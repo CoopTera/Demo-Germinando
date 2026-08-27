@@ -8,6 +8,8 @@ import OrganizacionesPage from './pages/OrganizacionesPage';
 import BeneficiariosPage from './pages/BeneficiariosPage';
 import GraficosPage from './pages/GraficosPage';
 import GrafoPage from './pages/GrafoPage';
+import ProfilePage from './pages/ProfilePage';
+import OportunidadesPage from './pages/OportunidadesPage';
 import { DataProvider } from './context/DataContext';
 
 createRoot(document.getElementById('root')).render(
@@ -19,8 +21,10 @@ createRoot(document.getElementById('root')).render(
             <Route index element={<DashboardPage />} />
             <Route path="organizaciones" element={<OrganizacionesPage />} />
             <Route path="beneficiarios" element={<BeneficiariosPage />} />
+            <Route path="oportunidades" element={<OportunidadesPage />} />
             <Route path="graficos" element={<GraficosPage />} />
             <Route path="grafo" element={<GrafoPage />} />
+            <Route path="perfil" element={<ProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

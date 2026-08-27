@@ -10,9 +10,16 @@ export default function MainLayout() {
   const [importOpen, setImportOpen] = useState(false);
   const [importResult, setImportResult] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const mainRef = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({ autoRaf: true });
+    if (!mainRef.current) return;
+    const content = mainRef.current.firstElementChild;
+    const lenis = new Lenis({ 
+      wrapper: mainRef.current, 
+      content: content,
+      autoRaf: true 
+    });
     return () => lenis.destroy();
   }, []);
 
@@ -37,7 +44,7 @@ export default function MainLayout() {
           onImportClick={() => setImportOpen(true)} 
           onMenuClick={() => setSidebarOpen(true)}
         />
-        <main className="flex-1 overflow-y-auto scroll-smooth">
+        <main ref={mainRef} className="flex-1 overflow-y-auto scroll-smooth">
           <div className="max-w-[1600px] mx-auto w-full" style={{ padding: 'clamp(24px, 8vw, 80px)' }}>
             <Outlet context={{ importResult }} />
           </div>

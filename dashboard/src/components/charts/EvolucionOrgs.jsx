@@ -40,9 +40,9 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function EvolucionOrgs() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-borde p-5">
-      <div className="flex items-center gap-2 mb-4">
-        <TrendingUp className="w-5 h-5 text-primario" />
+    <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
+      <div className="flex items-center" style={{ gap: '8px', marginBottom: '16px' }}>
+        <TrendingUp className="text-primario" style={{ width: '20px', height: '20px' }} />
         <h3 className="font-semibold text-pizarra text-base">
           Evolución de Organizaciones y Beneficiarios
         </h3>

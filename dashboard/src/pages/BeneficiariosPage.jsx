@@ -1,125 +1,147 @@
-import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { Users, Plus, AlertTriangle, Search, Filter } from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, AlertTriangle, CreditCard, Calendar, Clock } from 'lucide-react';
 import BeneficiariosTable from '../components/tables/BeneficiariosTable';
-import { beneficiariosData as initialData } from '../data/mockData';
+import BeneficiariosGrid from '../components/tables/BeneficiariosGrid';
+import { useData } from '../context/DataContext';
+import PageTemplate from '../components/layout/PageTemplate';
+import Modal from '../components/common/Modal';
+import BeneficiarioForm from '../components/forms/BeneficiarioForm';
 
 const FILTROS_ESTADO = ['Todos', 'Activos', 'Sin seguimiento'];
 
 export default function BeneficiariosPage() {
-  const [data] = useState(initialData);
+  const { beneficiarios, importarBeneficiarios } = useData();
   const [filtro, setFiltro] = useState('Todos');
   const [busqueda, setBusqueda] = useState('');
-  const { importResult } = useOutletContext();
+  const [viewMode, setViewMode] = useState('list');
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
 
-  const conAlerta = data.filter((b) => b.alerta).length;
+  const conAlerta = beneficiarios.filter((b) => b.alerta || b.estado === 'Sin seguimiento').length;
 
-  const filteredData = data.filter((b) => {
+  const filteredData = beneficiarios.filter((b) => {
+    const isSinSeguimiento = b.alerta || b.estado === 'Sin seguimiento';
     const matchFiltro =
       filtro === 'Todos' ||
-      (filtro === 'Activos' && !b.alerta) ||
-      (filtro === 'Sin seguimiento' && b.alerta);
+      (filtro === 'Activos' && !isSinSeguimiento) ||
+      (filtro === 'Sin seguimiento' && isSinSeguimiento);
+    
+    const busq = busqueda.toLowerCase();
     const matchBusqueda =
       !busqueda ||
-      b.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      b.dni.includes(busqueda);
+      b.nombre.toLowerCase().includes(busq) ||
+      b.dni.includes(busq);
+      
     return matchFiltro && matchBusqueda;
   });
 
-  return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between animate-fade-in-up delay-0">
+  const stats = [
+    { label: 'Total', value: `${beneficiarios.length} personas` },
+    { label: 'Becas activas', value: beneficiarios.length - conAlerta, valueColor: 'text-primario' }
+  ];
+
+  if (conAlerta > 0) {
+    stats.push({
+      label: '', // label handled as value
+      value: `${conAlerta} sin seguimiento`,
+      bgColor: 'bg-naranja/10 border-naranja/30',
+      valueColor: 'text-naranja',
+      icon: AlertTriangle,
+      iconColor: 'text-naranja',
+      pulse: true
+    });
+  }
+
+  const formatCurrency = (amount) => {
+    if (typeof amount !== 'number') return '$ 0';
+    return amount.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+  };
+
+  const getDetailContent = (b) => {
+    if (!b) return null;
+    const orgsRaw = b.programas || b.organizaciones;
+    const orgs = typeof orgsRaw === 'string' ? orgsRaw.split(',').map(s => s.trim()) : Array.isArray(orgsRaw) ? orgsRaw : orgsRaw ? [orgsRaw] : [];
+    const fecha = b.inicioBeca || b.fechaInicio;
+    const monto = b.monto !== undefined ? b.monto : b.presupuestoBeca;
+    const ultimoReg = b.actividad || b.ultimoRegistro;
+    
+    return (
+      <div className="flex flex-col" style={{ gap: '20px' }}>
+        <div className="grid grid-cols-2" style={{ gap: '16px' }}>
+          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
+            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><CreditCard style={{ width: '14px', height: '14px' }} /> DNI</div>
+            <p className="text-base font-semibold text-texto">{b.dni}</p>
+          </div>
+          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
+            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Calendar style={{ width: '14px', height: '14px' }} /> Fecha Inicio</div>
+            <p className="text-base font-semibold text-texto">{fecha}</p>
+          </div>
+          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
+            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Clock style={{ width: '14px', height: '14px' }} /> Último Registro</div>
+            <p className="text-base font-semibold text-texto">{ultimoReg}</p>
+          </div>
+          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
+            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}>Monto Beca</div>
+            <p className="text-base font-semibold text-texto">{formatCurrency(monto)}</p>
+          </div>
+        </div>
+        
         <div>
-          <h1 className="text-2xl font-bold text-pizarra flex items-center gap-2">
-            <Users className="w-6 h-6" />
-            Beneficiarios
-          </h1>
-          <p className="text-sm text-pizarra/50 mt-1">
-            Seguimiento de personas beneficiarias del programa
-          </p>
-        </div>
-        <button className="flex items-center gap-2 bg-primario text-white px-4 py-2.5 rounded-lg font-medium hover:opacity-90 transition cursor-pointer shadow-sm">
-          <Plus className="w-4 h-4" />
-          Nuevo Beneficiario
-        </button>
-      </div>
-
-      {/* Stats Bar */}
-      <div className="flex gap-4 flex-wrap animate-fade-in-up delay-1">
-        <div className="bg-white rounded-lg px-4 py-2.5 border border-borde text-sm card-elevated">
-          <span className="text-pizarra/50">Total:</span>{' '}
-          <span className="font-bold text-pizarra">{data.length} personas</span>
-        </div>
-        <div className="bg-white rounded-lg px-4 py-2.5 border border-borde text-sm card-elevated">
-          <span className="text-pizarra/50">Becas activas:</span>{' '}
-          <span className="font-bold text-primario">
-            {data.filter((b) => !b.alerta).length}
-          </span>
-        </div>
-        {conAlerta > 0 && (
-          <div className="bg-naranja/10 rounded-lg px-4 py-2.5 border border-naranja/30 text-sm flex items-center gap-2 card-elevated">
-            <AlertTriangle className="w-4 h-4 text-naranja animate-pulse-soft" />
-            <span className="text-naranja font-bold">
-              {conAlerta} sin seguimiento
-            </span>
+          <h3 className="text-sm font-bold text-pizarra uppercase mb-2">Programas y Organizaciones</h3>
+          <div className="flex flex-wrap" style={{ gap: '8px' }}>
+            {orgs.length > 0 ? orgs.map((org, idx) => (
+              <span key={idx} className="bg-primario/10 text-primario text-sm rounded-full font-bold uppercase tracking-wider" style={{ padding: '6px 12px' }}>
+                {org}
+              </span>
+            )) : <span className="text-gray-400">Sin organización asignada</span>}
           </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <PageTemplate
+        icon={Users}
+        title="Beneficiarios"
+        subtitle="Seguimiento de personas beneficiarias del programa"
+        onImport={importarBeneficiarios}
+        onNew={() => setIsNewModalOpen(true)}
+        newButtonText="Nuevo Beneficiario"
+        stats={stats}
+        busqueda={busqueda}
+        setBusqueda={setBusqueda}
+        filtros={FILTROS_ESTADO}
+        filtroActivo={filtro}
+        setFiltroActivo={setFiltro}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        totalItems={beneficiarios.length}
+        filteredItemsCount={filteredData.length}
+      >
+        {viewMode === 'list' ? (
+          <BeneficiariosTable data={filteredData} onItemClick={setSelectedItem} />
+        ) : (
+          <BeneficiariosGrid data={filteredData} onItemClick={setSelectedItem} />
         )}
-      </div>
+      </PageTemplate>
 
-      {/* Import result notice */}
-      {importResult && importResult.tipo === 'Padrón de Beneficiarios' && (
-        <div className="bg-exito/10 border border-exito/30 rounded-lg p-4 text-sm text-exito flex items-center gap-2 animate-scale-in">
-          ✅ Se importaron {importResult.totalRows} registros del padrón de beneficiarios.
-        </div>
-      )}
+      <Modal 
+        isOpen={!!selectedItem} 
+        onClose={() => setSelectedItem(null)} 
+        title={selectedItem?.nombre || 'Detalle'}
+      >
+        {getDetailContent(selectedItem)}
+      </Modal>
 
-      {/* Filters */}
-      <div className="flex items-center gap-4 animate-fade-in-up delay-2">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="w-4 h-4 text-pizarra/40 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Buscar por nombre o DNI..."
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            className="w-full bg-white text-texto placeholder:text-pizarra/40 text-sm rounded-lg pl-9 pr-4 py-2 border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20 focus:border-primario/30 transition-all"
-          />
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Filter className="w-4 h-4 text-pizarra/40 mr-1" />
-          {FILTROS_ESTADO.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFiltro(f)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                filtro === f
-                  ? f === 'Sin seguimiento'
-                    ? 'bg-naranja text-white shadow-sm'
-                    : 'bg-primario text-white shadow-sm'
-                  : 'bg-white text-pizarra/70 border border-borde hover:border-primario/30 hover:text-primario'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="animate-fade-in-up delay-3">
-        <BeneficiariosTable data={filteredData} />
-        <div className="flex items-center justify-between mt-4 px-2">
-          <p className="text-xs text-pizarra/40">
-            Mostrando <span className="font-semibold text-pizarra/60">{filteredData.length}</span> de{' '}
-            <span className="font-semibold text-pizarra/60">{data.length}</span> beneficiarios
-          </p>
-          <div className="flex items-center gap-1">
-            <button className="px-3 py-1.5 rounded-lg text-xs font-medium bg-primario text-white cursor-pointer">1</button>
-            <button className="px-3 py-1.5 rounded-lg text-xs font-medium text-pizarra/50 hover:bg-superficie-sec cursor-pointer">2</button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Modal
+        isOpen={isNewModalOpen}
+        onClose={() => setIsNewModalOpen(false)}
+        title="Nuevo Beneficiario"
+      >
+        <BeneficiarioForm onClose={() => setIsNewModalOpen(false)} />
+      </Modal>
+    </>
   );
 }

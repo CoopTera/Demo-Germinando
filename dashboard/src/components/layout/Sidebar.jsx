@@ -1,12 +1,13 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Sprout,
   LayoutDashboard,
   Building2,
   Users,
   BarChart3,
-  Network
+  Network,
+  Bookmark
 } from 'lucide-react'
 
 const navSections = [
@@ -16,6 +17,7 @@ const navSections = [
       { name: 'Panel Ejecutivo', path: '/', icon: LayoutDashboard, end: true },
       { name: 'Organizaciones', path: '/organizaciones', icon: Building2 },
       { name: 'Beneficiarios', path: '/beneficiarios', icon: Users },
+      { name: 'Oportunidades', path: '/oportunidades', icon: Bookmark },
     ],
   },
   {
@@ -61,6 +63,42 @@ export default function Sidebar({ isOpen, onClose }) {
               Gestión Social
             </p>
           </div>
+        </div>
+
+        {/* User Profile */}
+        <div style={{ paddingTop: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <NavLink
+            to="/perfil"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? '#4A1621' : 'transparent',
+              padding: '16px 40px',
+              gap: '16px',
+              display: 'flex',
+              alignItems: 'center'
+            })}
+            className={({ isActive }) =>
+              `relative text-[15px] transition-all duration-150 ${
+                isActive
+                  ? 'text-white font-semibold'
+                  : 'text-white/90 hover:bg-white/5 hover:text-white font-medium'
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <div 
+                    className="absolute bg-white rounded-full" 
+                    style={{ width: '6px', height: '6px', left: '16px', top: '50%', transform: 'translateY(-50%)' }}
+                  />
+                )}
+                <div className="rounded-full bg-white/20 flex items-center justify-center font-bold text-[10px] shrink-0" style={{ width: '24px', height: '24px' }}>
+                  DG
+                </div>
+                <span className="truncate">Director General</span>
+              </>
+            )}
+          </NavLink>
         </div>
 
         {/* Navigation Sections */}

@@ -8,49 +8,53 @@ const getEspecializacionColor = (esp) => {
   return 'text-pizarra';
 };
 
-export default function OrganizacionesTable({ data }) {
+export default function OrganizacionesTable({ data, onItemClick }) {
   return (
     <div className="bg-white rounded-md shadow-sm border border-borde overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-superficie-sec border-b border-borde">
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider" style={{ paddingLeft: '24px' }}>NOMBRE</th>
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider">LOCALIZACIÓN</th>
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider">ESPECIALIZACIÓN</th>
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider text-center">CONVENIOS</th>
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider text-center">TALLERES</th>
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider text-right">PRESUPUESTO</th>
-              <th className="py-3 px-4 text-xs font-bold text-pizarra tracking-wider text-center" style={{ paddingRight: '24px' }}>ACCIONES</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider" style={{ padding: '12px 16px', paddingLeft: '24px' }}>NOMBRE</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider" style={{ padding: '12px 16px' }}>LOCALIZACIÓN</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider" style={{ padding: '12px 16px' }}>ESPECIALIZACIÓN</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={{ padding: '12px 16px' }}>CONVENIOS</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={{ padding: '12px 16px' }}>TALLERES</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-right" style={{ padding: '12px 16px' }}>PRESUPUESTO</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={{ padding: '12px 16px', paddingRight: '24px' }}>ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             {data.map((org, i) => (
-              <tr key={org.id || i} className="border-b border-borde last:border-0 hover:bg-canvas transition-colors">
-                <td className="py-3 px-4 text-sm font-semibold text-texto" style={{ paddingLeft: '24px' }}>
+              <tr 
+                key={org.id || i} 
+                onClick={() => onItemClick && onItemClick(org)}
+                className="border-b border-borde last:border-0 hover:bg-canvas transition-colors cursor-pointer"
+              >
+                <td className="text-sm font-semibold text-texto" style={{ padding: '12px 16px', paddingLeft: '24px' }}>
                   {org.nombre}
                 </td>
-                <td className="py-3 px-4 text-sm text-pizarra/80 font-medium">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-pizarra/50" />
+                <td className="text-sm text-pizarra/80 font-medium" style={{ padding: '12px 16px' }}>
+                  <div className="flex items-center" style={{ gap: '6px' }}>
+                    <MapPin className="text-pizarra/50" style={{ width: '14px', height: '14px' }} />
                     {org.localizacion}
                   </div>
                 </td>
-                <td className={`py-3 px-4 text-sm font-semibold ${getEspecializacionColor(org.especializacion)}`}>
+                <td className={`text-sm font-semibold ${getEspecializacionColor(org.especializacion)}`} style={{ padding: '12px 16px' }}>
                   {org.especializacion}
                 </td>
-                <td className="py-3 px-4 text-sm text-texto font-bold text-center">
+                <td className="text-sm text-texto font-bold text-center" style={{ padding: '12px 16px' }}>
                   {org.convenios}
                 </td>
-                <td className="py-3 px-4 text-sm text-texto font-bold text-center">
+                <td className="text-sm text-texto font-bold text-center" style={{ padding: '12px 16px' }}>
                   {org.talleres}
                 </td>
-                <td className="py-3 px-4 text-sm font-bold text-texto text-right">
-                  {org.presupuesto}
+                <td className="text-sm font-bold text-texto text-right" style={{ padding: '12px 16px' }}>
+                  {typeof org.presupuesto === 'number' ? `$ ${org.presupuesto.toLocaleString('es-AR')}` : org.presupuesto}
                 </td>
-                <td className="py-3 px-4 text-center" style={{ paddingRight: '24px' }}>
-                  <button className="inline-flex items-center gap-1 text-xs font-medium text-pizarra hover:text-primario transition-colors">
-                    <Pencil className="w-3.5 h-3.5" />
+                <td className="text-center" style={{ padding: '12px 16px', paddingRight: '24px' }}>
+                  <button className="inline-flex items-center text-xs font-medium text-pizarra hover:text-primario transition-colors" style={{ gap: '4px' }}>
+                    <Pencil style={{ width: '14px', height: '14px' }} />
                     Editar
                   </button>
                 </td>
@@ -58,7 +62,7 @@ export default function OrganizacionesTable({ data }) {
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan="7" className="py-8 text-center text-pizarra/60 font-medium">
+                <td colSpan="7" className="text-center text-pizarra/60 font-medium" style={{ padding: '32px 16px' }}>
                   No hay organizaciones cargadas. Importá un Excel para comenzar.
                 </td>
               </tr>

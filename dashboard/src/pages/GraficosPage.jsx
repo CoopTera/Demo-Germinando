@@ -1,43 +1,43 @@
 import { BarChart3, TrendingUp } from 'lucide-react';
 import EvolucionOrgs from '../components/charts/EvolucionOrgs';
 import PresupuestoArea from '../components/charts/PresupuestoArea';
+import EspecialidadChart from '../components/charts/EspecialidadChart';
+import EstadoBeneficiariosChart from '../components/charts/EstadoBeneficiariosChart';
 
 export default function GraficosPage() {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col animate-fade-in-up" style={{ gap: '24px' }}>
       {/* Page Title */}
-      <div className="animate-fade-in-up delay-0">
-        <h1 className="text-2xl font-bold text-pizarra flex items-center gap-2">
-          <BarChart3 className="w-6 h-6" />
+      <div>
+        <h1 className="text-2xl font-bold text-pizarra flex items-center" style={{ gap: '8px' }}>
+          <BarChart3 style={{ width: '24px', height: '24px' }} />
           Gráficos
         </h1>
-        <p className="text-sm text-pizarra/50 mt-1">
+        <p className="text-sm text-pizarra/50" style={{ marginTop: '4px' }}>
           Análisis de evolución del programa
         </p>
       </div>
 
       {/* Quick stats */}
-      <div className="flex gap-4 animate-fade-in-up delay-1">
-        <div className="bg-white rounded-lg px-4 py-2.5 border border-borde text-sm card-elevated flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-exito" />
+      <div className="flex flex-wrap items-center" style={{ gap: '16px' }}>
+        <div className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px', gap: '8px' }}>
+          <TrendingUp className="text-exito" style={{ width: '16px', height: '16px' }} />
           <span className="text-pizarra/50">Crecimiento interanual:</span>{' '}
           <span className="font-bold text-exito">+50% organizaciones</span>
         </div>
-        <div className="bg-white rounded-lg px-4 py-2.5 border border-borde text-sm card-elevated flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-primario" />
+        <div className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px', gap: '8px' }}>
+          <TrendingUp className="text-primario" style={{ width: '16px', height: '16px' }} />
           <span className="text-pizarra/50">Ejecución presupuestaria:</span>{' '}
           <span className="font-bold text-primario">95.7%</span>
         </div>
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="animate-fade-in-up delay-2">
-          <EvolucionOrgs />
-        </div>
-        <div className="animate-fade-in-up delay-3">
-          <PresupuestoArea />
-        </div>
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-2" style={{ gap: '24px' }}>
+        <EvolucionOrgs />
+        <PresupuestoArea />
+        <EspecialidadChart />
+        <EstadoBeneficiariosChart />
       </div>
     </div>
   );

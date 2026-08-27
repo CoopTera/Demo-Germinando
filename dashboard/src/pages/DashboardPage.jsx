@@ -4,7 +4,6 @@ import KPICard from '../components/dashboard/KPICard';
 import AlertPanel from '../components/dashboard/AlertPanel';
 import TopOrgs from '../components/dashboard/TopOrgs';
 import { kpiData } from '../data/mockData';
-import OportunidadesPanel from '../components/dashboard/OportunidadesPanel';
 import EvolucionChart from '../components/dashboard/EvolucionChart';
 import PresupuestoChart from '../components/dashboard/PresupuestoChart';
 import ActividadFeed from '../components/dashboard/ActividadFeed';
@@ -96,16 +95,13 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* Row 3: Feed + Top 5 + Oportunidades */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: '56px' }}>
-        <div className="lg:col-span-1">
+      {/* Row 3: Feed + Top 5 + Alerts */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: '56px' }}>
+        <div>
           <ActividadFeed />
         </div>
-        <div className="lg:col-span-1">
+        <div>
           <TopOrgs />
-        </div>
-        <div className="lg:col-span-1">
-          <OportunidadesPanel />
         </div>
       </motion.div>
     </motion.div>
