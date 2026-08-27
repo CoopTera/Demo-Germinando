@@ -1,0 +1,58 @@
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { DollarSign } from 'lucide-react';
+
+const data = [
+  { name: 'Ejecutado', value: 85 },
+  { name: 'Disponible', value: 15 }
+];
+const COLORS = ['#FF7402', '#EAE9EE'];
+
+export default function PresupuestoChart() {
+  return (
+    <div className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" style={{ padding: '24px' }}>
+      <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
+        <DollarSign className="w-5 h-5 text-pizarra" />
+        <h2 className="font-semibold text-pizarra text-base">Presupuesto</h2>
+      </div>
+      <div className="flex-1 w-full relative min-h-[200px] flex items-center justify-center">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={data}
+              innerRadius={70}
+              outerRadius={90}
+              paddingAngle={5}
+              dataKey="value"
+              stroke="none"
+              startAngle={90}
+              endAngle={-270}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip 
+              formatter={(value) => `${value}%`}
+              contentStyle={{ borderRadius: '6px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+        {/* Center Text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+          <span className="text-3xl font-bold text-texto">85%</span>
+          <span className="text-[11px] font-semibold text-pizarra/60 uppercase tracking-wider">Ejecutado</span>
+        </div>
+      </div>
+      <div className="flex justify-between items-center" style={{ marginTop: '16px' }}>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-naranja" />
+          <span className="text-xs text-texto font-medium">Ejecutado</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-superficie-sec" />
+          <span className="text-xs text-texto font-medium">Disponible</span>
+        </div>
+      </div>
+    </div>
+  );
+}

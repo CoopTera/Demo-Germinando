@@ -1,0 +1,188 @@
+@import "tailwindcss";
+@source "../src";
+@source "./";
+
+@theme {
+  --color-primario: #3C3AE5;
+  --color-naranja: #FF7402;
+  --color-pizarra: #494963;
+  --color-amarillo: #FFCB02;
+  --color-critico: #E42153;
+  --color-canvas: #F5F6F8;
+  --color-superficie: #FFFFFF;
+  --color-superficie-sec: #EAE9EE;
+  --color-texto: #333333;
+  --color-borde: #E3E1E2;
+  --color-exito: #22C55E;
+  --color-sidebar-bg: #652230;
+  --color-sidebar-active: #4A1621;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #F5F6F8;
+  color: #333333;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', system-ui, sans-serif;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #E3E1E2; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #494963; }
+
+/* ─── Gradient border for KPI cards ─── */
+.gradient-border-top {
+  position: relative;
+  border-top: none;
+  border-image: none;
+}
+.gradient-border-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(120deg, #FFCB02 0%, #FF7402 33%, #E42153 66%, #3C3AE5 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+/* ─── Card Shadows ─── */
+.card-elevated {
+  box-shadow:
+    0 1px 3px rgba(73, 73, 99, 0.06),
+    0 4px 12px rgba(73, 73, 99, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-elevated:hover {
+  box-shadow:
+    0 4px 12px rgba(73, 73, 99, 0.1),
+    0 8px 24px rgba(73, 73, 99, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ─── Animations ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Staggered delays */
+.delay-0 { animation-delay: 0ms; }
+.delay-1 { animation-delay: 80ms; }
+.delay-2 { animation-delay: 160ms; }
+.delay-3 { animation-delay: 240ms; }
+.delay-4 { animation-delay: 350ms; }
+.delay-5 { animation-delay: 450ms; }
+
+/* ─── Glassmorphism for modals ─── */
+.glass-overlay {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Progress bar styling ─── */
+.progress-bar-bg {
+  background: linear-gradient(90deg, rgba(60, 58, 229, 0.08) 0%, rgba(60, 58, 229, 0.02) 100%);
+}
+
+/* ─── Table row hover accent ─── */
+.row-hover-accent {
+  position: relative;
+  transition: all 0.2s ease;
+}
+.row-hover-accent::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #3C3AE5;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.row-hover-accent:hover::before {
+  opacity: 1;
+}
