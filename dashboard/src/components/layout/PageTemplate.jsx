@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, Upload, Plus, List, LayoutGrid } from 'lucide-react';
+import { MagnifyingGlass, Funnel, UploadSimple, Plus, List, SquaresFour } from '@phosphor-icons/react';
 
 const containerVariants = {
   hidden: { opacity: 1 },
@@ -53,7 +53,7 @@ export default function PageTemplate({
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-pizarra flex items-center" style={{ gap: '8px' }}>
-            {Icon && <Icon style={{ width: '24px', height: '24px' }} />}
+            {Icon && <Icon weight="duotone" style={{ width: '24px', height: '24px' }} />}
             {title}
           </h1>
           <p className="text-sm text-pizarra/50" style={{ marginTop: '4px' }}>
@@ -76,7 +76,7 @@ export default function PageTemplate({
                 className="flex items-center border border-borde bg-white hover:bg-canvas text-pizarra text-[14px] font-semibold rounded-md transition-colors shadow-sm cursor-pointer" 
                 style={{ padding: '10px 20px', gap: '8px' }}
               >
-                <Upload className="stroke-[2.5]" style={{ width: '18px', height: '18px' }} />
+                <UploadSimple weight="bold" className="stroke-[2.5]" style={{ width: '18px', height: '18px' }} />
                 <span>Importar</span>
               </button>
             </>
@@ -88,7 +88,7 @@ export default function PageTemplate({
               className="flex items-center bg-primario hover:bg-primario/90 text-white text-[14px] font-semibold rounded-lg transition-colors shadow-sm cursor-pointer" 
               style={{ padding: '10px 20px', gap: '8px' }}
             >
-              <Plus style={{ width: '16px', height: '16px' }} />
+              <Plus weight="bold" style={{ width: '16px', height: '16px' }} />
               {newButtonText || 'Nuevo Registro'}
             </button>
           )}
@@ -104,7 +104,7 @@ export default function PageTemplate({
               className={`bg-white rounded-lg border text-sm flex items-center card-elevated ${stat.bgColor || 'border-borde'}`} 
               style={{ padding: '10px 16px', gap: stat.icon ? '8px' : '0' }}
             >
-              {stat.icon && <stat.icon className={`${stat.iconColor} ${stat.pulse ? 'animate-pulse-soft' : ''}`} style={{ width: '16px', height: '16px' }} />}
+              {stat.icon && <stat.icon weight="duotone" className={`${stat.iconColor} ${stat.pulse ? 'animate-pulse-soft' : ''}`} style={{ width: '16px', height: '16px' }} />}
               <span className={stat.labelColor || "text-pizarra/50"} style={{ marginRight: '4px' }}>{stat.label}:</span>
               <span className={`font-bold ${stat.valueColor || 'text-pizarra'}`}>
                 {stat.value}
@@ -119,7 +119,7 @@ export default function PageTemplate({
         <div className="flex flex-col md:flex-row md:items-center flex-1" style={{ gap: '16px' }}>
           {/* Search */}
           <div className="relative flex-1" style={{ maxWidth: '320px' }}>
-            <Search className="text-pizarra/40 absolute" style={{ width: '16px', height: '16px', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            <MagnifyingGlass weight="bold" className="text-pizarra/40 absolute" style={{ width: '16px', height: '16px', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
             <input
               type="text"
               placeholder="Buscar..."
@@ -133,7 +133,7 @@ export default function PageTemplate({
           {/* Filters */}
           {filtros.length > 0 && (
             <div className="flex items-center overflow-x-auto pb-1 hide-scrollbar" style={{ gap: '6px' }}>
-              <Filter className="text-pizarra/40 shrink-0" style={{ width: '16px', height: '16px', marginRight: '4px' }} />
+              <Funnel weight="fill" className="text-pizarra/40 shrink-0" style={{ width: '16px', height: '16px', marginRight: '4px' }} />
               {filtros.map((f) => (
                 <button
                   key={f}
@@ -163,7 +163,7 @@ export default function PageTemplate({
               title="Vista de Lista"
               style={{ padding: '6px' }}
             >
-              <List style={{ width: '16px', height: '16px' }} />
+              <List weight="bold" style={{ width: '16px', height: '16px' }} />
             </button>
             <button
               onClick={() => setViewMode('grid')}
@@ -171,7 +171,7 @@ export default function PageTemplate({
               title="Vista de Tarjetas"
               style={{ padding: '6px' }}
             >
-              <LayoutGrid style={{ width: '16px', height: '16px' }} />
+              <SquaresFour weight="bold" style={{ width: '16px', height: '16px' }} />
             </button>
           </div>
         )}
@@ -194,3 +194,4 @@ export default function PageTemplate({
     </motion.div>
   );
 }
+

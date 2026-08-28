@@ -1,4 +1,4 @@
-import { Users, FileText, Building2, Hammer } from 'lucide-react';
+import { Users, FileText, Buildings, Hammer } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import KPICard from '../components/dashboard/KPICard';
 import AlertPanel from '../components/dashboard/AlertPanel';
@@ -72,7 +72,7 @@ export default function DashboardPage() {
           valor={kpiData.unidadesProductivas.total}
           variacion={kpiData.unidadesProductivas.variacion}
           periodo={kpiData.unidadesProductivas.periodo}
-          icono={Building2}
+          icono={Buildings}
           index={2}
         />
         <KPICard
@@ -107,3 +107,4 @@ export default function DashboardPage() {
     </motion.div>
   );
 }
+

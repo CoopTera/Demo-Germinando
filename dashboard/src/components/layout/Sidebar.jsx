@@ -2,24 +2,24 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import LogoSantaFe from '../../assets/logo-santa-fe.png'
 import {
-  Sprout,
-  LayoutDashboard,
-  Building2,
+  Plant,
+  SquaresFour,
+  Buildings,
   Users,
-  BarChart3,
-  Network,
-  Bookmark,
+  ChartBar,
+  Graph,
+  BookmarkSimple,
   Briefcase,
   BookOpen
-} from 'lucide-react'
+} from '@phosphor-icons/react'
 
 const navSections = [
   {
     category: 'PRINCIPAL',
     items: [
-      { name: 'Panel Ejecutivo', path: '/', icon: LayoutDashboard, end: true },
-      { name: 'Oportunidades', path: '/oportunidades', icon: Bookmark },
-      { name: 'Organizaciones', path: '/organizaciones', icon: Building2 },
+      { name: 'Panel Ejecutivo', path: '/', icon: SquaresFour, end: true },
+      { name: 'Oportunidades', path: '/oportunidades', icon: BookmarkSimple },
+      { name: 'Organizaciones', path: '/organizaciones', icon: Buildings },
       { name: 'Beneficiarios', path: '/beneficiarios', icon: Users },
       { name: 'Convenios', path: '/convenios', icon: Briefcase },
       { name: 'Talleres', path: '/talleres', icon: BookOpen },
@@ -28,8 +28,8 @@ const navSections = [
   {
     category: 'ANÁLISIS',
     items: [
-      { name: 'Gráficos', path: '/graficos', icon: BarChart3 },
-      { name: 'Grafo de Vínculos', path: '/grafo', icon: Network },
+      { name: 'Gráficos', path: '/graficos', icon: ChartBar },
+      { name: 'Grafo de Vínculos', path: '/grafo', icon: Graph },
     ],
   },
 ]
@@ -103,7 +103,7 @@ export default function Sidebar({ isOpen, onClose }) {
                               style={{ width: '6px', height: '6px', left: '16px', top: '50%', transform: 'translateY(-50%)' }}
                             />
                           )}
-                          <Icon className="shrink-0" style={{ width: '20px', height: '20px' }} />
+                          <Icon weight="duotone" className="shrink-0" style={{ width: '20px', height: '20px' }} />
                           <span className="truncate">{item.name}</span>
                         </>
                       )}
