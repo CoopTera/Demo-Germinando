@@ -3,6 +3,7 @@ import EvolucionOrgs from '../components/charts/EvolucionOrgs';
 import PresupuestoArea from '../components/charts/PresupuestoArea';
 import EspecialidadChart from '../components/charts/EspecialidadChart';
 import EstadoBeneficiariosChart from '../components/charts/EstadoBeneficiariosChart';
+import CrecimientoBeneficiarios from '../components/charts/CrecimientoBeneficiarios';
 
 export default function GraficosPage() {
   return (
@@ -38,6 +39,7 @@ export default function GraficosPage() {
         <PresupuestoArea />
         <EspecialidadChart />
         <EstadoBeneficiariosChart />
+        <CrecimientoBeneficiarios />
       </div>
     </div>
   );

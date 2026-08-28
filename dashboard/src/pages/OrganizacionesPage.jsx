@@ -1,25 +1,32 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Buildings, MapPin, Hammer, Users, CurrencyDollar, Target } from '@phosphor-icons/react';
+import { Buildings, MapPin, Hammer, Users, CurrencyDollar, Target, Briefcase, FilePdf } from '@phosphor-icons/react';
 import { useData } from '../context/DataContext';
 import OrganizacionesTable from '../components/organizaciones/OrganizacionesTable';
 import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid';
 import PageTemplate from '../components/layout/PageTemplate';
 import Modal from '../components/common/Modal';
 import OrganizacionForm from '../components/forms/OrganizacionForm';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const FILTROS = ['Todas', 'Textil e Indumentaria', 'Producción Alimentaria', 'Construcción y Hábitat', 'Agricultura Familiar', 'Artesanías y Manufactura', 'Reciclado y Economía Circular'];
 
 export default function OrganizacionesPage() {
-  const { organizaciones, importarDesdeExcel, eliminarOrganizacion } = useData();
+  const { organizaciones, convenios, importarDesdeExcel, eliminarOrganizacion } = useData();
   const location = useLocation();
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('list');
   const [busqueda, setBusqueda] = useState('');
   const [filtroActivo, setFiltroActivo] = useState('Todas');
+  const [ciudadActiva, setCiudadActiva] = useState('Todas');
   const [selectedItem, setSelectedItem] = useState(null);
   const [isEditingItem, setIsEditingItem] = useState(false);
   const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+
+  const ciudades = useMemo(() => {
+    const unique = [...new Set(organizaciones.map(o => o.localizacion).filter(Boolean))];
+    return ['Todas', ...unique.sort()];
+  }, [organizaciones]);
 
   useEffect(() => {
     if (location.state?.openModalId) {
@@ -58,9 +65,10 @@ export default function OrganizacionesPage() {
     return organizaciones.filter(org => {
       const matchesSearch = org.nombre.toLowerCase().includes(busqueda.toLowerCase());
       const matchesFilter = filtroActivo === 'Todas' || org.especializacion.toLowerCase().includes(filtroActivo.toLowerCase());
-      return matchesSearch && matchesFilter;
+      const matchesCiudad = ciudadActiva === 'Todas' || org.localizacion === ciudadActiva;
+      return matchesSearch && matchesFilter && matchesCiudad;
     });
-  }, [organizaciones, busqueda, filtroActivo]);
+  }, [organizaciones, busqueda, filtroActivo, ciudadActiva]);
 
   const getDetailContent = (org) => {
     if (!org) return null;
@@ -80,12 +88,32 @@ export default function OrganizacionesPage() {
             <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><CurrencyDollar style={{ width: '14px', height: '14px' }} /> Presupuesto</div>
             <p className="text-base font-bold text-texto">{org.presupuesto}</p>
           </div>
-          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
-            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Hammer style={{ width: '14px', height: '14px' }} /> Talleres</div>
-            <p className="text-base font-semibold text-texto">{org.talleres}</p>
+          <div 
+            className="group bg-canvas rounded border border-borde cursor-pointer hover:border-primario hover:bg-primario/5 transition-colors" 
+            style={{ padding: '16px' }}
+            onClick={() => navigate('/talleres', { state: { filterOrg: org.nombre } })}
+            title={`Ver talleres de ${org.nombre}`}
+          >
+            <div className="flex items-center justify-between text-xs font-bold text-pizarra/50 uppercase mb-1">
+              <div className="flex items-center" style={{ gap: '4px' }}>
+                <Hammer style={{ width: '14px', height: '14px' }} /> Talleres
+              </div>
+              <span className="text-[10px] text-primario group-hover:underline">VER TODOS &rarr;</span>
+            </div>
+            <p className="text-base font-bold text-texto">{org.talleres}</p>
           </div>
-          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
-            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Users style={{ width: '14px', height: '14px' }} /> Beneficiarios</div>
+          <div 
+            className="bg-canvas rounded border border-borde cursor-pointer hover:border-primario hover:bg-primario/5 transition-colors" 
+            style={{ padding: '16px' }}
+            onClick={() => navigate('/beneficiarios', { state: { filterOrg: org.nombre } })}
+            title={`Ver beneficiarios de ${org.nombre}`}
+          >
+            <div className="flex items-center justify-between text-xs font-bold text-pizarra/50 uppercase mb-1">
+              <div className="flex items-center" style={{ gap: '4px' }}>
+                <Users style={{ width: '14px', height: '14px' }} /> Beneficiarios
+              </div>
+              <span className="text-[10px] text-primario font-bold bg-primario/10 px-1.5 py-0.5 rounded">Ver todos &rarr;</span>
+            </div>
             <p className="text-base font-semibold text-texto">{org.beneficiarios || '-'}</p>
           </div>
         </div>
@@ -113,6 +141,26 @@ export default function OrganizacionesPage() {
         totalItems={organizaciones.length}
         filteredItemsCount={filteredData.length}
       >
+        {/* City filter chips */}
+        <div className="flex items-center flex-wrap" style={{ gap: '8px', marginBottom: '20px' }}>
+          <MapPin weight="duotone" className="text-pizarra/50 shrink-0" style={{ width: '16px', height: '16px' }} />
+          <span className="text-xs font-semibold text-pizarra/50 uppercase tracking-wider shrink-0" style={{ marginRight: '4px' }}>Ciudad:</span>
+          {ciudades.map(c => (
+            <button
+              key={c}
+              onClick={() => setCiudadActiva(c)}
+              className={`whitespace-nowrap rounded-full text-xs font-semibold transition-all cursor-pointer border ${
+                ciudadActiva === c
+                  ? 'bg-pizarra text-white border-pizarra shadow-sm'
+                  : 'bg-white text-pizarra/70 border-borde hover:border-pizarra/30 hover:text-pizarra'
+              }`}
+              style={{ padding: '5px 12px' }}
+            >
+              {c === 'Todas' ? 'Todas las ciudades' : c.replace(', Santa Fe', '')}
+            </button>
+          ))}
+        </div>
+
         {viewMode === 'list' ? (
           <OrganizacionesTable data={filteredData} onItemClick={setSelectedItem} />
         ) : (
@@ -138,16 +186,41 @@ export default function OrganizacionesPage() {
           <>
             {getDetailContent(selectedItem)}
             
-            <div className="mt-4 flex gap-2">
-              <button className="flex-1 text-xs font-semibold text-pizarra hover:bg-canvas border border-borde rounded-md py-2 transition-colors flex items-center justify-center gap-2">
-                + Añadir Convenio
-              </button>
-              <button className="flex-1 text-xs font-semibold text-pizarra hover:bg-canvas border border-borde rounded-md py-2 transition-colors flex items-center justify-center gap-2">
-                + Añadir Taller
-              </button>
-            </div>
+            {/* Mini-listado de convenios vinculados */}
+            {selectedItem && (() => {
+              const orgConvenios = convenios.filter(c => c.org_id === selectedItem.id);
+              return orgConvenios.length > 0 ? (
+                <div style={{ marginTop: '20px' }}>
+                  <h4 className="text-xs font-bold text-pizarra/70 uppercase tracking-wider flex items-center" style={{ gap: '6px', marginBottom: '12px' }}>
+                    <Briefcase style={{ width: '14px', height: '14px' }} /> Convenios vinculados ({orgConvenios.length})
+                  </h4>
+                  <div className="flex flex-col" style={{ gap: '8px' }}>
+                    {orgConvenios.map(conv => (
+                      <div key={conv.id} className="bg-canvas border border-borde rounded-md flex items-center justify-between" style={{ padding: '12px 16px' }}>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-texto truncate">{conv.nombre}</p>
+                          <p className="text-xs text-pizarra/60">Firma: {conv.fechaFirma} · Vto: {conv.fechaVencimiento}</p>
+                        </div>
+                        <div className="flex items-center shrink-0" style={{ gap: '12px' }}>
+                          <span className={`text-xs font-bold rounded-full ${conv.estado === 'Activo' ? 'bg-exito/10 text-exito' : 'bg-naranja/10 text-naranja'}`} style={{ padding: '3px 10px' }}>
+                            {conv.estado}
+                          </span>
+                          <button className="text-pizarra/40 hover:text-primario transition-colors" title="Ver documento (demo)">
+                            <FilePdf weight="duotone" style={{ width: '20px', height: '20px' }} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-pizarra/40 text-sm font-medium" style={{ marginTop: '20px', padding: '16px 0' }}>
+                  No tiene convenios vinculados.
+                </div>
+              );
+            })()}
 
-            <div className="flex justify-end border-t border-borde mt-6" style={{ paddingTop: '16px', gap: '12px' }}>
+            <div className="flex justify-end border-t border-borde" style={{ marginTop: '20px', paddingTop: '16px', gap: '12px' }}>
               <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-md transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
               <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-md shadow-sm transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
 import { BookOpen, PencilSimple } from '@phosphor-icons/react';
@@ -6,8 +7,10 @@ import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
 
 export default function TalleresPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { talleres, organizaciones } = useData();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(location.state?.filterOrg || location.state?.search || '');
   const [selectedItem, setSelectedItem] = useState(null);
   const [filtroActivo, setFiltroActivo] = useState('Todos');
 
@@ -22,7 +25,7 @@ export default function TalleresPage() {
 
   const filteredTalleres = talleres.filter(t => {
     const matchesSearch = t.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          getOrgName(t.org_id).toLowerCase().includes(searchTerm.toLowerCase());
+                          (t.org_ids || []).some(id => getOrgName(id).toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesFilter = filtroActivo === 'Todos' || t.estado === filtroActivo;
     return matchesSearch && matchesFilter;
   });
@@ -77,7 +80,15 @@ export default function TalleresPage() {
               {filteredTalleres.map((taller) => (
                 <tr key={taller.id} onClick={() => setSelectedItem(taller)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
                   <td className="text-sm font-semibold text-texto border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={taller.nombre}>{taller.nombre}</td>
-                  <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)} title={getOrgName(taller.org_id)}>{getOrgName(taller.org_id)}</td>
+                  <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)}>
+                      <div className="flex flex-wrap" style={{ gap: '4px' }}>
+                        {(taller.org_ids || []).map((id, i) => (
+                          <span key={i} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate cursor-pointer hover:bg-primario/20 transition-colors" style={{ padding: '2px 8px', maxWidth: '100%' }} onClick={(e) => { e.stopPropagation(); navigate('/organizaciones', { state: { filterOrg: getOrgName(id) } }); }} title={getOrgName(id)}>
+                            {getOrgName(id)}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
                   <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col3)}>{taller.cupo}</td>
                   <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col4)}>{taller.inscriptos}</td>
                   <td className="text-sm text-center border-r border-borde" style={thStyle(widths.col5)}>
@@ -102,7 +113,13 @@ export default function TalleresPage() {
           <div className="space-y-4">
             <div>
               <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Organización a Cargo</label>
-              <p className="text-sm font-medium text-texto">{getOrgName(selectedItem.org_id)}</p>
+              <div className="flex flex-wrap" style={{ gap: '6px' }}>
+                  {(selectedItem.org_ids || []).map((id, i) => (
+                    <span key={i} onClick={() => navigate('/organizaciones', { state: { openModalId: id } })} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate cursor-pointer hover:bg-primario/20 transition-colors" style={{ padding: '4px 10px', maxWidth: '100%' }} title={getOrgName(id)}>
+                      {getOrgName(id)} &rarr;
+                    </span>
+                  ))}
+                </div>
             </div>
             <div className="flex gap-8">
               <div>

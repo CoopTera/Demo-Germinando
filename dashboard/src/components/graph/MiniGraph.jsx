@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useState, useCallback } from 'react';
+﻿import React, { useRef, useMemo, useEffect, useState, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import { useData } from '../../context/DataContext';
 
@@ -26,7 +26,6 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
     const nodes = [];
     const links = [];
 
-    // Helper to add nodes without duplicates
     const addNode = (n) => {
       if (!nodes.find(existing => existing.id === n.id)) nodes.push(n);
     };
@@ -46,17 +45,29 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
           if (org) {
             addNode({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', size: 30, color: '#3C3AE5' });
             links.push({ source: ben.id, target: `org-${org.id}` });
-            
-            // Add a taller from this org randomly to show connections
-            const orgTalleres = talleres.filter(t => t.org_id === org.id);
-            if (orgTalleres.length > 0) {
-              const t = orgTalleres[0];
-              addNode({ id: `tall-${t.id}`, label: t.nombre, tipo: 'taller', size: 20, color: '#FF7402' });
-              links.push({ source: ben.id, target: `tall-${t.id}` });
-              links.push({ source: `tall-${t.id}`, target: `org-${org.id}` });
-            }
           }
         });
+
+        // Add dynamically assigned talleres
+        if (ben.talleres && ben.talleres.length > 0) {
+          ben.talleres.forEach(tId => {
+            const t = talleres.find(t => t.id === tId);
+            if (t) {
+              addNode({ id: `tall-${t.id}`, label: t.nombre, tipo: 'taller', size: 20, color: '#FF7402' });
+              links.push({ source: ben.id, target: `tall-${t.id}` });
+              // Connect taller to its org if not already
+              (t.org_ids || []).forEach(oId => {
+                if (!links.find(l => l.source === `tall-${t.id}` && l.target === `org-${oId}`)) {
+                  links.push({ source: `tall-${t.id}`, target: `org-${oId}` });
+                  const org = organizaciones.find(o => o.id === oId);
+                  if (org) {
+                    addNode({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', size: 30, color: '#3C3AE5' });
+                  }
+                }
+              });
+            }
+          });
+        }
       }
     }
 
@@ -80,7 +91,6 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillStyle = '#333333';
-    // Small text wrap for mini graph
     const words = label.split(' ');
     if (words.length > 2) {
       ctx.fillText(words.slice(0,2).join(' ') + '...', node.x, node.y + nodeRadius + 2);
@@ -89,7 +99,6 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
     }
   }, []);
 
-  // Zoom to fit after load
   useEffect(() => {
     if (fgRef.current && graphData.nodes.length > 0) {
       setTimeout(() => {

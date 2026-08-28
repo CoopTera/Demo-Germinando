@@ -1,11 +1,17 @@
 ﻿import React from 'react';
 import { Warning } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
+import { useTableSort } from '../../hooks/useTableSort';
+import SortableHeader from './SortableHeader';
+import { useData } from '../../context/DataContext';
 
 export default function BeneficiariosTable({ data = [], onItemClick }) {
+  const { talleres } = useData();
   const { widths, startResize } = useTableResize({
-    col1: 100, col2: 200, col3: 250, col4: 120, col5: 140, col6: 100, col7: 120
+    col1: 100, col2: 180, col3: 200, col4: 200, col5: 120, col6: 140, col7: 100, col8: 120
   });
+
+  const { sortedData, sortConfig, requestSort } = useTableSort(data);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '-';
@@ -79,24 +85,50 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
         <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
           <thead className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider">
             <tr>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col1)}>DNI<Resizer colKey="col1" /></th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>Nombre<Resizer colKey="col2" /></th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>Organización<Resizer colKey="col3" /></th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>Fecha Inicio<Resizer colKey="col4" /></th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col5)}>Tiempo en Prog.<Resizer colKey="col5" /></th>
-              <th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col6)}>Asistencia<Resizer colKey="col6" /></th>
-              <th scope="col" className="text-center" style={thStyle(widths.col7)}>Estado</th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col1)}>
+                <SortableHeader label="DNI" sortKey="dni" sortConfig={sortConfig} requestSort={requestSort} />
+                <Resizer colKey="col1" />
+              </th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>
+                <SortableHeader label="Nombre" sortKey="nombre" sortConfig={sortConfig} requestSort={requestSort} />
+                <Resizer colKey="col2" />
+              </th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>
+                <SortableHeader label="Organización" sortKey="programas" sortConfig={sortConfig} requestSort={requestSort} />
+                <Resizer colKey="col3" />
+              </th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>
+                <span className="truncate">Talleres</span>
+                <Resizer colKey="col4" />
+              </th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col5)}>
+                <SortableHeader label="Ingreso" sortKey="inicioBeca" sortConfig={sortConfig} requestSort={requestSort} />
+                <Resizer colKey="col5" />
+              </th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>
+                <span className="truncate">Tiempo en Prog.</span>
+                <Resizer colKey="col6" />
+              </th>
+              <th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col7)}>
+                <SortableHeader label="Asistencia" sortKey="asistencia" sortConfig={sortConfig} requestSort={requestSort} />
+                <Resizer colKey="col7" />
+              </th>
+              <th scope="col" className="text-center" style={thStyle(widths.col8)}>
+                <SortableHeader label="Estado" sortKey="estado" sortConfig={sortConfig} requestSort={requestSort} />
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-borde">
-            {data && data.length > 0 ? (
-              data.map((row, index) => {
+            {sortedData && sortedData.length > 0 ? (
+              sortedData.map((row, index) => {
                 const hasAlert = row.estado === 'Suspendido';
                 const org = row.programas || row.organizaciones;
                 const fecha = row.inicioBeca || row.fechaInicio;
                 const tiempoProg = getTiempoPrograma(fecha);
                 const asistenciaNum = parseInt((row.asistencia || "0").replace('%', ''));
                 const asisColor = asistenciaNum < 75 ? 'text-naranja' : 'text-texto';
+                
+                const benTalleres = (row.talleres || []).map(tId => talleres.find(t => t.id === tId)?.nombre).filter(Boolean);
 
                 return (
                   <tr
@@ -115,30 +147,51 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                       {row.nombre}
                     </td>
                     <td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col3)}>
-                      <div className="flex flex-wrap" style={{ gap: '4px', overflow: 'hidden', height: '24px' }}>
-                        {org ? (
-                            <span
-                              className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate"
-                              style={{ padding: '2px 8px', maxWidth: '100%' }}
-                              title={org}
-                            >
-                              {org}
-                            </span>
-                        ) : (
-                          <span className="text-gray-400 text-xs">Sin organización</span>
-                        )}
-                      </div>
+                        <div className="flex flex-wrap" style={{ gap: '4px' }}>
+                          {org ? (
+                            org.split(',').map((o, i) => (
+                              <span
+                                key={i}
+                                className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate"
+                                style={{ padding: '2px 8px', maxWidth: '100%' }}
+                                title={o.trim()}
+                              >
+                                {o.trim()}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-gray-400 text-xs">Sin organización</span>
+                          )}
+                        </div>
                     </td>
-                    <td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col4)}>
+                    <td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col4)}>
+                        <div className="flex flex-wrap" style={{ gap: '4px' }}>
+                          {benTalleres.length > 0 ? (
+                            benTalleres.map((o, i) => (
+                              <span
+                                key={i}
+                                className="bg-naranja/10 text-naranja text-[10px] rounded-full inline-block font-bold uppercase truncate"
+                                style={{ padding: '2px 8px', maxWidth: '100%' }}
+                                title={o.trim()}
+                              >
+                                {o.trim()}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-gray-400 text-xs">-</span>
+                          )}
+                        </div>
+                    </td>
+                    <td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col5)}>
                       {formatDate(fecha)}
                     </td>
-                    <td className="text-sm text-texto font-medium border-r border-borde" title={tiempoProg} style={cellStyle(widths.col5)}>
+                    <td className="text-sm text-texto font-medium border-r border-borde" title={tiempoProg} style={cellStyle(widths.col6)}>
                       {tiempoProg}
                     </td>
-                    <td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col6)}>
+                    <td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col7)}>
                       {row.asistencia || '-'}
                     </td>
-                    <td className="text-sm text-center" style={cellStyle(widths.col7)}>
+                    <td className="text-sm text-center" style={cellStyle(widths.col8)}>
                       {row.estado === 'Activo' ? (
                         <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
                           Activo
@@ -159,7 +212,7 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
             ) : (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="text-center text-sm text-pizarra/70"
                   style={{ padding: '32px 20px' }}
                 >

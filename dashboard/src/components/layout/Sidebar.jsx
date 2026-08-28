@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import LogoSantaFe from '../../assets/logo-santa-fe.png'
 import {
@@ -97,12 +97,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     >
                       {({ isActive }) => (
                         <>
-                          {isActive && (
-                            <div 
-                              className="absolute bg-white rounded-full" 
-                              style={{ width: '6px', height: '6px', left: '16px', top: '50%', transform: 'translateY(-50%)' }}
-                            />
-                          )}
+                          
                           <Icon weight="duotone" className="shrink-0" style={{ width: '20px', height: '20px' }} />
                           <span className="truncate">{item.name}</span>
                         </>
@@ -138,12 +133,7 @@ export default function Sidebar({ isOpen, onClose }) {
         >
           {({ isActive }) => (
             <>
-              {isActive && (
-                <div 
-                  className="absolute bg-white rounded-full" 
-                  style={{ width: '6px', height: '6px', left: '16px', top: '50%', transform: 'translateY(-50%)' }}
-                />
-              )}
+              
               <div className="rounded-full bg-white/20 flex items-center justify-center font-bold text-[10px] shrink-0" style={{ width: '24px', height: '24px' }}>
                 DG
               </div>
@@ -156,7 +146,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* Footer */}
       <div className="pb-6 pt-2 text-center shrink-0">
         <p className="text-xs text-superficie-sec/60">
-          Programa Germinando © 2026
+          Programa Germinando Â© 2026
         </p>
       </div>
       </div>
@@ -164,3 +154,4 @@ export default function Sidebar({ isOpen, onClose }) {
     </>
   )
 }
+

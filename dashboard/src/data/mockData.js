@@ -212,19 +212,28 @@ export const beneficiariosData = [
     "id": 1,
     "dni": "20.433.858",
     "nombre": "Juan López",
-    "programas": "Asociación Raíces del Norte",
+    "programas": "",
     "inicioBeca": "2022-01-22",
-    "estado": "Egresado",
-    "asistencia": "92%"
+    "estado": "Sin seguimiento",
+    "asistencia": "92%",
+    "talleres": [
+      "tall-1",
+      "tall-3"
+    ],
+    "alerta": true
   },
   {
     "id": 2,
     "dni": "25.295.178",
     "nombre": "Carlos Sánchez",
-    "programas": "Cooperativa Sol Naciente",
+    "programas": "Asociación Raíces del Norte",
     "inicioBeca": "2022-11-04",
-    "estado": "Activo",
-    "asistencia": "76%"
+    "estado": "Sin seguimiento",
+    "alerta": true,
+    "asistencia": "76%",
+    "talleres": [
+      "tall-2"
+    ]
   },
   {
     "id": 3,
@@ -232,152 +241,200 @@ export const beneficiariosData = [
     "nombre": "Diego Ruiz",
     "programas": "Cooperativa Trabajo Digno",
     "inicioBeca": "2024-12-03",
-    "estado": "Activo",
-    "asistencia": "78%"
+    "estado": "Sin seguimiento",
+    "alerta": true,
+    "asistencia": "78%",
+    "talleres": [
+      "tall-3"
+    ]
   },
   {
     "id": 4,
     "dni": "25.906.937",
     "nombre": "Juan Torres",
-    "programas": "Taller Textil Esperanza",
+    "programas": "Fundación Sembrando Futuro",
     "inicioBeca": "2025-08-22",
-    "estado": "Activo",
-    "asistencia": "85%"
+    "estado": "Sin seguimiento",
+    "alerta": true,
+    "asistencia": "85%",
+    "talleres": []
   },
   {
     "id": 5,
     "dni": "36.614.962",
     "nombre": "Juan Torres",
-    "programas": "Asociación Tierra Fértil",
+    "programas": "Asociación Manos Unidas",
     "inicioBeca": "2025-11-27",
-    "estado": "Activo",
-    "asistencia": "81%"
+    "estado": "Sin seguimiento",
+    "alerta": true,
+    "asistencia": "81%",
+    "talleres": [
+      "tall-5",
+      "tall-7"
+    ]
   },
   {
     "id": 6,
     "dni": "41.618.354",
     "nombre": "Carlos Pérez",
-    "programas": "Asociación Raíces del Norte",
+    "programas": "Cooperativa Sol Naciente, Cooperativa Nuevo Horizonte",
     "inicioBeca": "2023-03-11",
     "estado": "Suspendido",
-    "asistencia": "91%"
+    "asistencia": "91%",
+    "talleres": [
+      "tall-6"
+    ]
   },
   {
     "id": 7,
     "dni": "43.224.576",
     "nombre": "Roberto García",
-    "programas": "Cooperativa Manos Solidarias",
+    "programas": "Taller Textil Esperanza",
     "inicioBeca": "2023-11-03",
     "estado": "Suspendido",
-    "asistencia": "85%"
+    "asistencia": "85%",
+    "talleres": []
   },
   {
     "id": 8,
     "dni": "25.827.759",
     "nombre": "Juan Gómez",
-    "programas": "Cooperativa Nuevo Horizonte",
+    "programas": "",
     "inicioBeca": "2023-08-16",
     "estado": "Activo",
-    "asistencia": "74%"
+    "asistencia": "74%",
+    "talleres": [
+      "tall-8"
+    ]
   },
   {
     "id": 9,
     "dni": "32.201.437",
     "nombre": "Diego López",
-    "programas": "Asociación Construyendo",
+    "programas": "Cooperativa Nuevo Horizonte",
     "inicioBeca": "2025-11-12",
     "estado": "Activo",
-    "asistencia": "70%"
+    "asistencia": "70%",
+    "talleres": [
+      "tall-9",
+      "tall-1"
+    ]
   },
   {
     "id": 10,
     "dni": "23.472.535",
     "nombre": "Diego Torres",
-    "programas": "Cooperativa Trabajo Digno",
+    "programas": "Fundación Puente Social",
     "inicioBeca": "2025-05-25",
     "estado": "Activo",
-    "asistencia": "77%"
+    "asistencia": "77%",
+    "talleres": []
   },
   {
     "id": 11,
     "dni": "27.789.997",
     "nombre": "Carlos García",
-    "programas": "Cooperativa Nuevo Horizonte",
+    "programas": "Asociación Construyendo, Asociación Raíces del Norte",
     "inicioBeca": "2024-07-16",
     "estado": "Activo",
-    "asistencia": "81%"
+    "asistencia": "81%",
+    "talleres": [
+      "tall-1"
+    ]
   },
   {
     "id": 12,
     "dni": "42.473.590",
     "nombre": "Juan García",
-    "programas": "Fundación Puente Social",
+    "programas": "Cooperativa Agroecológica, Cooperativa Trabajo Digno, Cooperativa Sol Naciente",
     "inicioBeca": "2024-05-17",
     "estado": "Egresado",
-    "asistencia": "93%"
+    "asistencia": "93%",
+    "talleres": [
+      "tall-2"
+    ]
   },
   {
     "id": 13,
     "dni": "33.855.999",
     "nombre": "Marta González",
-    "programas": "Asociación Raíces del Norte",
+    "programas": "Cooperativa Manos Solidarias",
     "inicioBeca": "2024-03-19",
     "estado": "Activo",
-    "asistencia": "74%"
+    "asistencia": "74%",
+    "talleres": [
+      "tall-3",
+      "tall-5"
+    ]
   },
   {
     "id": 14,
     "dni": "33.328.687",
     "nombre": "Laura Torres",
-    "programas": "Cooperativa Nuevo Horizonte",
+    "programas": "Asociación Raíces del Norte",
     "inicioBeca": "2024-06-14",
     "estado": "Activo",
-    "asistencia": "89%"
+    "asistencia": "89%",
+    "talleres": [
+      "tall-4"
+    ]
   },
   {
     "id": 15,
     "dni": "35.690.857",
     "nombre": "Martina Díaz",
-    "programas": "Fundación Puente Social",
+    "programas": "",
     "inicioBeca": "2025-07-18",
     "estado": "Activo",
-    "asistencia": "77%"
+    "asistencia": "77%",
+    "talleres": [
+      "tall-5"
+    ]
   },
   {
     "id": 16,
     "dni": "28.184.205",
     "nombre": "Laura Díaz",
-    "programas": "Cooperativa Sabores Nuestros",
+    "programas": "Fundación Sembrando Futuro, Taller Textil Esperanza",
     "inicioBeca": "2022-11-25",
     "estado": "Activo",
-    "asistencia": "72%"
+    "asistencia": "72%",
+    "talleres": []
   },
   {
     "id": 17,
     "dni": "42.145.954",
     "nombre": "Pedro Gómez",
-    "programas": "Cooperativa Nuevo Horizonte",
+    "programas": "Asociación Manos Unidas",
     "inicioBeca": "2024-11-16",
     "estado": "Suspendido",
-    "asistencia": "76%"
+    "asistencia": "76%",
+    "talleres": [
+      "tall-7",
+      "tall-9"
+    ]
   },
   {
     "id": 18,
     "dni": "40.143.489",
     "nombre": "Diego Sánchez",
-    "programas": "Asociación Manos Unidas",
+    "programas": "Cooperativa Sol Naciente",
     "inicioBeca": "2022-05-27",
     "estado": "Activo",
-    "asistencia": "96%"
+    "asistencia": "96%",
+    "talleres": [
+      "tall-8"
+    ]
   },
   {
     "id": 19,
     "dni": "41.672.869",
     "nombre": "Juan Torres",
-    "programas": "Fundación Sembrando Futuro",
+    "programas": "Taller Textil Esperanza",
     "inicioBeca": "2025-02-20",
     "estado": "Activo",
-    "asistencia": "76%"
+    "asistencia": "76%",
+    "talleres": []
   },
   {
     "id": 20,
@@ -386,43 +443,57 @@ export const beneficiariosData = [
     "programas": "Asociación Tierra Fértil",
     "inicioBeca": "2022-11-07",
     "estado": "Activo",
-    "asistencia": "72%"
+    "asistencia": "72%",
+    "talleres": [
+      "tall-10"
+    ]
   },
   {
     "id": 21,
     "dni": "40.492.560",
     "nombre": "Jorge Sánchez",
-    "programas": "Asociación Manos Unidas",
+    "programas": "Cooperativa Nuevo Horizonte, Cooperativa Agroecológica",
     "inicioBeca": "2023-08-03",
     "estado": "Activo",
-    "asistencia": "79%"
+    "asistencia": "79%",
+    "talleres": [
+      "tall-1",
+      "tall-3"
+    ]
   },
   {
     "id": 22,
     "dni": "45.540.914",
     "nombre": "Laura Torres",
-    "programas": "Asociación Construyendo",
+    "programas": "",
     "inicioBeca": "2025-06-02",
     "estado": "Activo",
-    "asistencia": "92%"
+    "asistencia": "92%",
+    "talleres": []
   },
   {
     "id": 23,
     "dni": "35.546.811",
     "nombre": "Carlos Fernández",
-    "programas": "Asociación Raíces del Norte",
+    "programas": "Asociación Construyendo, Asociación Raíces del Norte, Asociación Manos Unidas",
     "inicioBeca": "2025-09-27",
     "estado": "Activo",
-    "asistencia": "76%"
+    "asistencia": "76%",
+    "talleres": [
+      "tall-3"
+    ]
   },
   {
     "id": 24,
     "dni": "27.184.458",
     "nombre": "Pedro Sosa",
-    "programas": "Asociación Raíces del Norte",
+    "programas": "Cooperativa Agroecológica",
     "inicioBeca": "2024-03-06",
     "estado": "Activo",
-    "asistencia": "98%"
+    "asistencia": "98%",
+    "talleres": [
+      "tall-4"
+    ]
   },
   {
     "id": 25,
@@ -431,70 +502,92 @@ export const beneficiariosData = [
     "programas": "Cooperativa Manos Solidarias",
     "inicioBeca": "2023-10-05",
     "estado": "Activo",
-    "asistencia": "70%"
+    "asistencia": "70%",
+    "talleres": [
+      "tall-5",
+      "tall-7"
+    ]
   },
   {
     "id": 26,
     "dni": "32.728.757",
     "nombre": "Alejandro Sánchez",
-    "programas": "Fundación Puente Social",
+    "programas": "Asociación Raíces del Norte, Asociación Manos Unidas",
     "inicioBeca": "2025-06-20",
     "estado": "Egresado",
-    "asistencia": "90%"
+    "asistencia": "90%",
+    "talleres": [
+      "tall-6"
+    ]
   },
   {
     "id": 27,
     "dni": "22.296.827",
     "nombre": "María Pérez",
-    "programas": "Asociación Raíces del Norte",
+    "programas": "Cooperativa Trabajo Digno",
     "inicioBeca": "2025-12-28",
     "estado": "Suspendido",
-    "asistencia": "72%"
+    "asistencia": "72%",
+    "talleres": [
+      "tall-7"
+    ]
   },
   {
     "id": 28,
     "dni": "36.906.944",
     "nombre": "Jorge Romero",
-    "programas": "Cooperativa Trabajo Digno",
+    "programas": "Fundación Sembrando Futuro",
     "inicioBeca": "2023-11-26",
     "estado": "Activo",
-    "asistencia": "90%"
+    "asistencia": "90%",
+    "talleres": []
   },
   {
     "id": 29,
     "dni": "23.860.704",
     "nombre": "Diego Álvarez",
-    "programas": "Asociación Manos Unidas",
+    "programas": "",
     "inicioBeca": "2022-02-26",
     "estado": "Egresado",
-    "asistencia": "74%"
+    "asistencia": "74%",
+    "talleres": [
+      "tall-9",
+      "tall-1"
+    ]
   },
   {
     "id": 30,
     "dni": "32.561.557",
     "nombre": "Roberto Sánchez",
-    "programas": "Cooperativa Trabajo Digno",
+    "programas": "Cooperativa Sol Naciente",
     "inicioBeca": "2024-11-20",
     "estado": "Activo",
-    "asistencia": "76%"
+    "asistencia": "76%",
+    "talleres": [
+      "tall-10"
+    ]
   },
   {
     "id": 31,
     "dni": "42.875.631",
     "nombre": "Alejandro Álvarez",
-    "programas": "Cooperativa Manos Solidarias",
+    "programas": "Taller Textil Esperanza, Fundación Puente Social",
     "inicioBeca": "2024-04-26",
     "estado": "Activo",
-    "asistencia": "93%"
+    "asistencia": "93%",
+    "talleres": []
   },
   {
     "id": 32,
     "dni": "22.783.665",
     "nombre": "Martina López",
-    "programas": "Fundación Sembrando Futuro",
+    "programas": "Asociación Tierra Fértil",
     "inicioBeca": "2023-12-28",
     "estado": "Egresado",
-    "asistencia": "74%"
+    "asistencia": "74%",
+    "talleres": [
+      "tall-2"
+    ]
   },
   {
     "id": 33,
@@ -503,25 +596,33 @@ export const beneficiariosData = [
     "programas": "Cooperativa Nuevo Horizonte",
     "inicioBeca": "2024-07-16",
     "estado": "Activo",
-    "asistencia": "95%"
+    "asistencia": "95%",
+    "talleres": [
+      "tall-3",
+      "tall-5"
+    ]
   },
   {
     "id": 34,
     "dni": "38.877.429",
     "nombre": "Marta Romero",
-    "programas": "Cooperativa Nuevo Horizonte",
+    "programas": "Fundación Puente Social, Cooperativa Manos Solidarias, Fundación Sembrando Futuro",
     "inicioBeca": "2023-11-22",
     "estado": "Activo",
-    "asistencia": "77%"
+    "asistencia": "77%",
+    "talleres": []
   },
   {
     "id": 35,
     "dni": "25.923.138",
     "nombre": "Ana Gómez",
-    "programas": "Taller Textil Esperanza",
+    "programas": "Asociación Construyendo",
     "inicioBeca": "2023-07-01",
     "estado": "Activo",
-    "asistencia": "89%"
+    "asistencia": "89%",
+    "talleres": [
+      "tall-5"
+    ]
   }
 ];
 export const oportunidades = [
@@ -645,83 +746,109 @@ export const conveniosData = [
 export const talleresData = [
   {
     "id": "tall-1",
-    "org_id": 1,
     "nombre": "Taller de Costura Avanzada",
     "cupo": 30,
     "inscriptos": 25,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      1,
+      3
+    ]
   },
   {
     "id": "tall-2",
-    "org_id": 1,
     "nombre": "Taller de Moldería",
     "cupo": 20,
     "inscriptos": 20,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      1
+    ]
   },
   {
     "id": "tall-3",
-    "org_id": 2,
     "nombre": "Manipulación de Alimentos",
     "cupo": 50,
     "inscriptos": 48,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      2
+    ]
   },
   {
     "id": "tall-4",
-    "org_id": 3,
     "nombre": "Albañilería Básica",
     "cupo": 40,
     "inscriptos": 35,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      3,
+      5
+    ]
   },
   {
     "id": "tall-5",
-    "org_id": 4,
     "nombre": "Cultivo Orgánico",
     "cupo": 25,
     "inscriptos": 12,
-    "estado": "Abierto"
+    "estado": "Abierto",
+    "org_ids": [
+      4
+    ]
   },
   {
     "id": "tall-6",
-    "org_id": 6,
     "nombre": "Gestión de Residuos",
     "cupo": 30,
     "inscriptos": 0,
-    "estado": "Abierto"
+    "estado": "Abierto",
+    "org_ids": [
+      6,
+      8,
+      9
+    ]
   },
   {
     "id": "tall-7",
-    "org_id": 7,
     "nombre": "Corte y Confección",
     "cupo": 20,
     "inscriptos": 18,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      7,
+      9
+    ]
   },
   {
     "id": "tall-8",
-    "org_id": 8,
     "nombre": "Sistemas de Riego",
     "cupo": 25,
     "inscriptos": 25,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      8
+    ]
   },
   {
     "id": "tall-9",
-    "org_id": 10,
     "nombre": "Formación de Formadores",
     "cupo": 15,
     "inscriptos": 15,
-    "estado": "Finalizado"
+    "estado": "Finalizado",
+    "org_ids": [
+      10
+    ]
   },
   {
     "id": "tall-10",
-    "org_id": 12,
     "nombre": "Cocina Saludable",
     "cupo": 30,
     "inscriptos": 28,
-    "estado": "En curso"
+    "estado": "En curso",
+    "org_ids": [
+      12,
+      2
+    ]
   }
 ];
 

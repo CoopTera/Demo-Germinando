@@ -1,12 +1,11 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { TrendUp, TrendDown } from '@phosphor-icons/react';
 
-// Color palette per card type — subtle but distinct
 const ACCENT_COLORS = [
-  { bg: '#EEF2FF', text: '#3C3AE5', border: 'rgba(60,58,229,0.15)', hover: '#E0E7FF' }, // azul — beneficiarios
-  { bg: '#FFF7ED', text: '#C2530A', border: 'rgba(255,116,2,0.15)', hover: '#FFEDD5' }, // naranja — convenios
-  { bg: '#F0FDF4', text: '#166534', border: 'rgba(34,197,94,0.12)', hover: '#DCFCE7' }, // verde — organizaciones
-  { bg: '#F5F3FF', text: '#6D28D9', border: 'rgba(109,40,217,0.12)', hover: '#EDE9FE' }, // violeta — talleres
+  { bg: '#3C3AE5', text: '#3C3AE5', border: 'rgba(60,58,229,0.3)' }, // azul
+  { bg: '#FF7402', text: '#FF7402', border: 'rgba(255,116,2,0.3)' }, // naranja
+  { bg: '#22C55E', text: '#22C55E', border: 'rgba(34,197,94,0.3)' }, // verde
+  { bg: '#6D28D9', text: '#6D28D9', border: 'rgba(109,40,217,0.3)' }, // violeta
 ];
 
 export default function KPICard({ titulo, valor, variacion, periodo, presupuesto, index = 0 }) {
@@ -16,69 +15,64 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.08, ease: 'easeOut' }}
-      whileHover={{ y: -4, backgroundColor: accent.hover, transition: { duration: 0.18 } }}
+      transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
+      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+      className="bg-white rounded-md shadow-sm card-elevated flex flex-col"
       style={{
-        backgroundColor: accent.bg,
-        border: `1.5px solid ${accent.border}`,
-        borderRadius: '14px',
-        minHeight: '180px',
-        overflow: 'hidden',
+        border: '1px solid #E3E1E2',
+        borderTop: `4px solid ${accent.bg}`,
+        padding: '20px 24px',
+        gap: '12px',
       }}
     >
-      <div style={{ padding: '28px 28px 24px', display: 'flex', flexDirection: 'column', height: '100%', gap: '8px' }}>
-        {/* Title */}
-        <h2 style={{ fontSize: '11px', fontWeight: 700, color: accent.text, textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.85 }}>
-          {titulo}
-        </h2>
+      <h2 style={{ fontSize: '12px', fontWeight: 600, color: '#494963', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        {titulo}
+      </h2>
 
-        {/* Big number */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', marginTop: '8px' }}>
-          <span style={{ fontSize: '3rem', fontWeight: 800, color: '#1a1a2e', lineHeight: 1, letterSpacing: '-0.03em' }}>
-            {valor}
-          </span>
-        </div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+        <span style={{ fontSize: '32px', fontWeight: 800, color: '#1a1a2e', lineHeight: 1 }}>
+          {valor}
+        </span>
+      </div>
 
-        {/* Presupuesto bar — only for the budget card */}
-        {presupuesto && (
-          <div style={{ marginTop: '4px', marginBottom: '4px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 500 }}>Ejecutado</span>
-              <span style={{ fontSize: '12px', color: accent.text, fontWeight: 700 }}>{presupuesto.porcentaje}%</span>
-            </div>
-            <div style={{ height: '5px', borderRadius: '99px', backgroundColor: 'rgba(0,0,0,0.08)', overflow: 'hidden' }}>
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${presupuesto.porcentaje}%` }}
-                transition={{ duration: 0.8, delay: index * 0.08 + 0.3, ease: 'easeOut' }}
-                style={{ height: '100%', backgroundColor: accent.text, borderRadius: '99px' }}
-              />
-            </div>
+      {presupuesto && (
+        <div style={{ marginTop: '4px', marginBottom: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <span style={{ fontSize: '11px', color: '#888', fontWeight: 600, textTransform: 'uppercase' }}>Ejecutado</span>
+            <span style={{ fontSize: '12px', color: accent.text, fontWeight: 700 }}>{presupuesto.porcentaje}%</span>
           </div>
-        )}
+          <div style={{ height: '6px', borderRadius: '99px', backgroundColor: '#EAE9EE', overflow: 'hidden' }}>
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${presupuesto.porcentaje}%` }}
+              transition={{ duration: 0.8, delay: index * 0.08 + 0.3, ease: 'easeOut' }}
+              style={{ height: '100%', backgroundColor: accent.bg, borderRadius: '99px' }}
+            />
+          </div>
+        </div>
+      )}
 
-        {/* Variation pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+      {(isPositive || isNegative || periodo) && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 'auto', paddingTop: '4px' }}>
           {isPositive && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#16a34a', backgroundColor: 'rgba(34,197,94,0.12)', padding: '3px 10px', borderRadius: '99px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#16a34a', backgroundColor: 'rgba(34,197,94,0.12)', padding: '2px 8px', borderRadius: '99px' }}>
               <TrendUp weight="bold" style={{ width: '12px', height: '12px' }} />
               +{variacion}%
             </span>
           )}
           {isNegative && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#dc2626', backgroundColor: 'rgba(228,33,83,0.1)', padding: '3px 10px', borderRadius: '99px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#dc2626', backgroundColor: 'rgba(228,33,83,0.1)', padding: '2px 8px', borderRadius: '99px' }}>
               <TrendDown weight="bold" style={{ width: '12px', height: '12px' }} />
               {variacion}%
             </span>
           )}
           {periodo && (
-            <span style={{ fontSize: '11px', color: '#9ca3af' }}>{periodo}</span>
+            <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>{periodo}</span>
           )}
         </div>
-      </div>
+      )}
     </motion.div>
   );
 }
-

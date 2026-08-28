@@ -1,46 +1,42 @@
 import React, { useState, useMemo } from 'react';
-import { BookmarkSimple } from '@phosphor-icons/react';
-import { oportunidades } from '../data/mockData';
+import { BookmarkSimple, BellRinging, Warning } from '@phosphor-icons/react';
+import { oportunidades, alertas } from '../data/mockData';
 import PageTemplate from '../components/layout/PageTemplate';
-import OportunidadesTable from '../components/oportunidades/OportunidadesTable';
 import OportunidadesGrid from '../components/oportunidades/OportunidadesGrid';
 
 const FILTROS = ['Todas', 'Licitaciones', 'Fondos', 'Capacitaciones'];
 
 export default function OportunidadesPage() {
-  const [viewMode, setViewMode] = useState('list');
   const [busqueda, setBusqueda] = useState('');
   const [filtroActivo, setFiltroActivo] = useState('Todas');
 
-  const statsObj = useMemo(() => {
-    return {
-      total: oportunidades.length,
-      proximas: 2
-    };
-  }, []);
-
   const stats = [
-    { label: 'Oportunidades Activas', value: statsObj.total },
-    { label: 'Vencen pronto', value: statsObj.proximas, valueColor: 'text-naranja' }
+    { label: 'Total Alertas', value: alertas.length },
+    { label: 'Críticas', value: alertas.filter(a => a.prioridad === 'critica').length, valueColor: 'text-critico' },
+    { label: 'Oportunidades Activas', value: oportunidades.length }
   ];
 
-  const filteredData = useMemo(() => {
+  const filteredOportunidades = useMemo(() => {
     return oportunidades.filter(opt => {
       const matchesSearch = opt.titulo?.toLowerCase().includes(busqueda.toLowerCase()) || 
                             opt.organizador?.toLowerCase().includes(busqueda.toLowerCase());
       const matchesFiltro = filtroActivo === 'Todas' || 
-                            (filtroActivo === 'Licitaciones' && opt.titulo?.includes('Licitación')) ||
-                            (filtroActivo === 'Fondos' && opt.titulo?.includes('Fondo')) ||
-                            (filtroActivo === 'Capacitaciones' && opt.titulo?.includes('Capacitación'));
+                            (filtroActivo === 'Licitaciones' && opt.titulo?.toLowerCase().includes('licitación')) ||
+                            (filtroActivo === 'Fondos' && opt.titulo?.toLowerCase().includes('fondo')) ||
+                            (filtroActivo === 'Capacitaciones' && opt.titulo?.toLowerCase().includes('capacitación'));
       return matchesSearch && matchesFiltro;
     });
   }, [busqueda, filtroActivo]);
+  
+  const filteredAlertas = useMemo(() => {
+     return alertas.filter(a => a.mensaje.toLowerCase().includes(busqueda.toLowerCase()));
+  }, [busqueda]);
 
   return (
     <PageTemplate
       icon={BookmarkSimple}
-      title="Oportunidades"
-      subtitle="Buscador de licitaciones, fondos y capacitaciones"
+      title="Oportunidades & Alertas"
+      subtitle="Buscador de licitaciones y panel de notificaciones del sistema"
       onNew={() => console.log('Nueva oportunidad')}
       newButtonText="Nueva Oportunidad"
       stats={stats}
@@ -49,17 +45,69 @@ export default function OportunidadesPage() {
       filtros={FILTROS}
       filtroActivo={filtroActivo}
       setFiltroActivo={setFiltroActivo}
-      viewMode={viewMode}
-      setViewMode={setViewMode}
-      totalItems={oportunidades.length}
-      filteredItemsCount={filteredData.length}
+      totalItems={oportunidades.length + alertas.length}
+      filteredItemsCount={filteredOportunidades.length + filteredAlertas.length}
     >
-      {viewMode === 'list' ? (
-        <OportunidadesTable data={filteredData} />
-      ) : (
-        <OportunidadesGrid data={filteredData} />
-      )}
+      <div className="flex flex-col xl:flex-row" style={{ gap: '32px' }}>
+        
+        {/* Left Column: Alertas */}
+        <div className="flex-1 xl:max-w-md flex flex-col" style={{ gap: '20px' }}>
+          <div className="flex items-center" style={{ gap: '10px' }}>
+            <BellRinging weight="duotone" style={{ width: '24px', height: '24px', color: '#494963' }} />
+            <h2 className="font-semibold text-pizarra text-lg">Alertas del Sistema</h2>
+          </div>
+          
+          <div className="flex flex-col" style={{ gap: '16px' }}>
+            {filteredAlertas.map(alerta => {
+              const bgPrioridad = alerta.prioridad === 'critica' ? 'bg-critico/10' : alerta.prioridad === 'alta' ? 'bg-naranja/10' : 'bg-pizarra/10';
+              const textPrioridad = alerta.prioridad === 'critica' ? 'text-critico' : alerta.prioridad === 'alta' ? 'text-naranja' : 'text-pizarra';
+              const borderPrioridad = alerta.prioridad === 'critica' ? 'border-critico' : alerta.prioridad === 'alta' ? 'border-naranja' : 'border-pizarra/30';
+              
+              return (
+                <div key={alerta.id} className="bg-white rounded-md border border-borde shadow-sm flex flex-col relative overflow-hidden card-elevated" style={{ padding: '20px', borderLeftWidth: '4px', borderLeftColor: borderPrioridad === 'border-critico' ? '#E42153' : borderPrioridad === 'border-naranja' ? '#FF7402' : '#E3E1E2' }}>
+                  <div className="flex items-start" style={{ gap: '16px' }}>
+                    <div className={`rounded-full flex items-center justify-center shrink-0 ${bgPrioridad} ${textPrioridad}`} style={{ width: '40px', height: '40px' }}>
+                      <Warning weight="duotone" style={{ width: '24px', height: '24px' }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2 ${bgPrioridad} ${textPrioridad}`}>
+                        Prioridad {alerta.prioridad}
+                      </span>
+                      <h3 className="font-semibold text-texto text-[15px] leading-snug mb-1">{alerta.mensaje}</h3>
+                      <p className="text-xs text-pizarra/60 font-medium">Registrada el {new Date(alerta.fecha).toLocaleDateString('es-AR')}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-4 pt-4 border-t border-borde">
+                    <button className="text-sm font-semibold text-primario hover:underline flex items-center" style={{ gap: '4px' }}>
+                      Resolver Acción &rarr;
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+            
+            {filteredAlertas.length === 0 && (
+              <div className="bg-white rounded-md border border-borde text-center text-pizarra/50 font-medium shadow-sm flex flex-col items-center justify-center" style={{ padding: '40px 20px', gap: '12px' }}>
+                <BellRinging style={{ width: '32px', height: '32px', opacity: 0.3 }} />
+                No hay alertas que coincidan con la búsqueda.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Oportunidades */}
+        <div className="flex-[2] flex flex-col" style={{ gap: '20px' }}>
+          <div className="flex items-center justify-between">
+             <div className="flex items-center" style={{ gap: '10px' }}>
+               <BookmarkSimple weight="duotone" style={{ width: '24px', height: '24px', color: '#494963' }} />
+               <h2 className="font-semibold text-pizarra text-lg">Oportunidades Destacadas</h2>
+             </div>
+          </div>
+          
+          <OportunidadesGrid data={filteredOportunidades} />
+        </div>
+        
+      </div>
     </PageTemplate>
   );
 }
-

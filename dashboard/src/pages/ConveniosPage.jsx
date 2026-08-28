@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
-import { Briefcase, PencilSimple, Warning } from '@phosphor-icons/react';
+import { Briefcase, PencilSimple, Warning, CalendarBlank } from '@phosphor-icons/react';
 import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
 
@@ -12,7 +12,7 @@ export default function ConveniosPage() {
   const [filtroActivo, setFiltroActivo] = useState('Todos');
 
   const { widths, startResize } = useTableResize({
-    col1: 200, col2: 250, col3: 150, col4: 150, col5: 150, col6: 100
+    col1: 220, col2: 250, col3: 150, col4: 150, col5: 200, col6: 100
   });
 
   const getOrgName = (orgId) => {
@@ -20,10 +20,29 @@ export default function ConveniosPage() {
     return org ? org.nombre : 'Desconocida';
   };
 
+  const getDaysLeft = (fechaVencimiento) => {
+    if (!fechaVencimiento) return null;
+    const [year, month, day] = fechaVencimiento.split('-');
+    const vDate = new Date(year, month - 1, day);
+    const today = new Date();
+    const diff = vDate - today;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  };
+
   const filteredConvenios = convenios.filter(c => {
     const matchesSearch = c.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           getOrgName(c.org_id).toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filtroActivo === 'Todos' || c.estado === filtroActivo;
+    
+    let matchesFilter = true;
+    if (filtroActivo !== 'Todos') {
+      if (filtroActivo === 'Próximos a vencer') {
+        const daysLeft = getDaysLeft(c.fechaVencimiento);
+        matchesFilter = daysLeft !== null && daysLeft >= 0 && daysLeft <= 30;
+      } else {
+        matchesFilter = c.estado === filtroActivo;
+      }
+    }
+    
     return matchesSearch && matchesFilter;
   });
 
@@ -53,7 +72,7 @@ export default function ConveniosPage() {
       icon={Briefcase}
       busqueda={searchTerm}
       setBusqueda={setSearchTerm}
-      filtros={['Todos', 'Activo', 'En revisión', 'Finalizado']}
+      filtros={['Todos', 'Activo', 'Próximos a vencer', 'Por vencer', 'En revisión', 'Finalizado']}
       filtroActivo={filtroActivo}
       setFiltroActivo={setFiltroActivo}
       onNew={() => console.log('Nuevo Convenio')}
@@ -74,29 +93,49 @@ export default function ConveniosPage() {
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col2)}>ORGANIZACIÓN ASOCIADA<Resizer colKey="col2" /></th>
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col3)}>FECHA FIRMA<Resizer colKey="col3" /></th>
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-right" style={thStyle(widths.col4)}>MONTO<Resizer colKey="col4" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col5)}>ESTADO<Resizer colKey="col5" /></th>
+                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col5)}>ESTADO Y VENCIMIENTO<Resizer colKey="col5" /></th>
                 <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>ACCIONES</th>
               </tr>
             </thead>
             <tbody>
-              {filteredConvenios.map((conv) => (
-                <tr key={conv.id} onClick={() => setSelectedItem(conv)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
-                  <td className="text-sm font-semibold text-texto border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={conv.nombre}>{conv.nombre}</td>
-                  <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)} title={getOrgName(conv.org_id)}>{getOrgName(conv.org_id)}</td>
-                  <td className="text-sm text-texto border-r border-borde" style={thStyle(widths.col3)}>{conv.fechaFirma}</td>
-                  <td className="text-sm font-bold text-texto text-right border-r border-borde" style={thStyle(widths.col4)}>{formatCurrency(conv.monto)}</td>
-                  <td className="text-sm text-center border-r border-borde" style={thStyle(widths.col5)}>
-                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${conv.estado === 'Activo' ? 'bg-exito/10 text-exito' : 'bg-naranja/10 text-naranja'}`}>
-                      {conv.estado}
-                    </span>
-                  </td>
-                  <td className="text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>
-                    <button className="inline-flex items-center gap-1 text-xs font-medium text-pizarra hover:text-primario">
-                      <PencilSimple className="w-3.5 h-3.5" /> Editar
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {filteredConvenios.map((conv) => {
+                const daysLeft = getDaysLeft(conv.fechaVencimiento);
+                const isWarning = daysLeft !== null && daysLeft >= 0 && daysLeft <= 30;
+
+                return (
+                  <tr key={conv.id} onClick={() => setSelectedItem(conv)} className={`border-b border-borde hover:bg-canvas cursor-pointer transition-colors ${isWarning ? 'bg-naranja/5' : ''}`}>
+                    <td className="text-sm font-semibold text-texto border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={conv.nombre}>
+                      {conv.nombre}
+                    </td>
+                    <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)} title={getOrgName(conv.org_id)}>{getOrgName(conv.org_id)}</td>
+                    <td className="text-sm text-texto border-r border-borde" style={thStyle(widths.col3)}>{conv.fechaFirma}</td>
+                    <td className="text-sm font-bold text-texto text-right border-r border-borde" style={thStyle(widths.col4)}>{formatCurrency(conv.monto)}</td>
+                    <td className="text-sm text-center border-r border-borde" style={{...thStyle(widths.col5), padding: '8px 16px'}}>
+                      <div className="flex flex-col items-center justify-center" style={{ gap: '4px' }}>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                          conv.estado === 'Activo' ? 'bg-exito/10 text-exito' :
+                          conv.estado === 'Por vencer' ? 'bg-naranja/10 text-naranja' :
+                          conv.estado === 'En revisión' ? 'bg-amarillo/10 text-amarillo' :
+                          'bg-pizarra/10 text-pizarra'
+                        }`}>
+                          {conv.estado}
+                        </span>
+                        {daysLeft !== null && daysLeft <= 30 && (
+                          <div className="flex items-center text-[10px] font-bold text-naranja bg-naranja/5 px-2 py-0.5 rounded border border-naranja/20" style={{ gap: '4px' }}>
+                            <Warning style={{ width: '12px', height: '12px' }} />
+                            Vence en {daysLeft} días
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>
+                      <button className="inline-flex items-center gap-1 text-xs font-medium text-pizarra hover:text-primario">
+                        <PencilSimple className="w-3.5 h-3.5" /> Editar
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -117,10 +156,14 @@ export default function ConveniosPage() {
               <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Estado</label>
               <p className="text-sm font-medium text-texto">{selectedItem.estado}</p>
             </div>
+            <div className="flex gap-4">
+              <button className="flex-1 bg-white border border-borde text-pizarra hover:bg-canvas rounded-md py-2 font-medium text-sm transition-colors">
+                Modo Demo: Ver PDF
+              </button>
+            </div>
           </div>
         )}
       </Modal>
     </PageTemplate>
   );
 }
-

@@ -92,54 +92,6 @@ export default function DashboardPage() {
         />
       </motion.div>
 
-      {/* Oportunidades Destacadas */}
-      <motion.div variants={itemVariants}>
-        <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '24px' }}>
-          <div className="flex items-center justify-between" style={{ marginBottom: '20px' }}>
-            <div>
-              <h2 className="text-base font-bold text-pizarra">Oportunidades Destacadas</h2>
-              <p className="text-xs text-pizarra/50 mt-0.5">{oportunidades.length} oportunidades disponibles actualmente</p>
-            </div>
-            <button
-              onClick={() => navigate('/oportunidades')}
-              className="flex items-center text-xs font-bold text-primario hover:underline cursor-pointer"
-              style={{ gap: '4px' }}
-            >
-              Ver todas <ArrowRight weight="bold" style={{ width: '14px', height: '14px' }} />
-            </button>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {oportunidades.slice(0, 3).map((op) => {
-              const tipoKey = op.categoria?.toLowerCase() || 'default';
-              const tagColor = TAG_COLORS[tipoKey] || TAG_COLORS.default;
-              return (
-                <div
-                  key={op.id}
-                  onClick={() => navigate('/oportunidades')}
-                  className="flex items-center justify-between bg-canvas hover:bg-borde/40 rounded-lg transition-colors cursor-pointer"
-                  style={{ padding: '14px 16px', gap: '16px' }}
-                >
-                  <div className="flex items-center flex-1 min-w-0" style={{ gap: '12px' }}>
-                    <div className="rounded-lg flex items-center justify-center shrink-0" style={{ width: '36px', height: '36px', backgroundColor: tagColor.bg }}>
-                      <Tag weight="duotone" style={{ width: '18px', height: '18px', color: tagColor.text }} />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-texto truncate">{op.titulo}</p>
-                      <p className="text-xs text-pizarra/50 truncate">{op.organizador}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center shrink-0" style={{ gap: '6px' }}>
-                    <Clock weight="duotone" style={{ width: '13px', height: '13px', color: '#9ca3af' }} />
-                    <span className="text-xs font-medium text-pizarra/50 whitespace-nowrap">{op.fecha}</span>
-                    <ArrowRight weight="bold" style={{ width: '14px', height: '14px', color: '#9ca3af', marginLeft: '4px' }} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </motion.div>
-
       {/* Row 2: Charts */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: 'clamp(24px, 3vw, 40px)' }}>
         <div className="lg:col-span-2">

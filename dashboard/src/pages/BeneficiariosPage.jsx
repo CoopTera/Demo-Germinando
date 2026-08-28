@@ -10,15 +10,16 @@ import EntityTimeline from '../components/common/EntityTimeline';
 import MiniGraph from '../components/graph/MiniGraph';
 import BeneficiarioForm from '../components/forms/BeneficiarioForm';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const FILTROS_ESTADO = ['Todos', 'Activos', 'Sin seguimiento'];
 
 export default function BeneficiariosPage() {
   const { beneficiarios, importarBeneficiarios, eliminarBeneficiario, editarBeneficiario, organizaciones, talleres } = useData();
   const navigate = useNavigate();
+    const location = useLocation();
   const [filtro, setFiltro] = useState('Todos');
-  const [busqueda, setBusqueda] = useState('');
+  const [busqueda, setBusqueda] = useState(location.state?.filterOrg || location.state?.search || '');
   const [viewMode, setViewMode] = useState('list');
   const [selectedItem, setSelectedItem] = useState(null);
   const [isEditingItem, setIsEditingItem] = useState(false);
@@ -51,8 +52,9 @@ export default function BeneficiariosPage() {
     const busq = busqueda.toLowerCase();
     const matchBusqueda =
       !busqueda ||
-      b.nombre.toLowerCase().includes(busq) ||
-      b.dni.includes(busq);
+      (b.nombre && b.nombre.toLowerCase().includes(busq)) ||
+      (b.dni && b.dni.includes(busq)) ||
+      (b.programas && b.programas.toLowerCase().includes(busq));
       
     return matchFiltro && matchBusqueda;
   });
@@ -125,7 +127,7 @@ export default function BeneficiariosPage() {
               <p className="text-base font-semibold text-texto">{fecha}</p>
             </div>
             <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
-              <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Clock style={{ width: '14px', height: '14px' }} /> Último Registro</div>
+              <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Clock style={{ width: '14px', height: '14px' }} /> Ãšltimo Registro</div>
               <p className="text-base font-semibold text-texto">{ultimoReg}</p>
             </div>
             <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
@@ -222,7 +224,7 @@ export default function BeneficiariosPage() {
         title="Confirmar Eliminación"
       >
         <div className="flex flex-col items-center text-center py-6">
-          <h3 className="text-lg font-bold text-texto mb-2">¿Eliminar Beneficiario?</h3>
+          <h3 className="text-lg font-bold text-texto mb-2">Â¿Eliminar Beneficiario?</h3>
           <p className="text-sm text-pizarra/80 mb-6">Esta acción no se puede deshacer. Se perderán todos los datos asociados a "{selectedItem?.nombre}".</p>
           <div className="flex justify-center gap-3">
             <button onClick={() => setIsDeletingItem(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-md transition-colors cursor-pointer border border-borde px-4 py-2">Cancelar</button>
@@ -272,8 +274,10 @@ export default function BeneficiariosPage() {
                 const tallerSeleccionado = talleres.find(t => t.id.toString() === selectedTallerId);
                 const newEvent = { id: Date.now(), fecha: new Date().toLocaleDateString('es-AR'), tipo: 'taller', titulo: 'Asignación a Taller', descripcion: `Inscripto en: ${tallerSeleccionado?.nombre || 'Taller'}.` };
                 const newHistorial = [...(selectedItem.historial || []), newEvent];
-                editarBeneficiario({ ...selectedItem, historial: newHistorial });
-                setSelectedItem({ ...selectedItem, historial: newHistorial });
+                  const currentTalleres = selectedItem.talleres || [];
+                  const newTalleres = [...currentTalleres, parseInt(selectedTallerId)];
+                editarBeneficiario({ ...selectedItem, historial: newHistorial, talleres: newTalleres });
+                setSelectedItem({ ...selectedItem, historial: newHistorial, talleres: newTalleres });
                 setIsTallerModalOpen(false);
                 setSelectedTallerId('');
               }} 
@@ -307,6 +311,8 @@ export default function BeneficiariosPage() {
                 if(!seguimientoNota.trim()) return;
                 const newEvent = { id: Date.now(), fecha: new Date().toLocaleDateString('es-AR'), tipo: 'seguimiento', titulo: 'Nuevo Seguimiento', descripcion: seguimientoNota };
                 const newHistorial = [...(selectedItem.historial || []), newEvent];
+                  const currentTalleres = selectedItem.talleres || [];
+                  const newTalleres = [...currentTalleres, parseInt(selectedTallerId)];
                 editarBeneficiario({ ...selectedItem, historial: newHistorial, actividad: newEvent.fecha });
                 setSelectedItem({ ...selectedItem, historial: newHistorial, actividad: newEvent.fecha });
                 setIsSeguimientoModalOpen(false);
@@ -323,4 +329,6 @@ export default function BeneficiariosPage() {
     </>
   );
 }
+
+
 
