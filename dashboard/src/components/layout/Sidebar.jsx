@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import LogoSantaFe from '../../assets/logo-santa-fe.png'
 import {
   Sprout,
   LayoutDashboard,
@@ -7,7 +8,9 @@ import {
   Users,
   BarChart3,
   Network,
-  Bookmark
+  Bookmark,
+  Briefcase,
+  BookOpen
 } from 'lucide-react'
 
 const navSections = [
@@ -15,9 +18,11 @@ const navSections = [
     category: 'PRINCIPAL',
     items: [
       { name: 'Panel Ejecutivo', path: '/', icon: LayoutDashboard, end: true },
+      { name: 'Oportunidades', path: '/oportunidades', icon: Bookmark },
       { name: 'Organizaciones', path: '/organizaciones', icon: Building2 },
       { name: 'Beneficiarios', path: '/beneficiarios', icon: Users },
-      { name: 'Oportunidades', path: '/oportunidades', icon: Bookmark },
+      { name: 'Convenios', path: '/convenios', icon: Briefcase },
+      { name: 'Talleres', path: '/talleres', icon: BookOpen },
     ],
   },
   {
@@ -51,54 +56,18 @@ export default function Sidebar({ isOpen, onClose }) {
       >
       <div className="flex flex-col min-h-0">
         {/* Brand / Logo */}
-        <div className="h-24 flex items-center border-b border-white/10 shrink-0" style={{ padding: '0 40px', gap: '16px' }}>
-          <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white shrink-0">
-            <Sprout className="w-5 h-5 text-white" />
+        <div className="h-24 flex items-center border-b border-white/10 shrink-0" style={{ padding: '0 32px', gap: '16px' }}>
+          <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center shrink-0 overflow-hidden" style={{ padding: '4px' }}>
+            <img src={LogoSantaFe} alt="Santa Fe Provincia" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="font-bold text-lg leading-tight tracking-wide text-white">
               Germinando
             </h1>
-            <p className="text-[13px] text-white/70 font-medium">
-              Gestión Social
+            <p className="text-[12px] text-white/70 font-medium whitespace-nowrap">
+              Gobierno de Santa Fe
             </p>
           </div>
-        </div>
-
-        {/* User Profile */}
-        <div style={{ paddingTop: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <NavLink
-            to="/perfil"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? '#4A1621' : 'transparent',
-              padding: '16px 40px',
-              gap: '16px',
-              display: 'flex',
-              alignItems: 'center'
-            })}
-            className={({ isActive }) =>
-              `relative text-[15px] transition-all duration-150 ${
-                isActive
-                  ? 'text-white font-semibold'
-                  : 'text-white/90 hover:bg-white/5 hover:text-white font-medium'
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {isActive && (
-                  <div 
-                    className="absolute bg-white rounded-full" 
-                    style={{ width: '6px', height: '6px', left: '16px', top: '50%', transform: 'translateY(-50%)' }}
-                  />
-                )}
-                <div className="rounded-full bg-white/20 flex items-center justify-center font-bold text-[10px] shrink-0" style={{ width: '24px', height: '24px' }}>
-                  DG
-                </div>
-                <span className="truncate">Director General</span>
-              </>
-            )}
-          </NavLink>
         </div>
 
         {/* Navigation Sections */}
@@ -147,8 +116,44 @@ export default function Sidebar({ isOpen, onClose }) {
         </nav>
       </div>
 
+      {/* User Profile */}
+      <div style={{ paddingTop: '16px', paddingBottom: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <NavLink
+          to="/perfil"
+          style={({ isActive }) => ({
+            backgroundColor: isActive ? '#4A1621' : 'transparent',
+            padding: '16px 40px',
+            gap: '16px',
+            display: 'flex',
+            alignItems: 'center'
+          })}
+          className={({ isActive }) =>
+            `relative text-[15px] transition-all duration-150 ${
+              isActive
+                ? 'text-white font-semibold'
+                : 'text-white/90 hover:bg-white/5 hover:text-white font-medium'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              {isActive && (
+                <div 
+                  className="absolute bg-white rounded-full" 
+                  style={{ width: '6px', height: '6px', left: '16px', top: '50%', transform: 'translateY(-50%)' }}
+                />
+              )}
+              <div className="rounded-full bg-white/20 flex items-center justify-center font-bold text-[10px] shrink-0" style={{ width: '24px', height: '24px' }}>
+                DG
+              </div>
+              <span className="truncate">Director General</span>
+            </>
+          )}
+        </NavLink>
+      </div>
+
       {/* Footer */}
-      <div className="p-6 border-t border-white/10 text-center shrink-0">
+      <div className="pb-6 pt-2 text-center shrink-0">
         <p className="text-xs text-superficie-sec/60">
           Programa Germinando © 2026
         </p>
@@ -157,5 +162,3 @@ export default function Sidebar({ isOpen, onClose }) {
     </>
   )
 }
-
-

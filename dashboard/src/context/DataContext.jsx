@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import * as xlsx from 'xlsx';
-import { organizacionesData, beneficiariosData } from '../data/mockData';
+import { organizacionesData, beneficiariosData, conveniosData, talleresData } from '../data/mockData';
 
 const DataContext = createContext();
 
@@ -8,7 +8,18 @@ export const useData = () => useContext(DataContext);
 
 export const DataProvider = ({ children }) => {
   const [organizaciones, setOrganizaciones] = useState(organizacionesData);
-  const [beneficiarios, setBeneficiarios] = useState(beneficiariosData);
+  const [beneficiarios, setBeneficiarios] = useState(
+    beneficiariosData.map(b => ({
+      ...b,
+      historial: [
+        { id: 1, fecha: b.inicioBeca, tipo: 'ingreso', titulo: 'Ingreso al programa', descripcion: `Asignado a ${b.programas}` },
+        { id: 2, fecha: '12/05/2025', tipo: 'taller', titulo: 'Inscripción a Taller', descripcion: 'Comenzó taller de capacitación básica.' },
+        { id: 3, fecha: b.actividad, tipo: 'seguimiento', titulo: 'Última actividad', descripcion: `Estado de seguimiento: ${b.estado}` }
+      ]
+    }))
+  );
+  const [convenios, setConvenios] = useState(conveniosData);
+  const [talleres, setTalleres] = useState(talleresData);
 
   const importarDesdeExcel = (file) => {
     const reader = new FileReader();
@@ -20,7 +31,7 @@ export const DataProvider = ({ children }) => {
       const json = xlsx.utils.sheet_to_json(worksheet);
       
       const nuevasOrgs = json.map((row, index) => ({
-        id: `import-${index}`,
+        id: `import-${Date.now()}-${index}`,
         nombre: row['NOMBRE']?.toString().trim() || 'Sin nombre',
         especializacion: row['ESPECIALIZACION']?.toString().trim() || 'General',
         localizacion: row['LOCALIZACION']?.toString().trim() || 'Sin especificar',
@@ -31,7 +42,8 @@ export const DataProvider = ({ children }) => {
         presupuesto: row['PRESUPUESTO'] || '$ 0'
       }));
 
-      setOrganizaciones(nuevasOrgs);
+      setOrganizaciones(prev => [...prev, ...nuevasOrgs]);
+      alert(`✅ Se importaron ${nuevasOrgs.length} organizaciones correctamente.`);
     };
     reader.readAsArrayBuffer(file);
   };
@@ -53,7 +65,7 @@ export const DataProvider = ({ children }) => {
       const json = xlsx.utils.sheet_to_json(worksheet);
       
       const nuevosBeneficiarios = json.map((row, index) => ({
-        id: `ben-${index}`,
+        id: `ben-${Date.now()}-${index}`,
         nombre: row['NOMBRE']?.toString().trim() || 'Sin nombre',
         dni: row['DNI']?.toString().trim() || 'S/D',
         programas: row['PROGRAMAS QUE LO BENEFICIAN']?.toString().trim() || '-',
@@ -64,7 +76,7 @@ export const DataProvider = ({ children }) => {
         estado: row['ESTADO DE SEGUIMIENTO']?.toString().trim() || 'Sin seguimiento'
       }));
 
-      setBeneficiarios(nuevosBeneficiarios);
+      setBeneficiarios(prev => [...prev, ...nuevosBeneficiarios]);
       alert(`✅ Se importaron ${nuevosBeneficiarios.length} beneficiarios correctamente.`);
     };
     reader.readAsArrayBuffer(file);
@@ -74,8 +86,24 @@ export const DataProvider = ({ children }) => {
     setOrganizaciones([...organizaciones, { ...nuevaOrg, id: Date.now() }]);
   };
 
+  const editarOrganizacion = (id, dataEditada) => {
+    setOrganizaciones(prev => prev.map(org => org.id === id ? { ...org, ...dataEditada } : org));
+  };
+
+  const eliminarOrganizacion = (id) => {
+    setOrganizaciones(prev => prev.filter(org => org.id !== id));
+  };
+
   const agregarBeneficiario = (nuevoBen) => {
     setBeneficiarios([...beneficiarios, { ...nuevoBen, id: Date.now() }]);
+  };
+
+  const editarBeneficiario = (id, dataEditada) => {
+    setBeneficiarios(prev => prev.map(ben => ben.id === id ? { ...ben, ...dataEditada } : ben));
+  };
+
+  const eliminarBeneficiario = (id) => {
+    setBeneficiarios(prev => prev.filter(ben => ben.id !== id));
   };
 
   return (
@@ -84,9 +112,17 @@ export const DataProvider = ({ children }) => {
       setOrganizaciones, 
       importarDesdeExcel,
       agregarOrganizacion,
+      editarOrganizacion,
+      eliminarOrganizacion,
       beneficiarios,
       importarBeneficiarios,
-      agregarBeneficiario
+      agregarBeneficiario,
+      editarBeneficiario,
+      eliminarBeneficiario,
+      convenios,
+      setConvenios,
+      talleres,
+      setTalleres
     }}>
       {children}
     </DataContext.Provider>

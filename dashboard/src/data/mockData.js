@@ -408,3 +408,15 @@ export const oportunidades = [
   { id: 3, titulo: "Capacitación Tecnológica", organizador: "Programa Nodos", fecha: "Cupos disponibles" }
 ];
  
+export const conveniosData = [
+  { id: 'conv-1', org_id: 1, nombre: 'Convenio Semilla 2024', fechaFirma: '15/01/2024', monto: 1500000, estado: 'Activo' },
+  { id: 'conv-2', org_id: 2, nombre: 'Apoyo Maquinaria', fechaFirma: '20/03/2024', monto: 2000000, estado: 'Activo' },
+  { id: 'conv-3', org_id: 3, nombre: 'Capacitación IT', fechaFirma: '10/05/2024', monto: 800000, estado: 'En revisión' }
+];
+
+export const talleresData = [
+  { id: 'tall-1', org_id: 1, nombre: 'Taller de Costura Avanzada', cupo: 30, inscriptos: 25, estado: 'En curso' },
+  { id: 'tall-2', org_id: 1, nombre: 'Taller de Moldería', cupo: 20, inscriptos: 20, estado: 'Finalizado' },
+  { id: 'tall-3', org_id: 2, nombre: 'Manipulación de Alimentos', cupo: 50, inscriptos: 48, estado: 'En curso' },
+  { id: 'tall-4', org_id: 3, nombre: 'Introducción a la Programación', cupo: 40, inscriptos: 15, estado: 'Abierto' }
+];

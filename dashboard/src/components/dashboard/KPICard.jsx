@@ -15,12 +15,9 @@ export default function KPICard({ titulo, valor, variacion, periodo, icono: Icon
       className="relative bg-white rounded-md overflow-hidden gradient-border-top card-elevated min-h-[140px]"
     >
       <div className="relative flex flex-col justify-between h-full gap-4" style={{ padding: '24px' }}>
-        {/* Top: Title + Icon */}
+        {/* Top: Title */}
         <div className="flex justify-between items-start">
           <h2 className="text-sm font-semibold text-pizarra/80 uppercase tracking-wider">{titulo}</h2>
-          <div className="rounded-full bg-primario/10 flex items-center justify-center text-primario shrink-0" style={{ width: '32px', height: '32px' }}>
-            <Icon className="w-4 h-4" />
-          </div>
         </div>
 
         {/* Value */}

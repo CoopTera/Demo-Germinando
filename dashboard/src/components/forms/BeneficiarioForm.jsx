@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 
-export default function BeneficiarioForm({ onClose }) {
-  const { agregarBeneficiario } = useData();
+export default function BeneficiarioForm({ onClose, initialData = null }) {
+  const { agregarBeneficiario, editarBeneficiario } = useData();
+  
+  // Helper to convert DD/MM/YYYY to YYYY-MM-DD for the input
+  const parseDateForInput = (dateStr) => {
+    if (!dateStr || dateStr === '-') return '';
+    const parts = dateStr.split('/');
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+    }
+    return '';
+  };
+
   const [formData, setFormData] = useState({
-    nombre: '',
-    dni: '',
-    programas: '',
-    inicioBeca: '',
-    tiempoBeca: '',
-    monto: '',
-    actividad: '',
-    estado: 'Activo'
+    nombre: initialData?.nombre || '',
+    dni: initialData?.dni || '',
+    programas: initialData?.programas || '',
+    inicioBeca: parseDateForInput(initialData?.inicioBeca),
+    tiempoBeca: initialData?.tiempoBeca || '',
+    monto: initialData?.monto || '',
+    actividad: parseDateForInput(initialData?.actividad),
+    estado: initialData?.estado || 'Activo'
   });
 
   const handleChange = (e) => {
@@ -21,13 +32,28 @@ export default function BeneficiarioForm({ onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    agregarBeneficiario({
+    
+    // Helper to format YYYY-MM-DD to local string
+    const formatDateForSave = (dateStr) => {
+      if (!dateStr) return '-';
+      const [y, m, d] = dateStr.split('-');
+      if (y && m && d) return `${d}/${m}/${y}`;
+      return '-';
+    };
+
+    const dataToSave = {
       ...formData,
       monto: Number(formData.monto) || 0,
-      inicioBeca: formData.inicioBeca ? new Date(formData.inicioBeca).toLocaleDateString('es-AR') : '-',
-      actividad: formData.actividad ? new Date(formData.actividad).toLocaleDateString('es-AR') : '-',
+      inicioBeca: formatDateForSave(formData.inicioBeca),
+      actividad: formatDateForSave(formData.actividad),
       alerta: formData.estado === 'Sin seguimiento'
-    });
+    };
+
+    if (initialData && initialData.id) {
+      editarBeneficiario(initialData.id, dataToSave);
+    } else {
+      agregarBeneficiario(dataToSave);
+    }
     onClose();
   };
 

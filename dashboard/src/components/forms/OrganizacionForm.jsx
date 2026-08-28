@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 
-export default function OrganizacionForm({ onClose }) {
-  const { agregarOrganizacion } = useData();
+export default function OrganizacionForm({ onClose, initialData = null }) {
+  const { agregarOrganizacion, editarOrganizacion } = useData();
   const [formData, setFormData] = useState({
-    nombre: '',
-    especializacion: '',
-    localizacion: '',
-    cuit: '',
-    beneficiarios: '',
-    presupuesto: '',
-    convenios: '',
-    talleres: ''
+    nombre: initialData?.nombre || '',
+    especializacion: initialData?.especializacion || '',
+    localizacion: initialData?.localizacion || '',
+    cuit: initialData?.cuit || '',
+    beneficiarios: initialData?.beneficiarios || '',
+    presupuesto: initialData?.presupuesto?.replace(/[^0-9]/g, '') || '',
+    convenios: initialData?.convenios || '',
+    talleres: initialData?.talleres || ''
   });
 
   const handleChange = (e) => {
@@ -21,13 +21,19 @@ export default function OrganizacionForm({ onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    agregarOrganizacion({
+    const dataToSave = {
       ...formData,
       beneficiarios: Number(formData.beneficiarios) || 0,
-      conveniosActivos: Number(formData.convenios) || 0,
-      talleresActivos: Number(formData.talleres) || 0,
+      convenios: Number(formData.convenios) || 0,
+      talleres: Number(formData.talleres) || 0,
       presupuesto: `$ ${Number(formData.presupuesto).toLocaleString('es-AR') || 0}`
-    });
+    };
+
+    if (initialData && initialData.id) {
+      editarOrganizacion(initialData.id, dataToSave);
+    } else {
+      agregarOrganizacion(dataToSave);
+    }
     onClose();
   };
 

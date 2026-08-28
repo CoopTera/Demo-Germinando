@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pencil, MapPin } from 'lucide-react';
+import { useTableResize } from '../../hooks/useTableResize';
 
 const getEspecializacionColor = (esp) => {
   if (esp.toLowerCase().includes('textil')) return 'text-primario';
@@ -9,19 +10,49 @@ const getEspecializacionColor = (esp) => {
 };
 
 export default function OrganizacionesTable({ data, onItemClick }) {
+  const { widths, startResize } = useTableResize({
+    col1: 250, col2: 200, col3: 200, col4: 100, col5: 100, col6: 120, col7: 100
+  });
+
+  const cellStyle = (width, extraPadding = {}) => ({
+    width: `${width}px`,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    padding: '12px 16px',
+    ...extraPadding
+  });
+
+  const Resizer = ({ colKey }) => (
+    <div 
+      onMouseDown={(e) => startResize(e, colKey)}
+      style={{
+        position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10
+      }}
+      onMouseEnter={(e) => e.target.style.backgroundColor = '#3C3AE5'}
+      onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'}
+    />
+  );
+
+  const thStyle = (width, extraPadding = {}) => ({
+    ...cellStyle(width, extraPadding),
+    position: 'relative',
+    userSelect: 'none'
+  });
+
   return (
     <div className="bg-white rounded-md shadow-sm border border-borde overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
           <thead>
             <tr className="bg-superficie-sec border-b border-borde">
-              <th className="text-xs font-bold text-pizarra tracking-wider" style={{ padding: '12px 16px', paddingLeft: '24px' }}>NOMBRE</th>
-              <th className="text-xs font-bold text-pizarra tracking-wider" style={{ padding: '12px 16px' }}>LOCALIZACIÓN</th>
-              <th className="text-xs font-bold text-pizarra tracking-wider" style={{ padding: '12px 16px' }}>ESPECIALIZACIÓN</th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={{ padding: '12px 16px' }}>CONVENIOS</th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={{ padding: '12px 16px' }}>TALLERES</th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-right" style={{ padding: '12px 16px' }}>PRESUPUESTO</th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={{ padding: '12px 16px', paddingRight: '24px' }}>ACCIONES</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>NOMBRE<Resizer colKey="col1" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col2)}>LOCALIZACIÓN<Resizer colKey="col2" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col3)}>ESPECIALIZACIÓN<Resizer colKey="col3" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center border-r border-borde" style={thStyle(widths.col4)}>CONVENIOS<Resizer colKey="col4" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center border-r border-borde" style={thStyle(widths.col5)}>TALLERES<Resizer colKey="col5" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-right border-r border-borde" style={thStyle(widths.col6)}>PRESUPUESTO<Resizer colKey="col6" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(widths.col7, { paddingRight: '24px' })}>ACCIONES</th>
             </tr>
           </thead>
           <tbody>
@@ -31,29 +62,29 @@ export default function OrganizacionesTable({ data, onItemClick }) {
                 onClick={() => onItemClick && onItemClick(org)}
                 className="border-b border-borde last:border-0 hover:bg-canvas transition-colors cursor-pointer"
               >
-                <td className="text-sm font-semibold text-texto" style={{ padding: '12px 16px', paddingLeft: '24px' }}>
+                <td className="text-sm font-semibold text-texto border-r border-borde" title={org.nombre} style={cellStyle(widths.col1, { paddingLeft: '24px' })}>
                   {org.nombre}
                 </td>
-                <td className="text-sm text-pizarra/80 font-medium" style={{ padding: '12px 16px' }}>
-                  <div className="flex items-center" style={{ gap: '6px' }}>
-                    <MapPin className="text-pizarra/50" style={{ width: '14px', height: '14px' }} />
-                    {org.localizacion}
+                <td className="text-sm text-pizarra/80 font-medium border-r border-borde" title={org.localizacion} style={cellStyle(widths.col2)}>
+                  <div className="flex items-center" style={{ gap: '6px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <MapPin className="text-pizarra/50 shrink-0" style={{ width: '14px', height: '14px' }} />
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{org.localizacion}</span>
                   </div>
                 </td>
-                <td className={`text-sm font-semibold ${getEspecializacionColor(org.especializacion)}`} style={{ padding: '12px 16px' }}>
+                <td className={`text-sm font-semibold border-r border-borde ${getEspecializacionColor(org.especializacion)}`} title={org.especializacion} style={cellStyle(widths.col3)}>
                   {org.especializacion}
                 </td>
-                <td className="text-sm text-texto font-bold text-center" style={{ padding: '12px 16px' }}>
+                <td className="text-sm text-texto font-bold text-center border-r border-borde" style={cellStyle(widths.col4)}>
                   {org.convenios}
                 </td>
-                <td className="text-sm text-texto font-bold text-center" style={{ padding: '12px 16px' }}>
+                <td className="text-sm text-texto font-bold text-center border-r border-borde" style={cellStyle(widths.col5)}>
                   {org.talleres}
                 </td>
-                <td className="text-sm font-bold text-texto text-right" style={{ padding: '12px 16px' }}>
+                <td className="text-sm font-bold text-texto text-right border-r border-borde" style={cellStyle(widths.col6)}>
                   {typeof org.presupuesto === 'number' ? `$ ${org.presupuesto.toLocaleString('es-AR')}` : org.presupuesto}
                 </td>
-                <td className="text-center" style={{ padding: '12px 16px', paddingRight: '24px' }}>
-                  <button className="inline-flex items-center text-xs font-medium text-pizarra hover:text-primario transition-colors" style={{ gap: '4px' }}>
+                <td className="text-center" style={cellStyle(widths.col7, { paddingRight: '24px' })}>
+                  <button className="inline-flex items-center justify-center w-full text-xs font-medium text-pizarra hover:text-primario transition-colors" style={{ gap: '4px' }}>
                     <Pencil style={{ width: '14px', height: '14px' }} />
                     Editar
                   </button>

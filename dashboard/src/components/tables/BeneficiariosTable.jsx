@@ -1,7 +1,12 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
+import { useTableResize } from '../../hooks/useTableResize';
 
 export default function BeneficiariosTable({ data = [], onItemClick }) {
+  const { widths, startResize } = useTableResize({
+    col1: 120, col2: 200, col3: 300, col4: 120, col5: 120, col6: 150, col7: 120
+  });
+
   const formatCurrency = (amount) => {
     if (typeof amount !== 'number') return '$ 0';
     return amount.toLocaleString('es-AR', {
@@ -13,9 +18,7 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '-';
-    // Si ya viene formateado con barras (ej: 15/3/2025) del Excel, lo devolvemos tal cual
     if (typeof dateStr === 'string' && dateStr.includes('/')) return dateStr;
-    
     if (typeof dateStr === 'string' && dateStr.includes('-')) {
       const parts = dateStr.split('-');
       if (parts.length === 3) {
@@ -29,19 +32,45 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
     return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('es-AR');
   };
 
+  const cellStyle = (width, extraPadding = {}) => ({
+    width: `${width}px`,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    padding: '16px 20px',
+    ...extraPadding
+  });
+
+  const Resizer = ({ colKey }) => (
+    <div 
+      onMouseDown={(e) => startResize(e, colKey)}
+      style={{
+        position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10
+      }}
+      onMouseEnter={(e) => e.target.style.backgroundColor = '#3C3AE5'}
+      onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'}
+    />
+  );
+
+  const thStyle = (width, extraPadding = {}) => ({
+    ...cellStyle(width, { padding: '12px 20px', ...extraPadding }),
+    position: 'relative',
+    userSelect: 'none'
+  });
+
   return (
     <div className="bg-white rounded-xl card-elevated animate-fade-in-up border border-borde overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
           <thead className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider">
             <tr>
-              <th scope="col" style={{ padding: '12px 20px' }}>DNI</th>
-              <th scope="col" style={{ padding: '12px 20px' }}>Nombre</th>
-              <th scope="col" style={{ padding: '12px 20px' }}>Organizaciones/Programas</th>
-              <th scope="col" style={{ padding: '12px 20px' }}>Fecha Inicio</th>
-              <th scope="col" className="text-right" style={{ padding: '12px 20px' }}>Beca Mensual</th>
-              <th scope="col" style={{ padding: '12px 20px' }}>Último Registro</th>
-              <th scope="col" className="text-center" style={{ padding: '12px 20px' }}>Estado</th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col1)}>DNI<Resizer colKey="col1" /></th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>Nombre<Resizer colKey="col2" /></th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>Organizaciones/Programas<Resizer colKey="col3" /></th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>Fecha Inicio<Resizer colKey="col4" /></th>
+              <th scope="col" className="text-right border-r border-borde" style={thStyle(widths.col5)}>Beca Mensual<Resizer colKey="col5" /></th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>Último Registro<Resizer colKey="col6" /></th>
+              <th scope="col" className="text-center" style={thStyle(widths.col7)}>Estado</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-borde">
@@ -49,7 +78,6 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
               data.map((row, index) => {
                 const hasAlert = row.alerta === true || row.estado === 'Sin seguimiento';
                 
-                // Handle both mock data and imported excel data structures
                 const orgsRaw = row.programas || row.organizaciones;
                 const orgs = typeof orgsRaw === 'string' 
                   ? orgsRaw.split(',').map(s => s.trim())
@@ -73,20 +101,21 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                         : `hover:bg-canvas ${index % 2 === 0 ? '' : 'bg-canvas/50'}`
                     }`}
                   >
-                    <td className="text-sm text-texto font-medium whitespace-nowrap" style={{ padding: '16px 20px' }}>
+                    <td className="text-sm text-texto font-medium border-r border-borde" title={row.dni} style={cellStyle(widths.col1)}>
                       {row.dni}
                     </td>
-                    <td className="text-sm text-texto font-semibold" style={{ padding: '16px 20px' }}>
+                    <td className="text-sm text-texto font-semibold border-r border-borde" title={row.nombre} style={cellStyle(widths.col2)}>
                       {row.nombre}
                     </td>
-                    <td className="text-sm text-texto" style={{ padding: '16px 20px' }}>
-                      <div className="flex flex-wrap" style={{ gap: '4px' }}>
+                    <td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col3)}>
+                      <div className="flex flex-wrap" style={{ gap: '4px', overflow: 'hidden', height: '24px' }}>
                         {orgs.length > 0 ? (
                           orgs.map((org, orgIdx) => (
                             <span
                               key={orgIdx}
-                              className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium"
-                              style={{ padding: '2px 8px' }}
+                              className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate"
+                              style={{ padding: '2px 8px', maxWidth: '100%' }}
+                              title={org}
                             >
                               {org}
                             </span>
@@ -96,32 +125,33 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                         )}
                       </div>
                     </td>
-                    <td className="text-sm text-texto whitespace-nowrap" style={{ padding: '16px 20px' }}>
+                    <td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col4)}>
                       {formatDate(fecha)}
                     </td>
-                    <td className="text-sm text-texto text-right font-semibold whitespace-nowrap" style={{ padding: '16px 20px' }}>
+                    <td className="text-sm text-texto text-right font-semibold border-r border-borde" title={formatCurrency(monto)} style={cellStyle(widths.col5)}>
                       {formatCurrency(monto)}
                     </td>
                     <td
-                      className={`text-sm whitespace-nowrap ${
+                      className={`text-sm border-r border-borde ${
                         hasAlert ? 'text-naranja font-semibold' : 'text-texto'
                       }`}
-                      style={{ padding: '16px 20px' }}
+                      style={cellStyle(widths.col6)}
+                      title={formatDate(ultimoReg)}
                     >
-                      <div className="flex items-center" style={{ gap: '6px' }}>
+                      <div className="flex items-center" style={{ gap: '6px', overflow: 'hidden' }}>
                         {hasAlert && (
                           <AlertTriangle className="text-naranja shrink-0" style={{ width: '14px', height: '14px' }} />
                         )}
-                        <span>{formatDate(ultimoReg)}</span>
+                        <span className="truncate">{formatDate(ultimoReg)}</span>
                       </div>
                     </td>
-                    <td className="text-sm text-center whitespace-nowrap" style={{ padding: '16px 20px' }}>
+                    <td className="text-sm text-center" style={cellStyle(widths.col7)}>
                       {hasAlert ? (
-                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-naranja/10 text-naranja" style={{ padding: '4px 8px' }}>
+                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-naranja/10 text-naranja truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
                           Sin seguimiento
                         </span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito" style={{ padding: '4px 8px' }}>
+                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
                           Activo
                         </span>
                       )}

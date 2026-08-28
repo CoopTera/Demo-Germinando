@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Building2, MapPin, Hammer, Users, DollarSign, Target } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import OrganizacionesTable from '../components/organizaciones/OrganizacionesTable';
@@ -6,16 +6,39 @@ import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid'
 import PageTemplate from '../components/layout/PageTemplate';
 import Modal from '../components/common/Modal';
 import OrganizacionForm from '../components/forms/OrganizacionForm';
+import { useLocation } from 'react-router-dom';
 
 const FILTROS = ['Todas', 'Textil e Indumentaria', 'Producción Alimentaria', 'Construcción y Hábitat', 'Agricultura Familiar', 'Artesanías y Manufactura', 'Reciclado y Economía Circular'];
 
 export default function OrganizacionesPage() {
-  const { organizaciones, importarDesdeExcel } = useData();
+  const { organizaciones, importarDesdeExcel, eliminarOrganizacion } = useData();
+  const location = useLocation();
   const [viewMode, setViewMode] = useState('list');
   const [busqueda, setBusqueda] = useState('');
   const [filtroActivo, setFiltroActivo] = useState('Todas');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isEditingItem, setIsEditingItem] = useState(false);
+  const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.openModalId) {
+      const org = organizaciones.find(o => o.id === location.state.openModalId);
+      if (org) {
+        setSelectedItem(org);
+      }
+      // Clean up state so it doesn't reopen on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, organizaciones]);
+
+  const confirmDelete = () => {
+    if (selectedItem) {
+      eliminarOrganizacion(selectedItem.id);
+      setSelectedItem(null);
+      setIsDeletingItem(false);
+    }
+  };
 
   const statsObj = useMemo(() => {
     return {
@@ -98,11 +121,46 @@ export default function OrganizacionesPage() {
       </PageTemplate>
 
       <Modal 
-        isOpen={!!selectedItem} 
-        onClose={() => setSelectedItem(null)} 
-        title={selectedItem?.nombre || 'Detalle de Organización'}
+        isOpen={!!selectedItem && !isEditingItem} 
+        onClose={() => { setSelectedItem(null); setIsDeletingItem(false); }} 
+        title={isDeletingItem ? 'Confirmar Eliminación' : (selectedItem?.nombre || 'Detalle de Organización')}
       >
-        {getDetailContent(selectedItem)}
+        {isDeletingItem ? (
+          <div className="flex flex-col items-center text-center" style={{ padding: '24px 0' }}>
+            <h3 className="text-lg font-bold text-texto" style={{ marginBottom: '8px' }}>¿Eliminar Organización?</h3>
+            <p className="text-sm text-pizarra/80" style={{ marginBottom: '24px' }}>Esta acción no se puede deshacer. Se perderán todos los datos asociados a "{selectedItem?.nombre}".</p>
+            <div className="flex justify-center" style={{ gap: '12px' }}>
+              <button onClick={() => setIsDeletingItem(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-md transition-colors cursor-pointer border border-borde" style={{ padding: '8px 16px' }}>Cancelar</button>
+              <button onClick={confirmDelete} className="text-sm font-semibold text-white bg-critico hover:bg-critico/90 rounded-md shadow-sm transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Sí, eliminar</button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {getDetailContent(selectedItem)}
+            
+            <div className="mt-4 flex gap-2">
+              <button className="flex-1 text-xs font-semibold text-pizarra hover:bg-canvas border border-borde rounded-md py-2 transition-colors flex items-center justify-center gap-2">
+                + Añadir Convenio
+              </button>
+              <button className="flex-1 text-xs font-semibold text-pizarra hover:bg-canvas border border-borde rounded-md py-2 transition-colors flex items-center justify-center gap-2">
+                + Añadir Taller
+              </button>
+            </div>
+
+            <div className="flex justify-end border-t border-borde mt-6" style={{ paddingTop: '16px', gap: '12px' }}>
+              <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-md transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
+              <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-md shadow-sm transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
+            </div>
+          </>
+        )}
+      </Modal>
+
+      <Modal
+        isOpen={isEditingItem && !!selectedItem}
+        onClose={() => setIsEditingItem(false)}
+        title="Editar Organización"
+      >
+        <OrganizacionForm initialData={selectedItem} onClose={() => { setIsEditingItem(false); setSelectedItem(null); }} />
       </Modal>
 
       <Modal

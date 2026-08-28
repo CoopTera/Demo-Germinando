@@ -8,7 +8,7 @@ import OportunidadesGrid from '../components/oportunidades/OportunidadesGrid';
 const FILTROS = ['Todas', 'Licitaciones', 'Fondos', 'Capacitaciones'];
 
 export default function OportunidadesPage() {
-  const [viewMode, setViewMode] = useState('grid');
+  const [viewMode, setViewMode] = useState('list');
   const [busqueda, setBusqueda] = useState('');
   const [filtroActivo, setFiltroActivo] = useState('Todas');
 
