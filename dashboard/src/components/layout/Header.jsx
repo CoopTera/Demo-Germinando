@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, Menu } from 'lucide-react';
+import { MagnifyingGlass, Bell, List } from '@phosphor-icons/react';
 
 export default function Header({
   searchTerm,
@@ -16,11 +16,11 @@ export default function Header({
           className="lg:hidden text-pizarra hover:bg-superficie-sec rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primario"
           style={{ padding: '8px' }}
         >
-          <Menu style={{ width: '24px', height: '24px' }} />
+          <List style={{ width: '24px', height: '24px' }} />
         </button>
         
         <div className="relative hidden sm:block" style={{ width: '320px' }}>
-          <Search className="text-pizarra/60 absolute" style={{ width: '18px', height: '18px', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
+          <MagnifyingGlass className="text-pizarra/60 absolute" style={{ width: '18px', height: '18px', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             type="text"
             placeholder="Buscar organización, expediente o DNI..."
@@ -50,6 +50,7 @@ export default function Header({
     </header>
   );
 }
+
 
 
 

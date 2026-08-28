@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pencil, MapPin } from 'lucide-react';
+import { PencilSimple, MapPin } from '@phosphor-icons/react';
 
 export default function OrganizacionesTable({ data = [] }) {
   const formatCurrency = (amount) => {
@@ -77,7 +77,7 @@ export default function OrganizacionesTable({ data = [] }) {
                       title={`Editar ${org.nombre}`}
                       aria-label={`Editar ${org.nombre}`}
                     >
-                      <Pencil className="w-3.5 h-3.5" />
+                      <PencilSimple className="w-3.5 h-3.5" />
                       Editar
                     </button>
                   </td>
@@ -99,3 +99,4 @@ export default function OrganizacionesTable({ data = [] }) {
     </div>
   );
 }
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, MapPin, Briefcase, Shield, Activity, Calendar } from 'lucide-react';
+import { User, Envelope, Phone, MapPin, Briefcase, ShieldCheck, Activity, Calendar } from '@phosphor-icons/react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -52,7 +52,7 @@ export default function ProfilePage() {
             <div className="flex flex-col" style={{ gap: '16px' }}>
               <div className="flex items-center" style={{ gap: '12px' }}>
                 <div className="rounded-full bg-canvas flex items-center justify-center shrink-0" style={{ width: '32px', height: '32px' }}>
-                  <Mail className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Envelope className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
                 </div>
                 <div className="overflow-hidden">
                   <p className="text-xs text-pizarra/60 font-semibold uppercase">Correo Electrónico</p>
@@ -97,7 +97,7 @@ export default function ProfilePage() {
               <div>
                 <p className="text-xs text-pizarra/60 font-semibold uppercase" style={{ marginBottom: '4px' }}>Nivel de Acceso</p>
                 <div className="flex items-center" style={{ gap: '8px' }}>
-                  <Shield className="text-exito" style={{ width: '16px', height: '16px' }} />
+                  <ShieldCheck className="text-exito" style={{ width: '16px', height: '16px' }} />
                   <p className="text-sm font-medium text-texto">Nivel 5 (Lectura y Escritura total)</p>
                 </div>
               </div>
@@ -156,3 +156,4 @@ export default function ProfilePage() {
     </motion.div>
   );
 }
+

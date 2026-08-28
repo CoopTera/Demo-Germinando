@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { Users } from 'lucide-react';
+import { Users } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
 import { beneficiariosData } from '../../data/mockData';
 
@@ -73,3 +73,4 @@ export default function EstadoBeneficiariosChart() {
     </div>
   );
 }
+

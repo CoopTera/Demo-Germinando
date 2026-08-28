@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, AlertTriangle, CreditCard, Calendar, Clock } from 'lucide-react';
+import { Users, Warning, CreditCard, Calendar, Clock } from '@phosphor-icons/react';
 import BeneficiariosTable from '../components/tables/BeneficiariosTable';
 import BeneficiariosGrid from '../components/tables/BeneficiariosGrid';
 import { useData } from '../context/DataContext';
@@ -68,7 +68,7 @@ export default function BeneficiariosPage() {
       value: `${conAlerta} sin seguimiento`,
       bgColor: 'bg-naranja/10 border-naranja/30',
       valueColor: 'text-naranja',
-      icon: AlertTriangle,
+      icon: Warning,
       iconColor: 'text-naranja',
       pulse: true
     });
@@ -323,3 +323,4 @@ export default function BeneficiariosPage() {
     </>
   );
 }
+

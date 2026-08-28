@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
-import { BookOpen, Pencil } from 'lucide-react';
+import { BookOpen, PencilSimple } from '@phosphor-icons/react';
 import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
 
@@ -87,7 +87,7 @@ export default function TalleresPage() {
                   </td>
                   <td className="text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>
                     <button className="inline-flex items-center gap-1 text-xs font-medium text-pizarra hover:text-primario">
-                      <Pencil className="w-3.5 h-3.5" /> Editar
+                      <PencilSimple className="w-3.5 h-3.5" /> Editar
                     </button>
                   </td>
                 </tr>
@@ -120,3 +120,4 @@ export default function TalleresPage() {
     </PageTemplate>
   );
 }
+

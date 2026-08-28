@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { Target } from 'lucide-react';
+import { Target } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
 import { organizacionesData } from '../../data/mockData';
 
@@ -74,3 +74,4 @@ export default function EspecialidadChart() {
     </div>
   );
 }
+

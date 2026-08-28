@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bookmark, MapPin, Calendar, ExternalLink } from 'lucide-react';
+import { BookmarkSimple, MapPin, Calendar, ArrowSquareOut } from '@phosphor-icons/react';
 
 export default function OportunidadesGrid({ data }) {
   if (data.length === 0) {
@@ -20,7 +20,7 @@ export default function OportunidadesGrid({ data }) {
         >
           <div className="flex justify-between items-start" style={{ marginBottom: '16px' }}>
             <div className="bg-primario/10 text-primario rounded-lg flex items-center justify-center shrink-0" style={{ width: '48px', height: '48px' }}>
-              <Bookmark style={{ width: '24px', height: '24px' }} />
+              <BookmarkSimple style={{ width: '24px', height: '24px' }} />
             </div>
             <span className="inline-flex items-center rounded-full text-xs font-bold uppercase tracking-wider bg-canvas border border-borde text-pizarra" style={{ padding: '4px 12px' }}>
               {item.titulo?.includes('Licitación') ? 'Licitación' : item.titulo?.includes('Fondo') ? 'Fondo' : 'Capacitación'}
@@ -42,10 +42,11 @@ export default function OportunidadesGrid({ data }) {
 
           <div className="mt-auto pt-4 border-t border-borde flex items-center justify-between" style={{ paddingTop: '16px' }}>
             <span className="text-sm font-semibold text-primario">Ver detalles</span>
-            <ExternalLink className="text-primario" style={{ width: '16px', height: '16px' }} />
+            <ArrowSquareOut className="text-primario" style={{ width: '16px', height: '16px' }} />
           </div>
         </div>
       ))}
     </div>
   );
 }
+

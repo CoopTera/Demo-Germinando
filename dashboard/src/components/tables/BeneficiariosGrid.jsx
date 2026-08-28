@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard, Calendar, Clock } from 'lucide-react';
+import { CreditCard, Calendar, Clock } from '@phosphor-icons/react';
 
 export default function BeneficiariosGrid({ data, onItemClick }) {
   const formatCurrency = (amount) => {
@@ -93,3 +93,4 @@ export default function BeneficiariosGrid({ data, onItemClick }) {
     </div>
   );
 }
+

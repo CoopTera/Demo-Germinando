@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp } from '@phosphor-icons/react';
 import { evolucionOrgsData } from '../../data/mockData';
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -107,3 +107,4 @@ export default function EvolucionOrgs() {
     </div>
   );
 }
+

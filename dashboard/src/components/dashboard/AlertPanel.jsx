@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertTriangle, Tag, Clock, Calendar, AlertCircle, ChevronRight } from 'lucide-react';
+import { Warning, Tag, Clock, Calendar, WarningCircle, CaretRight } from '@phosphor-icons/react';
 import { alertas } from '../../data/mockData';
 
 const getAlertIcon = (tipo) => {
@@ -25,7 +25,7 @@ const getAlertIcon = (tipo) => {
     default:
       return (
         <div className="w-9 h-9 rounded-lg bg-pizarra/10 flex items-center justify-center shrink-0">
-          <AlertCircle className="w-4.5 h-4.5 text-pizarra" />
+          <WarningCircle weight="duotone" className="w-4.5 h-4.5 text-pizarra" />
         </div>
       );
   }
@@ -61,7 +61,7 @@ export default function AlertPanel() {
     <div className="bg-white rounded-md shadow-sm border border-borde flex flex-col h-full overflow-hidden">
       {/* Title */}
       <div className="flex items-center gap-2.5 p-8 pb-4">
-        <AlertTriangle className="w-5 h-5 text-pizarra" />
+        <Warning weight="duotone" className="w-5 h-5 text-pizarra" />
         <h2 className="font-semibold text-pizarra text-base">Central de Alertas</h2>
         {list.length > 0 && (
           <span className="ml-auto bg-critico/10 text-critico text-xs font-bold px-2 py-0.5 rounded-full">
@@ -75,7 +75,7 @@ export default function AlertPanel() {
         {list.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-6 text-pizarra/50">
             <div className="w-12 h-12 rounded-full bg-exito/10 flex items-center justify-center mb-3">
-              <AlertTriangle className="w-6 h-6 text-exito" />
+              <Warning weight="duotone" className="w-6 h-6 text-exito" />
             </div>
             <p className="text-sm font-medium text-pizarra">Todo está al día</p>
             <p className="text-xs mt-1">No hay alertas críticas pendientes en este momento.</p>
@@ -109,11 +109,12 @@ export default function AlertPanel() {
       <div className="pt-4 border-t border-borde mt-auto">
         <button type="button" className="text-xs text-primario font-medium hover:underline flex items-center gap-1 outline-none focus-visible:ring-2 focus-visible:ring-primario rounded-sm">
           Ver todas las alertas
-          <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
+          <CaretRight weight="bold" className="w-3.5 h-3.5" aria-hidden="true" />
         </button>
       </div>
     </div>
   );
 }
 
-export { AlertPanel };
+
+

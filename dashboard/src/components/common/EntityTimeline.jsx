@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Calendar, UserPlus, BookOpen, Activity, Bookmark, Pencil, Trash2, Check, X } from 'lucide-react';
+import { Calendar, UserPlus, BookOpen, Activity, BookmarkSimple, PencilSimple, Trash, Check, X } from '@phosphor-icons/react';
 
 const getIcon = (tipo) => {
   switch (tipo) {
     case 'ingreso': return <UserPlus className="w-4 h-4 text-primario" />;
     case 'taller': return <BookOpen className="w-4 h-4 text-naranja" />;
     case 'seguimiento': return <Activity className="w-4 h-4 text-exito" />;
-    case 'convenio': return <Bookmark className="w-4 h-4 text-pizarra" />;
+    case 'convenio': return <BookmarkSimple className="w-4 h-4 text-pizarra" />;
     default: return <Calendar className="w-4 h-4 text-pizarra/50" />;
   }
 };
@@ -72,12 +72,12 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                     {onEdit && (
                       <button onClick={() => startEdit(evento)} className="p-1 text-pizarra/40 hover:text-primario hover:bg-primario/10 rounded transition-colors cursor-pointer" title="Editar">
-                        <Pencil style={{ width: '14px', height: '14px' }} />
+                        <PencilSimple style={{ width: '14px', height: '14px' }} />
                       </button>
                     )}
                     {onDelete && (
                       <button onClick={() => onDelete(evento.id)} className="p-1 text-pizarra/40 hover:text-critico hover:bg-critico/10 rounded transition-colors cursor-pointer" title="Eliminar">
-                        <Trash2 style={{ width: '14px', height: '14px' }} />
+                        <Trash style={{ width: '14px', height: '14px' }} />
                       </button>
                     )}
                   </div>
@@ -117,3 +117,4 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
     </div>
   );
 }
+

@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useMemo, useState, useEffect } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
-import { Network } from 'lucide-react';
+import { Graph } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
 
 const LEGEND_ITEMS = [
@@ -113,7 +113,7 @@ export default function GrafoVinculos() {
       <div className="p-5 border-b border-borde flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <Network className="w-5 h-5 text-primario" />
+            <Graph className="w-5 h-5 text-primario" />
             <h3 className="font-semibold text-pizarra text-base">Grafo de Vínculos Dinámico</h3>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs text-texto">
@@ -165,3 +165,4 @@ export default function GrafoVinculos() {
     </div>
   );
 }
+

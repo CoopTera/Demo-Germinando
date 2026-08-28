@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bookmark, MapPin, Calendar, ExternalLink } from 'lucide-react';
+import { BookmarkSimple, MapPin, Calendar, ArrowSquareOut } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 
 export default function OportunidadesTable({ data }) {
@@ -57,7 +57,7 @@ export default function OportunidadesTable({ data }) {
                 <td className="border-r border-borde" style={cellStyle(widths.col1)} title={item.titulo}>
                   <div className="flex items-center" style={{ gap: '12px' }}>
                     <div className="bg-primario/10 text-primario rounded-lg flex items-center justify-center shrink-0" style={{ width: '32px', height: '32px' }}>
-                      <Bookmark style={{ width: '16px', height: '16px' }} />
+                      <BookmarkSimple style={{ width: '16px', height: '16px' }} />
                     </div>
                     <div className="overflow-hidden">
                       <p className="text-sm font-bold text-texto group-hover:text-primario transition-colors truncate">{item.titulo}</p>
@@ -78,7 +78,7 @@ export default function OportunidadesTable({ data }) {
                 </td>
                 <td className="text-center" style={cellStyle(widths.col4)}>
                   <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer mx-auto block">
-                    <ExternalLink style={{ width: '18px', height: '18px' }} />
+                    <ArrowSquareOut style={{ width: '18px', height: '18px' }} />
                   </button>
                 </td>
               </tr>
@@ -89,3 +89,4 @@ export default function OportunidadesTable({ data }) {
     </div>
   );
 }
+

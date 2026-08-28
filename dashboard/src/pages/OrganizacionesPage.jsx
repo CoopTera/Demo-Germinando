@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Building2, MapPin, Hammer, Users, DollarSign, Target } from 'lucide-react';
+import { Buildings, MapPin, Hammer, Users, CurrencyDollar, Target } from '@phosphor-icons/react';
 import { useData } from '../context/DataContext';
 import OrganizacionesTable from '../components/organizaciones/OrganizacionesTable';
 import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid';
@@ -77,7 +77,7 @@ export default function OrganizacionesPage() {
             <p className="text-sm font-bold text-texto">{org.especializacion}</p>
           </div>
           <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
-            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><DollarSign style={{ width: '14px', height: '14px' }} /> Presupuesto</div>
+            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><CurrencyDollar style={{ width: '14px', height: '14px' }} /> Presupuesto</div>
             <p className="text-base font-bold text-texto">{org.presupuesto}</p>
           </div>
           <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
@@ -96,7 +96,7 @@ export default function OrganizacionesPage() {
   return (
     <>
       <PageTemplate
-        icon={Building2}
+        icon={Buildings}
         title="Organizaciones"
         subtitle="Gestión de unidades productivas del programa"
         onImport={importarDesdeExcel}
@@ -173,3 +173,4 @@ export default function OrganizacionesPage() {
     </>
   );
 }
+

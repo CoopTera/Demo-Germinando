@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pencil, MapPin } from 'lucide-react';
+import { PencilSimple, MapPin } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 
 const getEspecializacionColor = (esp) => {
@@ -85,7 +85,7 @@ export default function OrganizacionesTable({ data, onItemClick }) {
                 </td>
                 <td className="text-center" style={cellStyle(widths.col7, { paddingRight: '24px' })}>
                   <button className="inline-flex items-center justify-center w-full text-xs font-medium text-pizarra hover:text-primario transition-colors" style={{ gap: '4px' }}>
-                    <Pencil style={{ width: '14px', height: '14px' }} />
+                    <PencilSimple style={{ width: '14px', height: '14px' }} />
                     Editar
                   </button>
                 </td>
@@ -104,3 +104,4 @@ export default function OrganizacionesTable({ data, onItemClick }) {
     </div>
   );
 }
+

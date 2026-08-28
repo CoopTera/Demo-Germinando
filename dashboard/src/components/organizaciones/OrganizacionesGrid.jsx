@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, MapPin, FileText, Hammer, DollarSign, Pencil } from 'lucide-react';
+import { Buildings, MapPin, FileText, Hammer, CurrencyDollar, PencilSimple } from '@phosphor-icons/react';
 
 export default function OrganizacionesGrid({ data, onItemClick }) {
   if (data.length === 0) {
@@ -22,7 +22,7 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
           <div className="flex justify-between items-start" style={{ marginBottom: '16px' }}>
             <div className="flex" style={{ gap: '12px' }}>
               <div className="rounded-full bg-superficie-sec flex items-center justify-center shrink-0 border border-borde" style={{ width: '40px', height: '40px' }}>
-                <Building2 className="text-pizarra/70" style={{ width: '20px', height: '20px' }} />
+                <Buildings className="text-pizarra/70" style={{ width: '20px', height: '20px' }} />
               </div>
               <div>
                 <h3 className="font-semibold text-texto text-[15px] leading-tight" style={{ marginBottom: '4px' }}>{org.nombre}</h3>
@@ -32,7 +32,7 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
               </div>
             </div>
             <button className="text-pizarra/40 hover:text-primario transition-colors" title="Editar">
-              <Pencil style={{ width: '16px', height: '16px' }} />
+              <PencilSimple style={{ width: '16px', height: '16px' }} />
             </button>
           </div>
 
@@ -61,7 +61,7 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
           <div className="border-t border-borde flex items-center justify-between" style={{ paddingTop: '12px' }}>
             <div className="flex flex-col">
               <span className="text-xs font-bold text-pizarra/50 uppercase mb-1 flex items-center" style={{ gap: '4px' }}>
-                <DollarSign style={{ width: '12px', height: '12px' }} /> Presupuesto
+                <CurrencyDollar style={{ width: '12px', height: '12px' }} /> Presupuesto
               </span>
               <span className="text-sm font-bold text-texto">
                 {typeof org.presupuesto === 'number' ? `$ ${org.presupuesto.toLocaleString('es-AR')}` : org.presupuesto}
@@ -73,3 +73,4 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
     </div>
   );
 }
+

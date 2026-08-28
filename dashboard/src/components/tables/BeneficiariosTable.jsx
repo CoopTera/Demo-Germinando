@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { Warning } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 
 export default function BeneficiariosTable({ data = [], onItemClick }) {
@@ -140,7 +140,7 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                     >
                       <div className="flex items-center" style={{ gap: '6px', overflow: 'hidden' }}>
                         {hasAlert && (
-                          <AlertTriangle className="text-naranja shrink-0" style={{ width: '14px', height: '14px' }} />
+                          <Warning className="text-naranja shrink-0" style={{ width: '14px', height: '14px' }} />
                         )}
                         <span className="truncate">{formatDate(ultimoReg)}</span>
                       </div>
@@ -176,3 +176,4 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
     </div>
   );
 }
+

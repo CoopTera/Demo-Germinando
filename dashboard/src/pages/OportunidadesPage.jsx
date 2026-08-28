@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Bookmark } from 'lucide-react';
+import { BookmarkSimple } from '@phosphor-icons/react';
 import { oportunidades } from '../data/mockData';
 import PageTemplate from '../components/layout/PageTemplate';
 import OportunidadesTable from '../components/oportunidades/OportunidadesTable';
@@ -38,7 +38,7 @@ export default function OportunidadesPage() {
 
   return (
     <PageTemplate
-      icon={Bookmark}
+      icon={BookmarkSimple}
       title="Oportunidades"
       subtitle="Buscador de licitaciones, fondos y capacitaciones"
       onNew={() => console.log('Nueva oportunidad')}
@@ -62,3 +62,4 @@ export default function OportunidadesPage() {
     </PageTemplate>
   );
 }
+

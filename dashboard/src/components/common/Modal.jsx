@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X } from '@phosphor-icons/react';
 
 export default function Modal({ isOpen, onClose, title, children }) {
   return (
@@ -37,3 +37,4 @@ export default function Modal({ isOpen, onClose, title, children }) {
     </AnimatePresence>
   );
 }
+

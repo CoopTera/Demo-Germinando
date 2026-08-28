@@ -8,8 +8,8 @@ import {
   Package,
   FileUp,
   FileSpreadsheet,
-  Trash2
-} from 'lucide-react';
+  Trash
+} from '@phosphor-icons/react';
 
 export default function ImportModal({ isOpen, onClose, onImport }) {
   const [tipo, setTipo] = useState(null);
@@ -215,7 +215,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
                     onClick={handleRemoveFile}
                     className="mt-1 inline-flex items-center gap-1 text-[11px] text-critico hover:underline font-medium cursor-pointer"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash className="w-3 h-3" />
                     Eliminar archivo
                   </button>
                 </div>
@@ -258,4 +258,5 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
     </Dialog.Root>
   );
 }
+
 

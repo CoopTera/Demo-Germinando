@@ -1,4 +1,4 @@
-import { Lightbulb, ExternalLink } from 'lucide-react';
+import { Lightbulb, ArrowSquareOut } from '@phosphor-icons/react';
 import { oportunidades } from '../../data/mockData';
 
 export default function OportunidadesPanel() {
@@ -13,7 +13,7 @@ export default function OportunidadesPanel() {
           <div key={op.id} className="group rounded-md border border-borde bg-canvas/30 hover:bg-white hover:border-primario/30 transition-all cursor-pointer" style={{ padding: '16px' }}>
             <div className="flex justify-between items-start mb-1">
               <h3 className="font-semibold text-texto text-sm line-clamp-1">{op.titulo}</h3>
-              <ExternalLink className="w-3.5 h-3.5 text-pizarra/40 group-hover:text-primario transition-colors shrink-0" />
+              <ArrowSquareOut className="w-3.5 h-3.5 text-pizarra/40 group-hover:text-primario transition-colors shrink-0" />
             </div>
             <p className="text-xs text-pizarra/70 mb-2">{op.organizador}</p>
             <span className="inline-block px-2 py-0.5 bg-exito/10 text-exito text-[10px] font-bold uppercase tracking-wider rounded-sm">
@@ -30,3 +30,4 @@ export default function OportunidadesPanel() {
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Drawer({ isOpen, onClose, title, children, actions }) {
@@ -41,3 +41,4 @@ export default function Drawer({ isOpen, onClose, title, children, actions }) {
     </AnimatePresence>
   );
 }
+

@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { DollarSign } from 'lucide-react';
+import { CurrencyDollar } from '@phosphor-icons/react';
 
 const data = [
   { name: 'Ejecutado', value: 85 },
@@ -11,7 +11,7 @@ export default function PresupuestoChart() {
   return (
     <div className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" style={{ padding: '24px' }}>
       <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-        <DollarSign className="w-5 h-5 text-pizarra" />
+        <CurrencyDollar weight="duotone" className="w-5 h-5 text-pizarra" />
         <h2 className="font-semibold text-pizarra text-base">Presupuesto</h2>
       </div>
       <div className="flex-1 w-full relative min-h-[200px] flex items-center justify-center">
@@ -56,3 +56,4 @@ export default function PresupuestoChart() {
     </div>
   );
 }
+

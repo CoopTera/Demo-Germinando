@@ -1,4 +1,4 @@
-import { BarChart3, TrendingUp } from 'lucide-react';
+import { ChartBar, TrendingUp } from '@phosphor-icons/react';
 import EvolucionOrgs from '../components/charts/EvolucionOrgs';
 import PresupuestoArea from '../components/charts/PresupuestoArea';
 import EspecialidadChart from '../components/charts/EspecialidadChart';
@@ -10,7 +10,7 @@ export default function GraficosPage() {
       {/* Page Title */}
       <div>
         <h1 className="text-2xl font-bold text-pizarra flex items-center" style={{ gap: '8px' }}>
-          <BarChart3 style={{ width: '24px', height: '24px' }} />
+          <ChartBar style={{ width: '24px', height: '24px' }} />
           Gráficos
         </h1>
         <p className="text-sm text-pizarra/50" style={{ marginTop: '4px' }}>
@@ -42,3 +42,4 @@ export default function GraficosPage() {
     </div>
   );
 }
+
