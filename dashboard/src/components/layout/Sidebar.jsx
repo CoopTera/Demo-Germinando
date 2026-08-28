@@ -116,8 +116,9 @@ export default function Sidebar({ isOpen, onClose }) {
         </nav>
       </div>
 
-      {/* User Profile */}
-      <div style={{ paddingTop: '16px', paddingBottom: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <div className="mt-auto">
+        {/* User Profile */}
+        <div style={{ paddingTop: '16px', paddingBottom: '16px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
         <NavLink
           to="/perfil"
           style={({ isActive }) => ({
@@ -157,6 +158,7 @@ export default function Sidebar({ isOpen, onClose }) {
         <p className="text-xs text-superficie-sec/60">
           Programa Germinando © 2026
         </p>
+      </div>
       </div>
     </aside>
     </>
