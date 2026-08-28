@@ -395,11 +395,16 @@ export const grafoLinks = [
 ];
 
 export const actividadReciente = [
-  { id: 1, usuario: "Dir. García", accion: "aprobó el presupuesto para", entidad: "Coop. Trabajo Digno", fecha: "Hace 2 horas", avatar: "DG" },
-  { id: 2, usuario: "Sistema", accion: "generó el reporte mensual de", entidad: "Beneficiarios Norte", fecha: "Hace 5 horas", avatar: "S" },
-  { id: 3, usuario: "Ana López", accion: "registró un nuevo taller en", entidad: "Asoc. Raíces del Norte", fecha: "Ayer", avatar: "AL" },
-  { id: 4, usuario: "Carlos Ruiz", accion: "actualizó el padrón de", entidad: "Fundación Sembrando", fecha: "Ayer", avatar: "CR" },
-  { id: 5, usuario: "Dir. García", accion: "firmó el convenio #2026-041 con", entidad: "Asoc. Manos Unidas", fecha: "Hace 2 días", avatar: "DG" }
+  { id: 1, usuario: "Dir. García", accion: "aprobó el presupuesto para", entidad: "Coop. Trabajo Digno", fecha: "Hoy, 10:30 hs", avatar: "DG", tipo: "organizacion", entidadId: 3 },
+  { id: 2, usuario: "Sistema", accion: "generó el reporte mensual de", entidad: "Beneficiarios Norte", fecha: "Hoy, 08:15 hs", avatar: "S", tipo: null, entidadId: null },
+  { id: 3, usuario: "Ana López", accion: "registró nuevo taller en", entidad: "Asoc. Raíces del Norte", fecha: "Ayer, 16:45 hs", avatar: "AL", tipo: "organizacion", entidadId: 2 },
+  { id: 4, usuario: "Carlos Ruiz", accion: "actualizó el padrón de", entidad: "Fundación Sembrando Futuro", fecha: "Ayer, 14:20 hs", avatar: "CR", tipo: "organizacion", entidadId: 4 },
+  { id: 5, usuario: "Dir. García", accion: "firmó el convenio con", entidad: "Asoc. Manos Unidas", fecha: "Hace 2 días", avatar: "DG", tipo: "convenio", entidadId: "conv-3" },
+  { id: 6, usuario: "Ana López", accion: "registró seguimiento para", entidad: "María Gómez", fecha: "Hace 2 días", avatar: "AL", tipo: "beneficiario", entidadId: 1 },
+  { id: 7, usuario: "Carlos Ruiz", accion: "inscribió beneficiario en", entidad: "Taller de Costura Avanzada", fecha: "Hace 3 días", avatar: "CR", tipo: "taller", entidadId: "tall-1" },
+  { id: 8, usuario: "Sistema", accion: "detectó convenio próximo a vencer:", entidad: "Convenio Semilla 2024", fecha: "Hace 4 días", avatar: "S", tipo: "convenio", entidadId: "conv-1" },
+  { id: 9, usuario: "Dir. García", accion: "aprobó ingreso de", entidad: "Roberto Díaz", fecha: "Hace 5 días", avatar: "DG", tipo: "beneficiario", entidadId: 3 },
+  { id: 10, usuario: "Ana López", accion: "actualizó datos de", entidad: "Coop. Manos Solidarias", fecha: "Hace 6 días", avatar: "AL", tipo: "organizacion", entidadId: 1 },
 ];
 
 export const oportunidades = [
