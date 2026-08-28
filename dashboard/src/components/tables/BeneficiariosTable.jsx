@@ -1,20 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import { Warning } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 
 export default function BeneficiariosTable({ data = [], onItemClick }) {
   const { widths, startResize } = useTableResize({
-    col1: 120, col2: 200, col3: 300, col4: 120, col5: 120, col6: 150, col7: 120
+    col1: 100, col2: 200, col3: 250, col4: 120, col5: 140, col6: 100, col7: 120
   });
-
-  const formatCurrency = (amount) => {
-    if (typeof amount !== 'number') return '$ 0';
-    return amount.toLocaleString('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-      maximumFractionDigits: 0,
-    });
-  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '-';
@@ -30,6 +21,30 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
     }
     const date = new Date(dateStr);
     return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('es-AR');
+  };
+
+  const getTiempoPrograma = (dateStr) => {
+    if (!dateStr) return '-';
+    let date;
+    if (typeof dateStr === 'string' && dateStr.includes('-')) {
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        date = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      }
+    }
+    if (!date) date = new Date(dateStr);
+    if (isNaN(date.getTime())) return '-';
+    
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 30) return `${diffDays} días`;
+    const diffMonths = Math.floor(diffDays / 30);
+    if (diffMonths < 12) return `${diffMonths} meses`;
+    const diffYears = Math.floor(diffMonths / 12);
+    const extraMonths = diffMonths % 12;
+    return extraMonths > 0 ? `${diffYears}a ${extraMonths}m` : `${diffYears} años`;
   };
 
   const cellStyle = (width, extraPadding = {}) => ({
@@ -66,30 +81,22 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
             <tr>
               <th scope="col" className="border-r border-borde" style={thStyle(widths.col1)}>DNI<Resizer colKey="col1" /></th>
               <th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>Nombre<Resizer colKey="col2" /></th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>Organizaciones/Programas<Resizer colKey="col3" /></th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>Organización<Resizer colKey="col3" /></th>
               <th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>Fecha Inicio<Resizer colKey="col4" /></th>
-              <th scope="col" className="text-right border-r border-borde" style={thStyle(widths.col5)}>Beca Mensual<Resizer colKey="col5" /></th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>Último Registro<Resizer colKey="col6" /></th>
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col5)}>Tiempo en Prog.<Resizer colKey="col5" /></th>
+              <th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col6)}>Asistencia<Resizer colKey="col6" /></th>
               <th scope="col" className="text-center" style={thStyle(widths.col7)}>Estado</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-borde">
             {data && data.length > 0 ? (
               data.map((row, index) => {
-                const hasAlert = row.alerta === true || row.estado === 'Sin seguimiento';
-                
-                const orgsRaw = row.programas || row.organizaciones;
-                const orgs = typeof orgsRaw === 'string' 
-                  ? orgsRaw.split(',').map(s => s.trim())
-                  : Array.isArray(orgsRaw)
-                    ? orgsRaw
-                    : orgsRaw
-                    ? [orgsRaw]
-                    : [];
-
+                const hasAlert = row.estado === 'Suspendido';
+                const org = row.programas || row.organizaciones;
                 const fecha = row.inicioBeca || row.fechaInicio;
-                const monto = row.monto !== undefined ? row.monto : row.presupuestoBeca;
-                const ultimoReg = row.actividad || row.ultimoRegistro;
+                const tiempoProg = getTiempoPrograma(fecha);
+                const asistenciaNum = parseInt((row.asistencia || "0").replace('%', ''));
+                const asisColor = asistenciaNum < 75 ? 'text-naranja' : 'text-texto';
 
                 return (
                   <tr
@@ -109,17 +116,14 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                     </td>
                     <td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col3)}>
                       <div className="flex flex-wrap" style={{ gap: '4px', overflow: 'hidden', height: '24px' }}>
-                        {orgs.length > 0 ? (
-                          orgs.map((org, orgIdx) => (
+                        {org ? (
                             <span
-                              key={orgIdx}
                               className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate"
                               style={{ padding: '2px 8px', maxWidth: '100%' }}
                               title={org}
                             >
                               {org}
                             </span>
-                          ))
                         ) : (
                           <span className="text-gray-400 text-xs">Sin organización</span>
                         )}
@@ -128,31 +132,24 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                     <td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col4)}>
                       {formatDate(fecha)}
                     </td>
-                    <td className="text-sm text-texto text-right font-semibold border-r border-borde" title={formatCurrency(monto)} style={cellStyle(widths.col5)}>
-                      {formatCurrency(monto)}
+                    <td className="text-sm text-texto font-medium border-r border-borde" title={tiempoProg} style={cellStyle(widths.col5)}>
+                      {tiempoProg}
                     </td>
-                    <td
-                      className={`text-sm border-r border-borde ${
-                        hasAlert ? 'text-naranja font-semibold' : 'text-texto'
-                      }`}
-                      style={cellStyle(widths.col6)}
-                      title={formatDate(ultimoReg)}
-                    >
-                      <div className="flex items-center" style={{ gap: '6px', overflow: 'hidden' }}>
-                        {hasAlert && (
-                          <Warning className="text-naranja shrink-0" style={{ width: '14px', height: '14px' }} />
-                        )}
-                        <span className="truncate">{formatDate(ultimoReg)}</span>
-                      </div>
+                    <td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col6)}>
+                      {row.asistencia || '-'}
                     </td>
                     <td className="text-sm text-center" style={cellStyle(widths.col7)}>
-                      {hasAlert ? (
-                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-naranja/10 text-naranja truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
-                          Sin seguimiento
-                        </span>
-                      ) : (
+                      {row.estado === 'Activo' ? (
                         <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
                           Activo
+                        </span>
+                      ) : row.estado === 'Egresado' ? (
+                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-primario/10 text-primario truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
+                          Egresado
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-naranja/10 text-naranja truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
+                          {row.estado}
                         </span>
                       )}
                     </td>
@@ -176,4 +173,3 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
     </div>
   );
 }
-
