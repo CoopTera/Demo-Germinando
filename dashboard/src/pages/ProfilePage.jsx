@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Envelope, Phone, MapPin, Briefcase, ShieldCheck, Activity, Calendar } from '@phosphor-icons/react';
+import { User, Envelope, Phone, MapPin, Briefcase, ShieldCheck, Pulse, Calendar } from '@phosphor-icons/react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -81,7 +81,7 @@ export default function ProfilePage() {
           </div>
         </motion.div>
 
-        {/* Right Column: Settings & Activity */}
+        {/* Right Column: Settings & Pulse */}
         <motion.div variants={itemVariants} className="lg:col-span-2 flex flex-col" style={{ gap: '24px' }}>
           {/* Work Details */}
           <div className="bg-white rounded-md shadow-sm border border-borde card-elevated" style={{ padding: '24px' }}>
@@ -111,7 +111,7 @@ export default function ProfilePage() {
               <div>
                 <p className="text-xs text-pizarra/60 font-semibold uppercase" style={{ marginBottom: '4px' }}>Última Conexión</p>
                 <div className="flex items-center" style={{ gap: '8px' }}>
-                  <Activity className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Pulse className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
                   <p className="text-sm font-medium text-texto">Hace 15 minutos (Esta sesión)</p>
                 </div>
               </div>
@@ -156,4 +156,5 @@ export default function ProfilePage() {
     </motion.div>
   );
 }
+
 

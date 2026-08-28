@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Calendar, UserPlus, BookOpen, Activity, BookmarkSimple, PencilSimple, Trash, Check, X } from '@phosphor-icons/react';
+import { Calendar, UserPlus, BookOpen, Pulse, BookmarkSimple, PencilSimple, Trash, Check, X } from '@phosphor-icons/react';
 
 const getIcon = (tipo) => {
   switch (tipo) {
     case 'ingreso': return <UserPlus className="w-4 h-4 text-primario" />;
     case 'taller': return <BookOpen className="w-4 h-4 text-naranja" />;
-    case 'seguimiento': return <Activity className="w-4 h-4 text-exito" />;
+    case 'seguimiento': return <Pulse className="w-4 h-4 text-exito" />;
     case 'convenio': return <BookmarkSimple className="w-4 h-4 text-pizarra" />;
     default: return <Calendar className="w-4 h-4 text-pizarra/50" />;
   }
@@ -117,4 +117,5 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
     </div>
   );
 }
+
 

@@ -1,4 +1,4 @@
-import { Activity } from '@phosphor-icons/react';
+import { Pulse } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { actividadReciente } from '../../data/mockData';
 
@@ -20,7 +20,7 @@ export default function ActividadFeed() {
   return (
     <div className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" style={{ padding: '24px' }}>
       <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-        <Activity weight="duotone" style={{ width: '20px', height: '20px', color: '#494963' }} />
+        <Pulse weight="duotone" style={{ width: '20px', height: '20px', color: '#494963' }} />
         <h2 className="font-semibold text-pizarra text-base">Actividad Reciente</h2>
         <span className="ml-auto text-xs text-pizarra/40 font-medium">Últimos 7 días</span>
       </div>
@@ -55,3 +55,4 @@ export default function ActividadFeed() {
     </div>
   );
 }
+
