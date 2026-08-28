@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { TrendingUp } from '@phosphor-icons/react';
+import { TrendUp } from '@phosphor-icons/react';
 import { evolucionOrgsData } from '../../data/mockData';
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -42,7 +42,7 @@ export default function EvolucionOrgs() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
       <div className="flex items-center" style={{ gap: '8px', marginBottom: '16px' }}>
-        <TrendingUp className="text-primario" style={{ width: '20px', height: '20px' }} />
+        <TrendUp className="text-primario" style={{ width: '20px', height: '20px' }} />
         <h3 className="font-semibold text-pizarra text-base">
           Evolución de Organizaciones y Beneficiarios
         </h3>
@@ -107,4 +107,5 @@ export default function EvolucionOrgs() {
     </div>
   );
 }
+
 

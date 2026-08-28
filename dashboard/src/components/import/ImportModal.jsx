@@ -6,8 +6,8 @@ import {
   Users,
   Receipt,
   Package,
-  FileUp,
-  FileSpreadsheet,
+  FileArrowUp,
+  FileXls,
   Trash
 } from '@phosphor-icons/react';
 
@@ -200,7 +200,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
               {file ? (
                 <div className="flex flex-col items-center gap-1.5 w-full">
                   <div className="w-8 h-8 rounded-full bg-primario/10 flex items-center justify-center text-primario">
-                    <FileSpreadsheet className="w-4 h-4" />
+                    <FileXls className="w-4 h-4" />
                   </div>
                   <div className="text-center max-w-full px-2">
                     <p className="text-xs font-medium text-pizarra truncate">
@@ -221,7 +221,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1 py-1">
-                  <FileUp className="w-6 h-6 text-pizarra/40" />
+                  <FileArrowUp className="w-6 h-6 text-pizarra/40" />
                   <p className="text-xs font-medium text-pizarra">
                     Arrastre el archivo aquí o haga clic para examinar
                   </p>
@@ -258,5 +258,6 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
     </Dialog.Root>
   );
 }
+
 
 

@@ -1,4 +1,4 @@
-import { ChartBar, TrendingUp } from '@phosphor-icons/react';
+import { ChartBar, TrendUp } from '@phosphor-icons/react';
 import EvolucionOrgs from '../components/charts/EvolucionOrgs';
 import PresupuestoArea from '../components/charts/PresupuestoArea';
 import EspecialidadChart from '../components/charts/EspecialidadChart';
@@ -21,12 +21,12 @@ export default function GraficosPage() {
       {/* Quick stats */}
       <div className="flex flex-wrap items-center" style={{ gap: '16px' }}>
         <div className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px', gap: '8px' }}>
-          <TrendingUp className="text-exito" style={{ width: '16px', height: '16px' }} />
+          <TrendUp className="text-exito" style={{ width: '16px', height: '16px' }} />
           <span className="text-pizarra/50">Crecimiento interanual:</span>{' '}
           <span className="font-bold text-exito">+50% organizaciones</span>
         </div>
         <div className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px', gap: '8px' }}>
-          <TrendingUp className="text-primario" style={{ width: '16px', height: '16px' }} />
+          <TrendUp className="text-primario" style={{ width: '16px', height: '16px' }} />
           <span className="text-pizarra/50">Ejecución presupuestaria:</span>{' '}
           <span className="font-bold text-primario">95.7%</span>
         </div>
@@ -42,4 +42,5 @@ export default function GraficosPage() {
     </div>
   );
 }
+
 

@@ -1,13 +1,13 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { evolucionOrgsData } from '../../data/mockData';
-import { TrendingUp } from '@phosphor-icons/react';
+import { TrendUp } from '@phosphor-icons/react';
 
 export default function EvolucionChart() {
   return (
     <div className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" style={{ padding: '24px' }}>
       <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
         <div className="flex items-center" style={{ gap: '10px' }}>
-          <TrendingUp weight="duotone" className="w-5 h-5 text-pizarra" />
+          <TrendUp weight="duotone" className="w-5 h-5 text-pizarra" />
           <h2 className="font-semibold text-pizarra text-base">Evolución de Impacto</h2>
         </div>
         <span className="text-xs font-medium text-pizarra/50 bg-superficie-sec px-3 py-1 rounded-full">Últimos 12 meses</span>
@@ -36,4 +36,5 @@ export default function EvolucionChart() {
     </div>
   );
 }
+
 

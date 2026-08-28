@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown } from '@phosphor-icons/react';
+import { TrendUp, TrendDown } from '@phosphor-icons/react';
 
 // Color palette per card type — subtle but distinct
 const ACCENT_COLORS = [
@@ -63,13 +63,13 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
           {isPositive && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#16a34a', backgroundColor: 'rgba(34,197,94,0.12)', padding: '3px 10px', borderRadius: '99px' }}>
-              <TrendingUp weight="bold" style={{ width: '12px', height: '12px' }} />
+              <TrendUp weight="bold" style={{ width: '12px', height: '12px' }} />
               +{variacion}%
             </span>
           )}
           {isNegative && (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 700, color: '#dc2626', backgroundColor: 'rgba(228,33,83,0.1)', padding: '3px 10px', borderRadius: '99px' }}>
-              <TrendingDown weight="bold" style={{ width: '12px', height: '12px' }} />
+              <TrendDown weight="bold" style={{ width: '12px', height: '12px' }} />
               {variacion}%
             </span>
           )}
@@ -81,3 +81,4 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
     </motion.div>
   );
 }
+
