@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Buildings, MapPin, Hammer, Users, CurrencyDollar, Target, Briefcase, FilePdf } from '@phosphor-icons/react';
 import { useData } from '../context/DataContext';
 import OrganizacionesTable from '../components/organizaciones/OrganizacionesTable';
@@ -34,7 +35,6 @@ export default function OrganizacionesPage() {
       if (org) {
         setSelectedItem(org);
       }
-      // Clean up state so it doesn't reopen on refresh
       window.history.replaceState({}, document.title);
     }
   }, [location.state, organizaciones]);
@@ -141,24 +141,34 @@ export default function OrganizacionesPage() {
         totalItems={organizaciones.length}
         filteredItemsCount={filteredData.length}
       >
-        {/* City filter chips */}
+        {/* City filter chips with layoutId */}
         <div className="flex items-center flex-wrap" style={{ gap: '8px', marginBottom: '20px' }}>
           <MapPin weight="duotone" className="text-pizarra/50 shrink-0" style={{ width: '16px', height: '16px' }} />
           <span className="text-xs font-semibold text-pizarra/50 uppercase tracking-wider shrink-0" style={{ marginRight: '4px' }}>Ciudad:</span>
-          {ciudades.map(c => (
-            <button
-              key={c}
-              onClick={() => setCiudadActiva(c)}
-              className={`whitespace-nowrap rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-                ciudadActiva === c
-                  ? 'bg-pizarra text-white border-pizarra shadow-sm'
-                  : 'bg-white text-pizarra/70 border-borde hover:border-pizarra/30 hover:text-pizarra'
-              }`}
-              style={{ padding: '5px 12px' }}
-            >
-              {c === 'Todas' ? 'Todas las ciudades' : c.replace(', Santa Fe', '')}
-            </button>
-          ))}
+          {ciudades.map(c => {
+            const isSelected = ciudadActiva === c;
+            return (
+              <button
+                key={c}
+                onClick={() => setCiudadActiva(c)}
+                className={`relative whitespace-nowrap rounded-full text-xs font-semibold cursor-pointer border transition-colors ${
+                  isSelected
+                    ? 'text-white border-pizarra shadow-sm'
+                    : 'bg-white text-pizarra/70 border-borde hover:border-pizarra/30 hover:text-pizarra'
+                }`}
+                style={{ padding: '5px 12px' }}
+              >
+                {isSelected && (
+                  <motion.div
+                    layoutId="activeCityFilterPill"
+                    className="absolute inset-0 rounded-full bg-pizarra -z-0"
+                    transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                  />
+                )}
+                <span className="relative z-10">{c === 'Todas' ? 'Todas las ciudades' : c.replace(', Santa Fe', '')}</span>
+              </button>
+            );
+          })}
         </div>
 
         {viewMode === 'list' ? (
@@ -205,7 +215,7 @@ export default function OrganizacionesPage() {
                           <span className={`text-xs font-bold rounded-full ${conv.estado === 'Activo' ? 'bg-exito/10 text-exito' : 'bg-naranja/10 text-naranja'}`} style={{ padding: '3px 10px' }}>
                             {conv.estado}
                           </span>
-                          <button className="text-pizarra/40 hover:text-primario transition-colors" title="Ver documento (demo)">
+                          <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer" title="Ver documento (demo)">
                             <FilePdf weight="duotone" style={{ width: '20px', height: '20px' }} />
                           </button>
                         </div>
@@ -246,4 +256,3 @@ export default function OrganizacionesPage() {
     </>
   );
 }
-

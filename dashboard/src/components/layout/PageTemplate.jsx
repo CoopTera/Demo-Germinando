@@ -1,16 +1,7 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MagnifyingGlass, Funnel, UploadSimple, Plus, List, SquaresFour } from '@phosphor-icons/react';
-
-const containerVariants = {
-  hidden: { opacity: 1 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-};
-
-const itemVariants = {
-  hidden: { opacity: 1, y: 0 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
-};
+import { pageContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function PageTemplate({
   icon: Icon,
@@ -25,8 +16,8 @@ export default function PageTemplate({
   filtros = [],
   filtroActivo,
   setFiltroActivo,
-  viewMode, // 'list' or 'grid' (optional)
-  setViewMode, // function (optional)
+  viewMode,
+  setViewMode,
   totalItems,
   filteredItemsCount,
   children
@@ -45,18 +36,18 @@ export default function PageTemplate({
     <motion.div 
       className="flex flex-col"
       style={{ gap: '24px' }}
-      variants={containerVariants}
+      variants={pageContainerVariants}
       initial="hidden"
       animate="show"
     >
       {/* Page Header */}
-      <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <motion.div variants={staggerItemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-pizarra flex items-center" style={{ gap: '8px' }}>
             {Icon && <Icon weight="duotone" style={{ width: '24px', height: '24px' }} />}
             {title}
           </h1>
-          <p className="text-sm text-pizarra/50" style={{ marginTop: '4px' }}>
+          <p className="text-sm text-pizarra/60" style={{ marginTop: '4px' }}>
             {subtitle}
           </p>
         </div>
@@ -71,36 +62,41 @@ export default function PageTemplate({
                 onChange={handleFileChange}
                 style={{ display: 'none' }} 
               />
-              <button 
+              <motion.button 
+                whileHover={{ y: -1, backgroundColor: '#f8fafc' }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center border border-borde bg-white hover:bg-canvas text-pizarra text-[14px] font-semibold rounded-md transition-colors shadow-sm cursor-pointer" 
+                className="flex items-center border border-borde bg-white text-pizarra text-[14px] font-semibold rounded-md transition-colors shadow-sm cursor-pointer" 
                 style={{ padding: '10px 20px', gap: '8px' }}
               >
                 <UploadSimple weight="bold" className="stroke-[2.5]" style={{ width: '18px', height: '18px' }} />
                 <span>Importar</span>
-              </button>
+              </motion.button>
             </>
           )}
           
           {onNew && (
-            <button 
+            <motion.button 
+              whileHover={{ y: -1, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
               onClick={onNew}
-              className="flex items-center bg-primario hover:bg-primario/90 text-white text-[14px] font-semibold rounded-lg transition-colors shadow-sm cursor-pointer" 
+              className="flex items-center bg-primario hover:bg-primario/90 text-white text-[14px] font-semibold rounded-lg transition-all shadow-sm hover:shadow cursor-pointer" 
               style={{ padding: '10px 20px', gap: '8px' }}
             >
               <Plus weight="bold" style={{ width: '16px', height: '16px' }} />
               {newButtonText || 'Nuevo Registro'}
-            </button>
+            </motion.button>
           )}
         </div>
       </motion.div>
 
       {/* Stats Bar */}
       {stats.length > 0 && (
-        <motion.div variants={itemVariants} className="flex flex-wrap items-center" style={{ gap: '16px' }}>
+        <motion.div variants={staggerItemVariants} className="flex flex-wrap items-center" style={{ gap: '16px' }}>
           {stats.map((stat, idx) => (
-            <div 
+            <motion.div 
               key={idx} 
+              whileHover={{ y: -1 }}
               className={`bg-white rounded-lg border text-sm flex items-center card-elevated ${stat.bgColor || 'border-borde'}`} 
               style={{ padding: '10px 16px', gap: stat.icon ? '8px' : '0' }}
             >
@@ -109,17 +105,17 @@ export default function PageTemplate({
               <span className={`font-bold ${stat.valueColor || 'text-pizarra'}`}>
                 {stat.value}
               </span>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       )}
 
       {/* Controls Bar (Search + Filters + View Toggle) */}
-      <motion.div variants={itemVariants} className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+      <motion.div variants={staggerItemVariants} className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
         <div className="flex flex-col md:flex-row md:items-center flex-1" style={{ gap: '16px' }}>
           {/* Search */}
           <div className="relative flex-1" style={{ maxWidth: '320px' }}>
-            <MagnifyingGlass weight="bold" className="text-pizarra/40 absolute" style={{ width: '16px', height: '16px', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            <MagnifyingGlass weight="bold" className="text-pizarra/40 absolute pointer-events-none" style={{ width: '16px', height: '16px', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
             <input
               type="text"
               placeholder="Buscar..."
@@ -130,47 +126,73 @@ export default function PageTemplate({
             />
           </div>
 
-          {/* Filters */}
+          {/* Filters with animated layout indicator */}
           {filtros.length > 0 && (
             <div className="flex items-center overflow-x-auto pb-1 hide-scrollbar" style={{ gap: '6px' }}>
               <Funnel weight="fill" className="text-pizarra/40 shrink-0" style={{ width: '16px', height: '16px', marginRight: '4px' }} />
-              {filtros.map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setFiltroActivo(f)}
-                  className={`whitespace-nowrap rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-                    filtroActivo === f
-                      ? f === 'Sin seguimiento'
-                        ? 'bg-naranja text-white border-naranja shadow-sm'
-                        : 'bg-primario text-white border-primario shadow-sm'
-                      : 'bg-white text-pizarra/70 border-borde hover:border-primario/30 hover:text-primario'
-                  }`}
-                  style={{ padding: '6px 12px' }}
-                >
-                  {f}
-                </button>
-              ))}
+              {filtros.map((f) => {
+                const isSelected = filtroActivo === f;
+                const isWarning = f === 'Sin seguimiento';
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setFiltroActivo(f)}
+                    className={`relative whitespace-nowrap rounded-full text-xs font-semibold cursor-pointer border transition-colors ${
+                      isSelected
+                        ? isWarning
+                          ? 'text-white border-naranja shadow-sm'
+                          : 'text-white border-primario shadow-sm'
+                        : 'bg-white text-pizarra/70 border-borde hover:border-primario/30 hover:text-primario'
+                    }`}
+                    style={{ padding: '6px 14px' }}
+                  >
+                    {isSelected && (
+                      <motion.div
+                        layoutId="activeCategoryFilterPill"
+                        className={`absolute inset-0 rounded-full ${isWarning ? 'bg-naranja' : 'bg-primario'}`}
+                        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                        style={{ zIndex: 0 }}
+                      />
+                    )}
+                    <span className="relative z-10">{f}</span>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
 
         {/* View Toggle */}
         {setViewMode && (
-          <div className="flex items-center bg-white border border-borde rounded-md p-1 shrink-0 shadow-sm">
+          <div className="flex items-center bg-white border border-borde rounded-lg p-1 shrink-0 shadow-sm relative">
             <button
               onClick={() => setViewMode('list')}
-              className={`rounded cursor-pointer transition-colors ${viewMode === 'list' ? 'bg-canvas text-primario shadow-sm' : 'text-pizarra/50 hover:text-pizarra'}`}
+              className={`relative rounded-md cursor-pointer transition-colors z-10 ${viewMode === 'list' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
               title="Vista de Lista"
-              style={{ padding: '6px' }}
+              style={{ padding: '6px 10px' }}
             >
+              {viewMode === 'list' && (
+                <motion.div
+                  layoutId="viewModeSwitchPill"
+                  className="absolute inset-0 bg-canvas rounded-md border border-borde/60 shadow-sm -z-10"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
               <List weight="bold" style={{ width: '16px', height: '16px' }} />
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`rounded cursor-pointer transition-colors ${viewMode === 'grid' ? 'bg-canvas text-primario shadow-sm' : 'text-pizarra/50 hover:text-pizarra'}`}
+              className={`relative rounded-md cursor-pointer transition-colors z-10 ${viewMode === 'grid' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
               title="Vista de Tarjetas"
-              style={{ padding: '6px' }}
+              style={{ padding: '6px 10px' }}
             >
+              {viewMode === 'grid' && (
+                <motion.div
+                  layoutId="viewModeSwitchPill"
+                  className="absolute inset-0 bg-canvas rounded-md border border-borde/60 shadow-sm -z-10"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
               <SquaresFour weight="bold" style={{ width: '16px', height: '16px' }} />
             </button>
           </div>
@@ -178,7 +200,7 @@ export default function PageTemplate({
       </motion.div>
 
       {/* Content */}
-      <motion.div variants={itemVariants}>
+      <motion.div variants={staggerItemVariants}>
         {children}
         <div className="flex items-center justify-between" style={{ marginTop: '16px', padding: '0 8px' }}>
           <p className="text-xs text-pizarra/40 font-medium">
@@ -194,4 +216,3 @@ export default function PageTemplate({
     </motion.div>
   );
 }
-

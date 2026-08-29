@@ -1,10 +1,18 @@
+import React from 'react';
+import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { evolucionOrgsData } from '../../data/mockData';
 import { TrendUp } from '@phosphor-icons/react';
 
-export default function EvolucionChart() {
+export default function EvolucionChart({ animate = true }) {
   return (
-    <div className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" style={{ padding: '24px' }}>
+    <motion.div 
+      initial={animate ? { opacity: 0, y: 16 } : false}
+      animate={{ opacity: 1, y: 0 }}
+      transition={animate ? { duration: 0.35, delay: 0.05 } : { duration: 0 }}
+      className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" 
+      style={{ padding: '24px' }}
+    >
       <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
         <div className="flex items-center" style={{ gap: '10px' }}>
           <TrendUp weight="duotone" className="w-5 h-5 text-pizarra" />
@@ -17,7 +25,7 @@ export default function EvolucionChart() {
           <AreaChart data={evolucionOrgsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorBen" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3C3AE5" stopOpacity={0.1}/>
+                <stop offset="5%" stopColor="#3C3AE5" stopOpacity={0.15}/>
                 <stop offset="95%" stopColor="#3C3AE5" stopOpacity={0}/>
               </linearGradient>
             </defs>
@@ -25,16 +33,24 @@ export default function EvolucionChart() {
             <XAxis dataKey="periodo" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#494963' }} dy={10} />
             <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#494963' }} />
             <Tooltip 
-              contentStyle={{ borderRadius: '6px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+              contentStyle={{ borderRadius: '8px', border: '1px solid #E3E1E2', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)' }}
               itemStyle={{ fontSize: '13px', fontWeight: 600 }}
               labelStyle={{ fontSize: '12px', color: '#494963', marginBottom: '4px' }}
             />
-            <Area type="monotone" dataKey="beneficiarios" name="Beneficiarios" stroke="#3C3AE5" strokeWidth={3} fillOpacity={1} fill="url(#colorBen)" />
+            <Area 
+              type="monotone" 
+              dataKey="beneficiarios" 
+              name="Beneficiarios" 
+              stroke="#3C3AE5" 
+              strokeWidth={3} 
+              fillOpacity={1} 
+              fill="url(#colorBen)"
+              animationDuration={animate ? 1200 : 0}
+              animationEasing="ease-out"
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </motion.div>
   );
 }
-
-

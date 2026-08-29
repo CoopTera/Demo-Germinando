@@ -1,8 +1,11 @@
+import React from 'react';
+import { motion } from 'framer-motion';
 import { Pulse } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { actividadReciente } from '../../data/mockData';
+import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
-export default function ActividadFeed() {
+export default function ActividadFeed({ animate = true }) {
   const navigate = useNavigate();
 
   const handleClick = (item) => {
@@ -18,41 +21,65 @@ export default function ActividadFeed() {
   };
 
   return (
-    <div className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" style={{ padding: '24px' }}>
+    <motion.div 
+      initial={animate ? { opacity: 0, y: 16 } : false}
+      animate={{ opacity: 1, y: 0 }}
+      transition={animate ? { duration: 0.35, delay: 0.15 } : { duration: 0 }}
+      className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" 
+      style={{ padding: '24px' }}
+    >
       <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
         <Pulse weight="duotone" style={{ width: '20px', height: '20px', color: '#494963' }} />
         <h2 className="font-semibold text-pizarra text-base">Actividad Reciente</h2>
         <span className="ml-auto text-xs text-pizarra/40 font-medium">Últimos 7 días</span>
       </div>
-      <div className="flex flex-col flex-1 overflow-y-auto pr-2" style={{ gap: '24px' }}>
+
+      <motion.div 
+        variants={animate ? staggerContainerVariants : undefined}
+        initial={animate ? 'hidden' : false}
+        animate="show"
+        className="flex flex-col flex-1 overflow-y-auto pr-2" 
+        style={{ gap: '24px' }}
+      >
         {actividadReciente.map((item, i) => (
-          <div
+          <motion.div
             key={item.id}
+            variants={animate ? staggerItemVariants : undefined}
+            whileHover={item.entidadId ? { x: 3 } : {}}
             onClick={() => handleClick(item)}
-            className={`relative flex ${item.entidadId ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+            className={`relative flex items-start ${item.entidadId ? 'cursor-pointer group' : ''}`}
             style={{ gap: '16px' }}
           >
             {/* Timeline line */}
             {i !== actividadReciente.length - 1 && (
-              <div className="absolute left-[19px] top-10 bottom-[-24px] w-0.5 bg-borde" />
+              <motion.div 
+                initial={animate ? { scaleY: 0 } : false}
+                animate={{ scaleY: 1 }}
+                transition={animate ? { duration: 0.4, delay: i * 0.08 + 0.2 } : { duration: 0 }}
+                style={{ transformOrigin: 'top' }}
+                className="absolute left-[19px] top-10 bottom-[-24px] w-0.5 bg-borde" 
+              />
             )}
             
             {/* Avatar */}
-            <div className="rounded-full bg-pizarra/10 flex items-center justify-center text-pizarra font-bold text-xs shrink-0 z-10 border-[3px] border-white" style={{ width: '40px', height: '40px' }}>
+            <motion.div 
+              whileHover={{ scale: 1.1 }}
+              className="rounded-full bg-pizarra/10 flex items-center justify-center text-pizarra font-bold text-xs shrink-0 z-10 border-[3px] border-white shadow-xs group-hover:bg-primario group-hover:text-white transition-colors" 
+              style={{ width: '40px', height: '40px' }}
+            >
               {item.avatar}
-            </div>
+            </motion.div>
             
             {/* Content */}
             <div className="flex-1 pt-1.5 pb-2">
               <p className="text-sm text-texto leading-relaxed">
-                <span className="font-semibold">{item.usuario}</span> {item.accion} <span className="font-medium text-primario">{item.entidad}</span>
+                <span className="font-semibold">{item.usuario}</span> {item.accion} <span className="font-semibold text-primario group-hover:underline">{item.entidad}</span>
               </p>
               <p className="text-[11px] text-pizarra/50 mt-1 font-medium">{item.fecha}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
-

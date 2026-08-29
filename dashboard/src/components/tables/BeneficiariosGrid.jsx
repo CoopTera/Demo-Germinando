@@ -1,6 +1,8 @@
-﻿import React from 'react';
-import { Warning, MapPin, CalendarBlank, Buildings } from '@phosphor-icons/react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Warning, CalendarBlank } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
+import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function BeneficiariosGrid({ data = [], onItemClick }) {
   const { talleres } = useData();
@@ -49,9 +51,15 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 animate-fade-in-up" style={{ gap: '20px' }}>
+    <motion.div 
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
+      style={{ gap: '20px' }}
+    >
       {data.map((row) => {
-        const hasAlert = row.estado === 'Suspendido';
+        const hasAlert = row.estado === 'Suspendido' || row.alerta;
         const org = row.programas || row.organizaciones;
         const fecha = row.inicioBeca || row.fechaInicio;
         const asistenciaNum = parseInt((row.asistencia || "0").replace('%', ''));
@@ -59,11 +67,14 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
         const benTalleres = (row.talleres || []).map(tId => talleres.find(t => t.id === tId)?.nombre).filter(Boolean);
 
         return (
-          <div
+          <motion.div
             key={row.id || row.dni}
+            variants={staggerItemVariants}
+            whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(73, 73, 99, 0.12)' }}
+            whileTap={{ scale: 0.99 }}
             onClick={() => onItemClick && onItemClick(row)}
-            className={`bg-white rounded-xl border border-borde overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col h-full ${
-              hasAlert ? 'border-naranja shadow-[0_4px_12px_rgba(255,116,2,0.08)]' : ''
+            className={`bg-white rounded-xl border border-borde overflow-hidden cursor-pointer flex flex-col h-full ${
+              hasAlert ? 'border-naranja shadow-[0_4px_12px_rgba(255,116,2,0.08)]' : 'card-elevated'
             }`}
           >
             {/* Cabecera Tarjeta */}
@@ -140,9 +151,9 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }

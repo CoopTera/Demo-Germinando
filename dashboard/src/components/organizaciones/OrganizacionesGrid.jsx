@@ -1,5 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Buildings, MapPin, FileText, Hammer, CurrencyDollar, PencilSimple } from '@phosphor-icons/react';
+import { staggerContainerVariants, staggerItemVariants, cardHoverVariants } from '../../lib/motionTokens';
 
 export default function OrganizacionesGrid({ data, onItemClick }) {
   if (data.length === 0) {
@@ -11,12 +13,21 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3" style={{ gap: '24px' }}>
+    <motion.div 
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
+      className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3" 
+      style={{ gap: '24px' }}
+    >
       {data.map((org, i) => (
-        <div 
+        <motion.div 
           key={org.id || i} 
+          variants={staggerItemVariants}
+          whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(73, 73, 99, 0.12)' }}
+          whileTap={{ scale: 0.99 }}
           onClick={() => onItemClick && onItemClick(org)}
-          className="bg-white rounded-md shadow-sm border border-borde hover:shadow-md transition-shadow flex flex-col card-elevated cursor-pointer" 
+          className="bg-white rounded-md shadow-sm border border-borde flex flex-col card-elevated cursor-pointer" 
           style={{ padding: '20px' }}
         >
           <div className="flex justify-between items-start" style={{ marginBottom: '16px' }}>
@@ -31,7 +42,7 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
                 </span>
               </div>
             </div>
-            <button className="text-pizarra/40 hover:text-primario transition-colors" title="Editar">
+            <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer" title="Editar">
               <PencilSimple style={{ width: '16px', height: '16px' }} />
             </button>
           </div>
@@ -68,9 +79,8 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
               </span>
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
-

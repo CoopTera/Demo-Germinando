@@ -20,6 +20,7 @@ export const DataProvider = ({ children }) => {
   );
   const [convenios, setConvenios] = useState(conveniosData);
   const [talleres, setTalleres] = useState(talleresData);
+  const [hasDashboardAnimated, setHasDashboardAnimated] = useState(false);
 
   const importarDesdeExcel = (file) => {
     const reader = new FileReader();
@@ -122,7 +123,9 @@ export const DataProvider = ({ children }) => {
       convenios,
       setConvenios,
       talleres,
-      setTalleres
+      setTalleres,
+      hasDashboardAnimated,
+      setHasDashboardAnimated
     }}>
       {children}
     </DataContext.Provider>

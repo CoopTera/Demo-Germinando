@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { BookmarkSimple, BellRinging, Warning } from '@phosphor-icons/react';
 import { oportunidades, alertas } from '../data/mockData';
 import PageTemplate from '../components/layout/PageTemplate';
 import OportunidadesGrid from '../components/oportunidades/OportunidadesGrid';
+import { staggerContainerVariants, staggerItemVariants } from '../lib/motionTokens';
 
 const FILTROS = ['Todas', 'Licitaciones', 'Fondos', 'Capacitaciones'];
 
@@ -57,14 +59,26 @@ export default function OportunidadesPage() {
             <h2 className="font-semibold text-pizarra text-lg">Alertas del Sistema</h2>
           </div>
           
-          <div className="flex flex-col" style={{ gap: '16px' }}>
+          <motion.div 
+            variants={staggerContainerVariants}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col" 
+            style={{ gap: '16px' }}
+          >
             {filteredAlertas.map(alerta => {
               const bgPrioridad = alerta.prioridad === 'critica' ? 'bg-critico/10' : alerta.prioridad === 'alta' ? 'bg-naranja/10' : 'bg-pizarra/10';
               const textPrioridad = alerta.prioridad === 'critica' ? 'text-critico' : alerta.prioridad === 'alta' ? 'text-naranja' : 'text-pizarra';
               const borderPrioridad = alerta.prioridad === 'critica' ? 'border-critico' : alerta.prioridad === 'alta' ? 'border-naranja' : 'border-pizarra/30';
               
               return (
-                <div key={alerta.id} className="bg-white rounded-md border border-borde shadow-sm flex flex-col relative overflow-hidden card-elevated" style={{ padding: '20px', borderLeftWidth: '4px', borderLeftColor: borderPrioridad === 'border-critico' ? '#E42153' : borderPrioridad === 'border-naranja' ? '#FF7402' : '#E3E1E2' }}>
+                <motion.div 
+                  key={alerta.id} 
+                  variants={staggerItemVariants}
+                  whileHover={{ y: -2, boxShadow: '0 6px 18px rgba(73, 73, 99, 0.1)' }}
+                  className="bg-white rounded-md border border-borde shadow-sm flex flex-col relative overflow-hidden card-elevated" 
+                  style={{ padding: '20px', borderLeftWidth: '4px', borderLeftColor: borderPrioridad === 'border-critico' ? '#E42153' : borderPrioridad === 'border-naranja' ? '#FF7402' : '#E3E1E2' }}
+                >
                   <div className="flex items-start" style={{ gap: '16px' }}>
                     <div className={`rounded-full flex items-center justify-center shrink-0 ${bgPrioridad} ${textPrioridad}`} style={{ width: '40px', height: '40px' }}>
                       <Warning weight="duotone" style={{ width: '24px', height: '24px' }} />
@@ -78,11 +92,11 @@ export default function OportunidadesPage() {
                     </div>
                   </div>
                   <div className="flex justify-end mt-4 pt-4 border-t border-borde">
-                    <button className="text-sm font-semibold text-primario hover:underline flex items-center" style={{ gap: '4px' }}>
+                    <button className="text-sm font-semibold text-primario hover:underline flex items-center cursor-pointer" style={{ gap: '4px' }}>
                       Resolver Acción &rarr;
                     </button>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
             
@@ -92,7 +106,7 @@ export default function OportunidadesPage() {
                 No hay alertas que coincidan con la búsqueda.
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* Right Column: Oportunidades */}
