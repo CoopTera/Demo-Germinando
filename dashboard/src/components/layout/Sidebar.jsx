@@ -55,7 +55,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
       {/* Sidebar Container */}
       <aside 
-        className={`fixed lg:static inset-y-0 left-0 w-[280px] h-screen shrink-0 text-white flex flex-col justify-between z-50 shadow-2xl lg:shadow-lg select-none transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 w-[280px] h-screen shrink-0 text-white flex flex-col justify-between z-50 shadow-2xl lg:shadow-none select-none transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
         style={{ backgroundColor: '#6B1330' }}
@@ -86,7 +86,7 @@ export default function Sidebar({ isOpen, onClose }) {
           </div>
 
           {/* Navigation Sections */}
-          <nav className="overflow-y-auto" style={{ paddingTop: '32px', paddingBottom: '32px' }}>
+          <nav className="overflow-y-auto overflow-x-hidden" style={{ paddingTop: '32px', paddingBottom: '32px' }}>
             {navSections.map((section) => (
               <div key={section.category} className="mb-2">
                 <div className="flex flex-col">
@@ -99,14 +99,14 @@ export default function Sidebar({ isOpen, onClose }) {
                         end={item.end}
                         onClick={onClose}
                         style={{
-                          padding: '16px 40px',
-                          gap: '16px',
+                          padding: '14px 32px',
+                          gap: '14px',
                           position: 'relative'
                         }}
                         className={({ isActive }) =>
                           `relative flex items-center text-[15px] transition-colors duration-150 ${
                             isActive
-                              ? 'text-white font-semibold'
+                              ? 'text-[#6B1330] font-bold'
                               : 'text-white/80 hover:bg-white/5 hover:text-white font-medium'
                           }`
                         }
@@ -115,17 +115,43 @@ export default function Sidebar({ isOpen, onClose }) {
                           <>
                             {isActive && (
                               <motion.div
-                                layoutId="sidebarActivePill"
-                                className="absolute inset-0 bg-[#4D0A20]"
+                                initial={{ scaleX: 0, opacity: 0 }}
+                                animate={{ scaleX: 1, opacity: 1 }}
+                                style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8' }}
+                                className="absolute inset-y-0 right-0 left-4 rounded-l-2xl z-20"
                                 transition={{
                                   type: 'spring',
-                                  stiffness: 380,
-                                  damping: 30,
+                                  stiffness: 320,
+                                  damping: 26,
+                                  mass: 0.8,
                                 }}
-                              />
+                              >
+                                {/* Top scoop fillet */}
+                                <motion.svg 
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                                  className="absolute -top-4 right-0 w-4 h-4 pointer-events-none" 
+                                  viewBox="0 0 16 16" 
+                                  fill="none"
+                                >
+                                  <path d="M0 16 C 8.836 16 16 8.836 16 0 L 16 16 Z" fill="#F5F6F8" />
+                                </motion.svg>
+                                {/* Bottom scoop fillet */}
+                                <motion.svg 
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                                  className="absolute -bottom-4 right-0 w-4 h-4 pointer-events-none" 
+                                  viewBox="0 0 16 16" 
+                                  fill="none"
+                                >
+                                  <path d="M0 0 C 8.836 0 16 7.164 16 16 L 16 0 Z" fill="#F5F6F8" />
+                                </motion.svg>
+                              </motion.div>
                             )}
-                            <Icon className="shrink-0 relative z-10" size={20} />
-                            <span className="truncate relative z-10">{item.name}</span>
+                            <Icon className="shrink-0 relative z-30" size={20} />
+                            <span className="truncate relative z-30">{item.name}</span>
                           </>
                         )}
                       </NavLink>
@@ -144,8 +170,8 @@ export default function Sidebar({ isOpen, onClose }) {
               to="/perfil"
               onClick={onClose}
               style={{
-                padding: '16px 40px',
-                gap: '16px',
+                padding: '14px 32px',
+                gap: '14px',
                 display: 'flex',
                 alignItems: 'center',
                 position: 'relative'
@@ -153,7 +179,7 @@ export default function Sidebar({ isOpen, onClose }) {
               className={({ isActive }) =>
                 `relative text-[15px] transition-colors duration-150 ${
                   isActive
-                    ? 'text-white font-semibold'
+                    ? 'text-[#6B1330] font-bold'
                     : 'text-white/80 hover:bg-white/5 hover:text-white font-medium'
                 }`
               }
@@ -162,19 +188,47 @@ export default function Sidebar({ isOpen, onClose }) {
                 <>
                   {isActive && (
                     <motion.div
-                      layoutId="sidebarActivePill"
-                      className="absolute inset-0 bg-[#4D0A20]"
+                      initial={{ scaleX: 0, opacity: 0 }}
+                      animate={{ scaleX: 1, opacity: 1 }}
+                      style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8' }}
+                      className="absolute inset-y-0 right-0 left-4 rounded-l-2xl z-20"
                       transition={{
                         type: 'spring',
-                        stiffness: 380,
-                        damping: 30,
+                        stiffness: 320,
+                        damping: 26,
+                        mass: 0.8,
                       }}
-                    />
+                    >
+                      {/* Top scoop fillet */}
+                      <motion.svg 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        className="absolute -top-4 right-0 w-4 h-4 pointer-events-none" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                      >
+                        <path d="M0 16 C 8.836 16 16 8.836 16 0 L 16 16 Z" fill="#F5F6F8" />
+                      </motion.svg>
+                      {/* Bottom scoop fillet */}
+                      <motion.svg 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        className="absolute -bottom-4 right-0 w-4 h-4 pointer-events-none" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                      >
+                        <path d="M0 0 C 8.836 0 16 7.164 16 16 L 16 0 Z" fill="#F5F6F8" />
+                      </motion.svg>
+                    </motion.div>
                   )}
-                  <div className="rounded-full bg-white/20 flex items-center justify-center font-bold text-[10px] shrink-0 relative z-10" style={{ width: '24px', height: '24px' }}>
+                  <div className={`rounded-full flex items-center justify-center font-bold text-[10px] shrink-0 relative z-30 transition-colors ${
+                    isActive ? 'bg-[#6B1330] text-white' : 'bg-white/20 text-white'
+                  }`} style={{ width: '24px', height: '24px' }}>
                     DG
                   </div>
-                  <span className="truncate relative z-10">Director General</span>
+                  <span className="truncate relative z-30">Director General</span>
                 </>
               )}
             </NavLink>
