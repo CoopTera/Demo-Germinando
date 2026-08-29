@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MagnifyingGlass, Bell, List, Warning, Tag, Clock } from '@phosphor-icons/react';
+import { Search, Notification, Menu, Warning, Tag, Time } from '@carbon/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { dropdownVariants } from '../../lib/motionTokens';
@@ -69,12 +69,11 @@ export default function Header({ onMenuClick }) {
 
   const getAlertIcon = (tipo, prioridad) => {
     const props = { 
-      weight: "duotone", 
-      style: { width: '20px', height: '20px' },
+      size: 20,
       className: prioridad === 'critica' ? 'text-critico' : prioridad === 'alta' ? 'text-naranja' : 'text-pizarra'
     };
     if (tipo === 'oportunidad') return <Tag {...props} />;
-    if (tipo === 'sin_actualizacion') return <Clock {...props} />;
+    if (tipo === 'sin_actualizacion') return <Time {...props} />;
     return <Warning {...props} />;
   };
 
@@ -88,7 +87,7 @@ export default function Header({ onMenuClick }) {
           className="lg:hidden text-pizarra hover:bg-superficie-sec rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primario cursor-pointer"
           style={{ padding: '8px' }}
         >
-          <List style={{ width: '24px', height: '24px' }} />
+          <Menu size={24} />
         </button>
         
         <motion.div 
@@ -97,7 +96,7 @@ export default function Header({ onMenuClick }) {
           style={{ width: isSearchFocused ? '420px' : '340px' }} 
           ref={searchRef}
         >
-          <MagnifyingGlass className="text-pizarra/60 absolute pointer-events-none" style={{ width: '18px', height: '18px', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
+          <Search size={18} className="text-pizarra/60 absolute pointer-events-none" style={{ left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             type="text"
             placeholder="Buscar organización, expediente o DNI..."
@@ -170,7 +169,7 @@ export default function Header({ onMenuClick }) {
           title="Notificaciones"
           style={{ padding: '10px' }}
         >
-          <Bell style={{ width: '22px', height: '22px' }} />
+          <Notification size={22} />
           {alertas && alertas.length > 0 && (
             <motion.span 
               initial={{ scale: 0 }}

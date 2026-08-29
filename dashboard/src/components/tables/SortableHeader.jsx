@@ -1,5 +1,5 @@
-﻿import React from 'react';
-import { CaretUp, CaretDown, ArrowsDownUp } from '@phosphor-icons/react';
+import React from 'react';
+import { CaretUp, CaretDown, ArrowsVertical } from '@carbon/icons-react';
 
 export default function SortableHeader({ label, sortKey, sortConfig, requestSort, customSort = null }) {
   const isSorted = sortConfig && sortConfig.key === sortKey;
@@ -13,11 +13,11 @@ export default function SortableHeader({ label, sortKey, sortConfig, requestSort
       <span className="truncate">{label}</span>
       <span className={`flex flex-col opacity-50 group-hover:opacity-100 ${isSorted ? 'opacity-100 text-primario' : ''}`}>
         {direction === 'asc' ? (
-          <CaretUp weight="fill" style={{ width: '12px', height: '12px' }} />
+          <CaretUp size={12} />
         ) : direction === 'desc' ? (
-          <CaretDown weight="fill" style={{ width: '12px', height: '12px' }} />
+          <CaretDown size={12} />
         ) : (
-          <ArrowsDownUp style={{ width: '12px', height: '12px' }} />
+          <ArrowsVertical size={12} />
         )}
       </span>
     </div>

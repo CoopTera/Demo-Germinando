@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, UserPlus, BookOpen, Pulse, BookmarkSimple, PencilSimple, Trash } from '@phosphor-icons/react';
+import { Calendar, UserFollow, Education, Activity, Document, Edit, TrashCan } from '@carbon/icons-react';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 const getIcon = (tipo) => {
   switch (tipo) {
-    case 'ingreso': return <UserPlus className="w-4 h-4 text-primario" />;
-    case 'taller': return <BookOpen className="w-4 h-4 text-naranja" />;
-    case 'seguimiento': return <Pulse className="w-4 h-4 text-exito" />;
-    case 'convenio': return <BookmarkSimple className="w-4 h-4 text-pizarra" />;
+    case 'ingreso': return <UserFollow className="w-4 h-4 text-primario" />;
+    case 'taller': return <Education className="w-4 h-4 text-naranja" />;
+    case 'seguimiento': return <Activity className="w-4 h-4 text-exito" />;
+    case 'convenio': return <Document className="w-4 h-4 text-pizarra" />;
     default: return <Calendar className="w-4 h-4 text-pizarra/50" />;
   }
 };
@@ -99,12 +99,12 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                       {onEdit && (
                         <button onClick={() => startEdit(evento)} className="p-1 text-pizarra/40 hover:text-primario hover:bg-primario/10 rounded transition-colors cursor-pointer" title="Editar">
-                          <PencilSimple style={{ width: '14px', height: '14px' }} />
+                          <Edit size={14} />
                         </button>
                       )}
                       {onDelete && (
                         <button onClick={() => onDelete(evento.id)} className="p-1 text-pizarra/40 hover:text-critico hover:bg-critico/10 rounded transition-colors cursor-pointer" title="Eliminar">
-                          <Trash style={{ width: '14px', height: '14px' }} />
+                          <TrashCan size={14} />
                         </button>
                       )}
                     </div>

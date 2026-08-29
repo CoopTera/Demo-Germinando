@@ -3,33 +3,33 @@ import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import LogoSantaFe from '../../assets/logo-santa-fe.png';
 import {
-  SquaresFour,
-  Buildings,
-  Users,
+  Dashboard,
+  Enterprise,
+  Group,
   ChartBar,
-  Graph,
-  BookmarkSimple,
-  Briefcase,
-  BookOpen
-} from '@phosphor-icons/react';
+  Network_2,
+  Catalog,
+  Document,
+  Education
+} from '@carbon/icons-react';
 
 const navSections = [
   {
     category: 'PRINCIPAL',
     items: [
-      { name: 'Panel Ejecutivo', path: '/', icon: SquaresFour, end: true },
-      { name: 'Oportunidades', path: '/oportunidades', icon: BookmarkSimple },
-      { name: 'Organizaciones', path: '/organizaciones', icon: Buildings },
-      { name: 'Beneficiarios', path: '/beneficiarios', icon: Users },
-      { name: 'Convenios', path: '/convenios', icon: Briefcase },
-      { name: 'Talleres', path: '/talleres', icon: BookOpen },
+      { name: 'Panel Ejecutivo', path: '/', icon: Dashboard, end: true },
+      { name: 'Oportunidades', path: '/oportunidades', icon: Catalog },
+      { name: 'Organizaciones', path: '/organizaciones', icon: Enterprise },
+      { name: 'Beneficiarios', path: '/beneficiarios', icon: Group },
+      { name: 'Convenios', path: '/convenios', icon: Document },
+      { name: 'Talleres', path: '/talleres', icon: Education },
     ],
   },
   {
     category: 'ANÁLISIS',
     items: [
       { name: 'Gráficos', path: '/graficos', icon: ChartBar },
-      { name: 'Grafo de Vínculos', path: '/grafo', icon: Graph },
+      { name: 'Grafo de Vínculos', path: '/grafo', icon: Network_2 },
     ],
   },
 ];
@@ -46,7 +46,7 @@ export default function Sidebar({ isOpen, onClose }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 backdrop-blur-sm z-40 lg:hidden"
-            style={{ backgroundColor: 'rgba(101, 34, 48, 0.5)' }}
+            style={{ backgroundColor: 'rgba(107, 19, 48, 0.5)' }}
             onClick={onClose}
             aria-hidden="true"
           />
@@ -58,18 +58,22 @@ export default function Sidebar({ isOpen, onClose }) {
         className={`fixed lg:static inset-y-0 left-0 w-[280px] h-screen shrink-0 text-white flex flex-col justify-between z-50 shadow-2xl lg:shadow-lg select-none transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
-        style={{ backgroundColor: '#652230' }}
+        style={{ backgroundColor: '#6B1330' }}
       >
         <div className="flex flex-col min-h-0">
           {/* Brand / Logo */}
-          <div className="h-24 flex items-center border-b border-white/10 shrink-0" style={{ padding: '0 32px', gap: '16px' }}>
+          <div className="h-24 flex items-center border-b border-white/10 shrink-0" style={{ padding: '0 28px', gap: '14px' }}>
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-11 h-11 bg-white rounded-xl flex items-center justify-center shrink-0 overflow-hidden shadow-sm"
-              style={{ padding: '4px' }}
+              className="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden shadow-sm"
+              style={{ padding: '6px' }}
             >
-              <img src={LogoSantaFe} alt="Santa Fe Provincia" className="w-full h-full object-contain" />
+              <img 
+                src={LogoSantaFe} 
+                alt="Santa Fe Provincia" 
+                className="w-full h-full object-contain" 
+              />
             </motion.div>
             <div>
               <h1 className="font-bold text-lg leading-tight tracking-wide text-white">
@@ -112,7 +116,7 @@ export default function Sidebar({ isOpen, onClose }) {
                             {isActive && (
                               <motion.div
                                 layoutId="sidebarActivePill"
-                                className="absolute inset-0 bg-[#4A1621]"
+                                className="absolute inset-0 bg-[#4D0A20]"
                                 transition={{
                                   type: 'spring',
                                   stiffness: 380,
@@ -120,7 +124,7 @@ export default function Sidebar({ isOpen, onClose }) {
                                 }}
                               />
                             )}
-                            <Icon weight="duotone" className="shrink-0 relative z-10" style={{ width: '20px', height: '20px' }} />
+                            <Icon className="shrink-0 relative z-10" size={20} />
                             <span className="truncate relative z-10">{item.name}</span>
                           </>
                         )}
@@ -159,7 +163,7 @@ export default function Sidebar({ isOpen, onClose }) {
                   {isActive && (
                     <motion.div
                       layoutId="sidebarActivePill"
-                      className="absolute inset-0 bg-[#4A1621]"
+                      className="absolute inset-0 bg-[#4D0A20]"
                       transition={{
                         type: 'spring',
                         stiffness: 380,

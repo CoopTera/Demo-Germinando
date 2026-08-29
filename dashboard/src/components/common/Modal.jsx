@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from '@phosphor-icons/react';
+import { Close } from '@carbon/icons-react';
 import { modalVariants } from '../../lib/motionTokens';
 
 export default function Modal({ isOpen, onClose, title, children }) {
@@ -35,7 +35,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
                 className="text-pizarra/50 hover:text-pizarra transition-colors rounded-full cursor-pointer" 
                 style={{ padding: '8px' }}
               >
-                <X style={{ width: '20px', height: '20px' }} />
+                <Close size={20} />
               </motion.button>
             </div>
             <div className="overflow-y-auto bg-white" style={{ padding: '24px' }}>

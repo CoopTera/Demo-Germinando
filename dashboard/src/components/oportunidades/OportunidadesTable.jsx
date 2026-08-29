@@ -1,10 +1,9 @@
 import React from 'react';
-import { BookmarkSimple, MapPin, Calendar, ArrowSquareOut } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 
 export default function OportunidadesTable({ data }) {
   const { widths, startResize } = useTableResize({
-    col1: 300, col2: 250, col3: 200, col4: 100
+    col1: 300, col2: 250, col3: 200, col4: 120
   });
 
   if (data.length === 0) {
@@ -28,7 +27,7 @@ export default function OportunidadesTable({ data }) {
     <div 
       onMouseDown={(e) => startResize(e, colKey)}
       style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10 }}
-      onMouseEnter={(e) => e.target.style.backgroundColor = '#3C3AE5'}
+      onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
       onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'}
     />
   );
@@ -55,30 +54,17 @@ export default function OportunidadesTable({ data }) {
             {data.map((item) => (
               <tr key={item.id} className="hover:bg-canvas transition-colors cursor-pointer group">
                 <td className="border-r border-borde" style={cellStyle(widths.col1)} title={item.titulo}>
-                  <div className="flex items-center" style={{ gap: '12px' }}>
-                    <div className="bg-primario/10 text-primario rounded-lg flex items-center justify-center shrink-0" style={{ width: '32px', height: '32px' }}>
-                      <BookmarkSimple style={{ width: '16px', height: '16px' }} />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-sm font-bold text-texto group-hover:text-primario transition-colors truncate">{item.titulo}</p>
-                    </div>
-                  </div>
+                  <p className="text-sm font-semibold text-texto group-hover:text-primario transition-colors truncate">{item.titulo}</p>
                 </td>
                 <td className="border-r border-borde" style={cellStyle(widths.col2)} title={item.organizador}>
-                  <div className="flex items-center text-sm font-medium text-pizarra/80" style={{ gap: '6px' }}>
-                    <MapPin className="text-pizarra/50 shrink-0" style={{ width: '14px', height: '14px' }} />
-                    <span className="truncate">{item.organizador}</span>
-                  </div>
+                  <span className="text-sm font-medium text-pizarra/80 truncate">{item.organizador}</span>
                 </td>
                 <td className="border-r border-borde" style={cellStyle(widths.col3)}>
-                  <div className="flex items-center text-sm font-medium text-pizarra/80" style={{ gap: '6px' }}>
-                    <Calendar className="text-pizarra/50 shrink-0" style={{ width: '14px', height: '14px' }} />
-                    <span className="truncate">{item.fecha}</span>
-                  </div>
+                  <span className="text-sm font-medium text-pizarra/80 truncate">{item.fecha}</span>
                 </td>
                 <td className="text-center" style={cellStyle(widths.col4)}>
-                  <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer mx-auto block">
-                    <ArrowSquareOut style={{ width: '18px', height: '18px' }} />
+                  <button className="text-xs font-semibold text-primario hover:underline cursor-pointer">
+                    Ver detalle
                   </button>
                 </td>
               </tr>

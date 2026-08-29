@@ -2,10 +2,10 @@ import React, { useRef, useCallback, useMemo, useState, useEffect } from 'react'
 import ForceGraph2D from 'react-force-graph-2d';
 import { useData } from '../../context/DataContext';
 import { grafoLinks } from '../../data/mockData';
-import { Faders, Minus, Plus } from '@phosphor-icons/react';
+import { SettingsAdjust } from '@carbon/icons-react';
 
 const LEGEND_ITEMS = [
-  { label: 'Organización', color: '#3C3AE5' },
+  { label: 'Organización', color: '#6B1330' },
   { label: 'Taller', color: '#FF7402' },
   { label: 'Convenio', color: '#22C55E' },
   { label: 'Beneficiario', color: '#494963' },
@@ -52,9 +52,9 @@ export default function GrafoVinculos() {
     const nodes = [];
     const links = [];
 
-    // 1. Organizaciones (Nodos grandes azules)
+    // 1. Organizaciones (Nodos grandes rojos)
     organizaciones.forEach(org => {
-      nodes.push({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', baseSize: 30, color: '#3C3AE5' });
+      nodes.push({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', baseSize: 30, color: '#6B1330' });
     });
 
     // 2. Convenios (Nodos verdes medianos)
@@ -199,7 +199,7 @@ export default function GrafoVinculos() {
           style={{ padding: '10px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           title="Ajustes del Grafo"
         >
-          <Faders weight="duotone" style={{ width: '20px', height: '20px' }} />
+          <SettingsAdjust size={20} />
         </button>
 
         {showControls && (
@@ -213,7 +213,7 @@ export default function GrafoVinculos() {
                       type="checkbox" 
                       checked={value} 
                       onChange={(e) => setLayers(p => ({...p, [key]: e.target.checked}))} 
-                      style={{ accentColor: '#3C3AE5', width: '16px', height: '16px' }}
+                      style={{ accentColor: '#6B1330', width: '16px', height: '16px' }}
                     />
                     <span style={{ fontSize: '13px', fontWeight: 500, color: '#494963' }}>
                       {key.charAt(0).toUpperCase() + key.slice(1)}
@@ -239,7 +239,7 @@ export default function GrafoVinculos() {
                     type="range" min="50" max="600" step="10"
                     value={graphConfig.repulsion}
                     onChange={(e) => setGraphConfig(p => ({...p, repulsion: parseInt(e.target.value)}))}
-                    style={{ width: '100%', accentColor: '#3C3AE5' }}
+                    style={{ width: '100%', accentColor: '#6B1330' }}
                   />
                 </div>
 
@@ -253,7 +253,7 @@ export default function GrafoVinculos() {
                     type="range" min="10" max="150" step="5"
                     value={graphConfig.linkDistance}
                     onChange={(e) => setGraphConfig(p => ({...p, linkDistance: parseInt(e.target.value)}))}
-                    style={{ width: '100%', accentColor: '#3C3AE5' }}
+                    style={{ width: '100%', accentColor: '#6B1330' }}
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export default function GrafoVinculos() {
                     type="range" min="0.5" max="2.5" step="0.1"
                     value={graphConfig.nodeSizeMultiplier}
                     onChange={(e) => setGraphConfig(p => ({...p, nodeSizeMultiplier: parseFloat(e.target.value)}))}
-                    style={{ width: '100%', accentColor: '#3C3AE5' }}
+                    style={{ width: '100%', accentColor: '#6B1330' }}
                   />
                 </div>
               </div>

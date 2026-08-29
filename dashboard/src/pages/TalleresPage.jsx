@@ -39,7 +39,7 @@ export default function TalleresPage() {
   const Resizer = ({ colKey }) => (
     <div onMouseDown={(e) => startResize(e, colKey)}
          style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10 }}
-         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C3AE5'}
+         onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
          onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'} />
   );
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { PencilSimple, MapPin } from '@phosphor-icons/react';
 
 export default function OrganizacionesTable({ data = [] }) {
   const formatCurrency = (amount) => {
@@ -46,26 +45,23 @@ export default function OrganizacionesTable({ data = [] }) {
                   <td className="px-5 py-5 text-sm text-texto font-medium">
                     {org.nombre}
                   </td>
-                  <td className="px-5 py-5 text-sm text-texto">
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-pizarra/40 shrink-0" />
-                      {org.localizacion}
-                    </span>
+                  <td className="px-5 py-5 text-sm text-pizarra/80 font-medium">
+                    {org.localizacion}
                   </td>
-                  <td className="px-5 py-5 text-sm text-texto">
+                  <td className="px-5 py-5 text-sm">
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getEspecializacionBadgeClass(
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${getEspecializacionBadgeClass(
                         org.especializacion
                       )}`}
                     >
                       {org.especializacion}
                     </span>
                   </td>
-                  <td className="px-5 py-5 text-sm text-texto text-center font-semibold">
-                    {org.conveniosActivos ?? 0}
+                  <td className="px-5 py-5 text-sm text-texto text-center font-bold">
+                    {org.convenios}
                   </td>
-                  <td className="px-5 py-5 text-sm text-texto text-center font-semibold">
-                    {org.talleresActivos ?? 0}
+                  <td className="px-5 py-5 text-sm text-texto text-center font-bold">
+                    {org.talleres}
                   </td>
                   <td className="px-5 py-5 text-sm text-texto text-right font-semibold">
                     {formatCurrency(org.presupuesto)}
@@ -73,11 +69,10 @@ export default function OrganizacionesTable({ data = [] }) {
                   <td className="px-5 py-5 text-sm text-texto text-center">
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-pizarra border border-borde rounded-lg hover:bg-superficie-sec transition-colors cursor-pointer"
+                      className="px-3 py-1.5 text-xs font-semibold text-pizarra/70 hover:text-primario border border-borde rounded-lg hover:bg-superficie-sec transition-colors cursor-pointer"
                       title={`Editar ${org.nombre}`}
                       aria-label={`Editar ${org.nombre}`}
                     >
-                      <PencilSimple className="w-3.5 h-3.5" />
                       Editar
                     </button>
                   </td>

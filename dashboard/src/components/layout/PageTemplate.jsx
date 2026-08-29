@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { MagnifyingGlass, Funnel, List, SquaresFour } from '@phosphor-icons/react';
+import { Search, Filter, List, Grid } from '@carbon/icons-react';
 import { pageContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function PageTemplate({
@@ -110,7 +110,7 @@ export default function PageTemplate({
         <div className="flex flex-col md:flex-row md:items-center flex-1" style={{ gap: '16px' }}>
           {/* Search */}
           <div className="relative flex-1" style={{ maxWidth: '320px' }}>
-            <MagnifyingGlass weight="bold" className="text-pizarra/40 absolute pointer-events-none" style={{ width: '16px', height: '16px', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            <Search size={16} className="text-pizarra/40 absolute pointer-events-none" style={{ left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
             <input
               type="text"
               placeholder="Buscar..."
@@ -124,7 +124,7 @@ export default function PageTemplate({
           {/* Filters with animated layout indicator */}
           {filtros.length > 0 && (
             <div className="flex items-center overflow-x-auto pb-1 hide-scrollbar" style={{ gap: '6px' }}>
-              <Funnel weight="fill" className="text-pizarra/40 shrink-0" style={{ width: '16px', height: '16px', marginRight: '4px' }} />
+              <Filter size={16} className="text-pizarra/40 shrink-0" style={{ marginRight: '4px' }} />
               {filtros.map((f) => {
                 const isSelected = filtroActivo === f;
                 const isWarning = f === 'Sin seguimiento';
@@ -173,12 +173,12 @@ export default function PageTemplate({
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-              <List weight="bold" style={{ width: '16px', height: '16px' }} />
+              <List size={16} />
             </button>
             <button
               onClick={() => setViewMode('grid')}
               className={`relative rounded-md cursor-pointer transition-colors z-10 ${viewMode === 'grid' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
-              title="Vista de Tarjetas"
+              title="Vista de Cuadrícula"
               style={{ padding: '6px 10px' }}
             >
               {viewMode === 'grid' && (
@@ -188,7 +188,7 @@ export default function PageTemplate({
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
-              <SquaresFour weight="bold" style={{ width: '16px', height: '16px' }} />
+              <Grid size={16} />
             </button>
           </div>
         )}

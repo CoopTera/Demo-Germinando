@@ -63,7 +63,7 @@ export default function EvolucionOrgs() {
             />
             <YAxis
               yAxisId="left"
-              tick={{ fontSize: 11, fill: '#3C3AE5' }}
+              tick={{ fontSize: 11, fill: '#6B1330' }}
               stroke="#E3E1E2"
               allowDecimals={false}
             />
@@ -84,7 +84,7 @@ export default function EvolucionOrgs() {
               yAxisId="left"
               dataKey="organizaciones"
               name="Organizaciones"
-              fill="#3C3AE5"
+              fill="#6B1330"
               fillOpacity={0.8}
               barSize={20}
               radius={[4, 4, 0, 0]}

@@ -2,14 +2,14 @@ import React, { useState, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
   Upload,
-  X,
-  Users,
+  Close,
+  Group,
   Receipt,
   Package,
-  FileArrowUp,
-  FileXls,
-  Trash
-} from '@phosphor-icons/react';
+  DocumentAdd,
+  Document,
+  TrashCan
+} from '@carbon/icons-react';
 
 export default function ImportModal({ isOpen, onClose, onImport }) {
   const [tipo, setTipo] = useState(null);
@@ -22,7 +22,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
       id: 'beneficiarios',
       title: 'Padrón de Beneficiarios',
       description: 'DNI, Nombre, Localidad, Organización, Beca',
-      icon: Users,
+      icon: Group,
     },
     {
       id: 'ejecucion',
@@ -118,7 +118,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
                 className="p-1.5 rounded-lg text-pizarra/60 hover:text-pizarra hover:bg-superficie-sec transition-colors cursor-pointer"
                 aria-label="Cerrar ventana"
               >
-                <X className="w-4 h-4" />
+                <Close className="w-4 h-4" />
               </button>
             </Dialog.Close>
           </div>
@@ -200,7 +200,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
               {file ? (
                 <div className="flex flex-col items-center gap-1.5 w-full">
                   <div className="w-8 h-8 rounded-full bg-primario/10 flex items-center justify-center text-primario">
-                    <FileXls className="w-4 h-4" />
+                    <Document className="w-4 h-4" />
                   </div>
                   <div className="text-center max-w-full px-2">
                     <p className="text-xs font-medium text-pizarra truncate">
@@ -215,13 +215,13 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
                     onClick={handleRemoveFile}
                     className="mt-1 inline-flex items-center gap-1 text-[11px] text-critico hover:underline font-medium cursor-pointer"
                   >
-                    <Trash className="w-3 h-3" />
+                    <TrashCan className="w-3 h-3" />
                     Eliminar archivo
                   </button>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1 py-1">
-                  <FileArrowUp className="w-6 h-6 text-pizarra/40" />
+                  <DocumentAdd className="w-6 h-6 text-pizarra/40" />
                   <p className="text-xs font-medium text-pizarra">
                     Arrastre el archivo aquí o haga clic para examinar
                   </p>

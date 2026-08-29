@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { User, Envelope, Phone, MapPin, Briefcase, ShieldCheck, Pulse, Calendar } from '@phosphor-icons/react';
+import { User, Email, Phone, Location, Portfolio, Security, Activity, Calendar } from '@carbon/icons-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -52,7 +52,7 @@ export default function ProfilePage() {
             <div className="flex flex-col" style={{ gap: '16px' }}>
               <div className="flex items-center" style={{ gap: '12px' }}>
                 <div className="rounded-full bg-canvas flex items-center justify-center shrink-0" style={{ width: '32px', height: '32px' }}>
-                  <Envelope className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Email size={16} className="text-pizarra/70" />
                 </div>
                 <div className="overflow-hidden">
                   <p className="text-xs text-pizarra/60 font-semibold uppercase">Correo Electrónico</p>
@@ -61,7 +61,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex items-center" style={{ gap: '12px' }}>
                 <div className="rounded-full bg-canvas flex items-center justify-center shrink-0" style={{ width: '32px', height: '32px' }}>
-                  <Phone className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Phone size={16} className="text-pizarra/70" />
                 </div>
                 <div>
                   <p className="text-xs text-pizarra/60 font-semibold uppercase">Teléfono Directo</p>
@@ -70,7 +70,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex items-center" style={{ gap: '12px' }}>
                 <div className="rounded-full bg-canvas flex items-center justify-center shrink-0" style={{ width: '32px', height: '32px' }}>
-                  <MapPin className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Location size={16} className="text-pizarra/70" />
                 </div>
                 <div>
                   <p className="text-xs text-pizarra/60 font-semibold uppercase">Sede de Trabajo</p>
@@ -90,28 +90,28 @@ export default function ProfilePage() {
               <div>
                 <p className="text-xs text-pizarra/60 font-semibold uppercase" style={{ marginBottom: '4px' }}>Cargo / Puesto</p>
                 <div className="flex items-center" style={{ gap: '8px' }}>
-                  <Briefcase className="text-primario" style={{ width: '16px', height: '16px' }} />
+                  <Portfolio size={16} className="text-primario" />
                   <p className="text-sm font-medium text-texto">Director General de Gestión Social</p>
                 </div>
               </div>
               <div>
                 <p className="text-xs text-pizarra/60 font-semibold uppercase" style={{ marginBottom: '4px' }}>Nivel de Acceso</p>
                 <div className="flex items-center" style={{ gap: '8px' }}>
-                  <ShieldCheck className="text-exito" style={{ width: '16px', height: '16px' }} />
+                  <Security size={16} className="text-exito" />
                   <p className="text-sm font-medium text-texto">Nivel 5 (Lectura y Escritura total)</p>
                 </div>
               </div>
               <div>
                 <p className="text-xs text-pizarra/60 font-semibold uppercase" style={{ marginBottom: '4px' }}>Fecha de Ingreso</p>
                 <div className="flex items-center" style={{ gap: '8px' }}>
-                  <Calendar className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Calendar size={16} className="text-pizarra/70" />
                   <p className="text-sm font-medium text-texto">15 de Marzo, 2024</p>
                 </div>
               </div>
               <div>
                 <p className="text-xs text-pizarra/60 font-semibold uppercase" style={{ marginBottom: '4px' }}>Última Conexión</p>
                 <div className="flex items-center" style={{ gap: '8px' }}>
-                  <Pulse className="text-pizarra/70" style={{ width: '16px', height: '16px' }} />
+                  <Activity size={16} className="text-pizarra/70" />
                   <p className="text-sm font-medium text-texto">Hace 15 minutos (Esta sesión)</p>
                 </div>
               </div>

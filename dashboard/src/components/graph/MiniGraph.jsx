@@ -1,4 +1,4 @@
-﻿import React, { useRef, useMemo, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useMemo, useEffect, useState, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import { useData } from '../../context/DataContext';
 
@@ -43,7 +43,7 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
             return on.includes(orgName) || orgName.includes(on);
           });
           if (org) {
-            addNode({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', size: 30, color: '#3C3AE5' });
+            addNode({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', size: 30, color: '#6B1330' });
             links.push({ source: ben.id, target: `org-${org.id}` });
           }
         });
@@ -61,7 +61,7 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
                   links.push({ source: `tall-${t.id}`, target: `org-${oId}` });
                   const org = organizaciones.find(o => o.id === oId);
                   if (org) {
-                    addNode({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', size: 30, color: '#3C3AE5' });
+                    addNode({ id: `org-${org.id}`, label: org.nombre, tipo: 'organizacion', size: 30, color: '#6B1330' });
                   }
                 }
               });

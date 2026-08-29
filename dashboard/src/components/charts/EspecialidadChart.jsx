@@ -3,7 +3,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recha
 import { useData } from '../../context/DataContext';
 import { organizacionesData } from '../../data/mockData';
 
-const COLORS = ['#3C3AE5', '#FF7402', '#494963', '#FFCB02', '#E42153', '#22C55E', '#8B5CF6'];
+const COLORS = ['#6B1330', '#FF7402', '#494963', '#FFCB02', '#E42153', '#22C55E', '#8B5CF6'];
 
 export default function EspecialidadChart() {
   const { organizaciones } = useData();

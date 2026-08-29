@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FilePdf } from '@phosphor-icons/react';
+import { DocumentPdf } from '@carbon/icons-react';
 import { useData } from '../context/DataContext';
 import OrganizacionesTable from '../components/organizaciones/OrganizacionesTable';
 import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid';
@@ -209,7 +209,7 @@ export default function OrganizacionesPage() {
                             {conv.estado}
                           </span>
                           <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer" title="Ver documento (demo)">
-                            <FilePdf weight="duotone" style={{ width: '20px', height: '20px' }} />
+                            <DocumentPdf size={20} />
                           </button>
                         </div>
                       </div>

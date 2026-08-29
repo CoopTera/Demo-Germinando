@@ -21,8 +21,8 @@ export default function EvolucionChart({ animate = true }) {
           <AreaChart data={evolucionOrgsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorBen" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3C3AE5" stopOpacity={0.15}/>
-                <stop offset="95%" stopColor="#3C3AE5" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#6B1330" stopOpacity={0.15}/>
+                <stop offset="95%" stopColor="#6B1330" stopOpacity={0}/>
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E3E1E2" />
@@ -37,7 +37,7 @@ export default function EvolucionChart({ animate = true }) {
               type="monotone" 
               dataKey="beneficiarios" 
               name="Beneficiarios" 
-              stroke="#3C3AE5" 
+              stroke="#6B1330" 
               strokeWidth={3} 
               fillOpacity={1} 
               fill="url(#colorBen)"

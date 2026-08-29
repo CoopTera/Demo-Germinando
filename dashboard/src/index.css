@@ -3,7 +3,7 @@
 @source "./";
 
 @theme {
-  --color-primario: #3C3AE5;
+  --color-primario: #6B1330;
   --color-naranja: #FF7402;
   --color-pizarra: #494963;
   --color-amarillo: #FFCB02;
@@ -14,8 +14,8 @@
   --color-texto: #333333;
   --color-borde: #E3E1E2;
   --color-exito: #22C55E;
-  --color-sidebar-bg: #652230;
-  --color-sidebar-active: #4A1621;
+  --color-sidebar-bg: #6B1330;
+  --color-sidebar-active: #4D0A20;
 }
 
 * {
@@ -147,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Progress bar styling ─── */
 .progress-bar-bg {
-  background: linear-gradient(90deg, rgba(60, 58, 229, 0.08) 0%, rgba(60, 58, 229, 0.02) 100%);
+  background: linear-gradient(90deg, rgba(107, 19, 48, 0.08) 0%, rgba(107, 19, 48, 0.02) 100%);
 }
 
 /* ─── Table row hover accent ─── */
@@ -162,7 +162,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: #3C3AE5;
+  background: #6B1330;
   opacity: 0;
   transition: opacity 0.2s ease;
 }

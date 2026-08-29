@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from '@phosphor-icons/react';
+import { Close } from '@carbon/icons-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { drawerVariants } from '../../lib/motionTokens';
 
@@ -37,7 +37,7 @@ export default function Drawer({ isOpen, onClose, title, children, actions }) {
                   className="text-pizarra/50 hover:text-pizarra rounded-full transition-colors cursor-pointer"
                   style={{ padding: '8px' }}
                 >
-                  <X style={{ width: '22px', height: '22px' }} />
+                  <Close size={20} />
                 </motion.button>
               </div>
             </div>

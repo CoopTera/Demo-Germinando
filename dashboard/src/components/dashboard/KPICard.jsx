@@ -32,7 +32,7 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
         <div style={{ marginTop: '4px', marginBottom: '8px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
             <span style={{ fontSize: '11px', color: '#888', fontWeight: 600, textTransform: 'uppercase' }}>Ejecutado</span>
-            <span style={{ fontSize: '12px', color: '#3C3AE5', fontWeight: 700 }}>
+            <span style={{ fontSize: '12px', color: '#6B1330', fontWeight: 700 }}>
               <AnimatedCounter value={presupuesto.porcentaje} suffix="%" animate={animate} />
             </span>
           </div>
@@ -41,7 +41,7 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
               initial={animate ? { width: 0 } : { width: `${presupuesto.porcentaje}%` }}
               animate={{ width: `${presupuesto.porcentaje}%` }}
               transition={animate ? { duration: 0.9, delay: index * 0.08 + 0.3, ease: [0.25, 1, 0.5, 1] } : { duration: 0 }}
-              style={{ height: '100%', backgroundColor: '#3C3AE5', borderRadius: '99px' }}
+              style={{ height: '100%', backgroundColor: '#6B1330', borderRadius: '99px' }}
             />
           </div>
         </div>

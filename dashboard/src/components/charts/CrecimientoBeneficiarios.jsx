@@ -49,10 +49,10 @@ export default function CrecimientoBeneficiarios() {
               axisLine={false}
               tickFormatter={(v) => v.toLocaleString('es-AR')}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(60,58,229,0.05)' }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(107,19,48,0.05)' }} />
             <Bar
               dataKey="beneficiarios"
-              fill="#3C3AE5"
+              fill="#6B1330"
               radius={[6, 6, 0, 0]}
               maxBarSize={48}
             />

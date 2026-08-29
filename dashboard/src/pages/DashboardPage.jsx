@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { Catalog } from '@carbon/icons-react';
 import KPICard from '../components/dashboard/KPICard';
 import TopOrgs from '../components/dashboard/TopOrgs';
 import { kpiData, oportunidades } from '../data/mockData';
@@ -28,7 +29,7 @@ export default function DashboardPage() {
 
   return (
     <motion.div 
-      className="flex flex-col"
+      className="flex flex-col" 
       style={{ gap: 'clamp(32px, 4vw, 48px)' }}
       variants={pageContainerVariants}
       initial="hidden"
@@ -49,20 +50,21 @@ export default function DashboardPage() {
         <motion.button
           type="button"
           onClick={() => navigate('/oportunidades')}
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          className="group flex items-center bg-white border border-borde hover:border-primario/40 shadow-sm rounded-lg transition-all cursor-pointer text-left self-start sm:self-auto card-elevated"
-          style={{ padding: '10px 20px', gap: '12px' }}
-          title="Ver pestaña de Oportunidades"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          className="relative group bg-white border border-borde hover:border-primario/40 shadow-sm rounded-xl transition-all cursor-pointer flex items-center justify-center self-start sm:self-auto card-elevated"
+          style={{ width: '52px', height: '52px' }}
+          title="Ver Oportunidades"
         >
-          <div className="flex items-baseline" style={{ gap: '8px' }}>
-            <span className="text-2xl font-bold text-texto group-hover:text-primario transition-colors leading-none">
+          <Catalog size={24} className="text-pizarra group-hover:text-primario transition-colors" />
+          {oportunidades && oportunidades.length > 0 && (
+            <span 
+              className="absolute bg-primario text-white text-xs font-bold rounded-full flex items-center justify-center border-2 border-white shadow-md"
+              style={{ minWidth: '26px', height: '26px', padding: '0 6px', top: '-8px', right: '-8px' }}
+            >
               {oportunidades.length}
             </span>
-            <span className="text-xs font-semibold text-pizarra/80 uppercase tracking-wider">
-              Oportunidades
-            </span>
-          </div>
+          )}
         </motion.button>
       </motion.div>
 
