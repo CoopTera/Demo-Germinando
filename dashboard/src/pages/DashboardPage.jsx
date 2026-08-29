@@ -1,4 +1,4 @@
-import { Users, FileText, Buildings, Hammer, ArrowRight, Clock, Tag } from '@phosphor-icons/react';
+import { ArrowRight, BookmarkSimple } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import KPICard from '../components/dashboard/KPICard';
@@ -22,14 +22,6 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
 };
 
-const TAG_COLORS = {
-  'licitacion': { bg: '#FEF3C7', text: '#92400E' },
-  'fondo': { bg: '#D1FAE5', text: '#065F46' },
-  'capacitacion': { bg: '#EDE9FE', text: '#5B21B6' },
-  'compra': { bg: '#FEE2E2', text: '#991B1B' },
-  default: { bg: '#E0E7FF', text: '#3730A3' },
-};
-
 export default function DashboardPage() {
   const navigate = useNavigate();
   const now = new Date();
@@ -47,8 +39,8 @@ export default function DashboardPage() {
       initial="hidden"
       animate="show"
     >
-      {/* Welcome Section */}
-      <motion.div variants={itemVariants}>
+      {/* Welcome Section with Opportunities Indicator */}
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-pizarra">
             Panel Ejecutivo
@@ -57,6 +49,38 @@ export default function DashboardPage() {
             {formattedDate}
           </p>
         </div>
+
+        {/* Indicador de Oportunidades */}
+        <motion.button
+          type="button"
+          onClick={() => navigate('/oportunidades')}
+          whileHover={{ y: -2, transition: { duration: 0.2 } }}
+          whileTap={{ scale: 0.98 }}
+          className="group flex items-center bg-white border border-borde hover:border-primario/40 shadow-sm hover:shadow-md rounded-xl transition-all cursor-pointer text-left self-start sm:self-auto card-elevated"
+          style={{ padding: '12px 20px', gap: '16px' }}
+          title="Ver pestaña de Oportunidades"
+        >
+          <div 
+            className="w-11 h-11 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+            style={{ backgroundColor: 'rgba(60, 58, 229, 0.08)', color: '#3C3AE5' }}
+          >
+            <BookmarkSimple weight="duotone" style={{ width: '22px', height: '22px' }} />
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center" style={{ gap: '8px' }}>
+              <span className="text-2xl font-bold text-texto group-hover:text-primario transition-colors leading-none">
+                {oportunidades.length}
+              </span>
+              <span className="text-xs font-bold text-pizarra uppercase tracking-wider">
+                Oportunidades
+              </span>
+            </div>
+            <span className="text-xs text-primario font-medium flex items-center group-hover:translate-x-0.5 transition-transform" style={{ gap: '4px', marginTop: '2px' }}>
+              Ver convocatorias activas
+              <ArrowRight weight="bold" style={{ width: '12px', height: '12px' }} />
+            </span>
+          </div>
+        </motion.button>
       </motion.div>
 
       {/* KPI Cards Row */}
