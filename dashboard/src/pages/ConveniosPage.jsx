@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
-import { Briefcase, PencilSimple, Warning, CalendarBlank } from '@phosphor-icons/react';
 import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
 
@@ -69,7 +68,6 @@ export default function ConveniosPage() {
     <PageTemplate 
       title="Gestión de Convenios" 
       subtitle="Administración de convenios activos con organizaciones"
-      icon={Briefcase}
       busqueda={searchTerm}
       setBusqueda={setSearchTerm}
       filtros={['Todos', 'Activo', 'Próximos a vencer', 'Por vencer', 'En revisión', 'Finalizado']}
@@ -100,10 +98,9 @@ export default function ConveniosPage() {
             <tbody>
               {filteredConvenios.map((conv) => {
                 const daysLeft = getDaysLeft(conv.fechaVencimiento);
-                const isWarning = daysLeft !== null && daysLeft >= 0 && daysLeft <= 30;
 
                 return (
-                  <tr key={conv.id} onClick={() => setSelectedItem(conv)} className={`border-b border-borde hover:bg-canvas cursor-pointer transition-colors ${isWarning ? 'bg-naranja/5' : ''}`}>
+                  <tr key={conv.id} onClick={() => setSelectedItem(conv)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
                     <td className="text-sm font-semibold text-texto border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={conv.nombre}>
                       {conv.nombre}
                     </td>
@@ -121,16 +118,15 @@ export default function ConveniosPage() {
                           {conv.estado}
                         </span>
                         {daysLeft !== null && daysLeft <= 30 && (
-                          <div className="flex items-center text-[10px] font-bold text-naranja bg-naranja/5 px-2 py-0.5 rounded border border-naranja/20" style={{ gap: '4px' }}>
-                            <Warning style={{ width: '12px', height: '12px' }} />
+                          <div className="text-[10px] font-bold text-naranja">
                             Vence en {daysLeft} días
                           </div>
                         )}
                       </div>
                     </td>
                     <td className="text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>
-                      <button className="inline-flex items-center gap-1 text-xs font-medium text-pizarra hover:text-primario">
-                        <PencilSimple className="w-3.5 h-3.5" /> Editar
+                      <button className="text-xs font-semibold text-pizarra/70 hover:text-primario cursor-pointer">
+                        Editar
                       </button>
                     </td>
                   </tr>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, UserPlus, BookOpen, Pulse, BookmarkSimple, PencilSimple, Trash, Check, X } from '@phosphor-icons/react';
+import { Calendar, UserPlus, BookOpen, Pulse, BookmarkSimple, PencilSimple, Trash } from '@phosphor-icons/react';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 const getIcon = (tipo) => {
@@ -127,11 +127,11 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
                         autoFocus
                       />
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => setEditingId(null)} className="flex items-center text-xs font-bold text-pizarra border border-borde px-2 py-1 rounded hover:bg-canvas cursor-pointer">
-                          <X style={{ width: '12px', height: '12px', marginRight: '4px' }} /> Cancelar
+                        <button onClick={() => setEditingId(null)} className="text-xs font-bold text-pizarra border border-borde px-3 py-1.5 rounded hover:bg-canvas cursor-pointer">
+                          Cancelar
                         </button>
-                        <button onClick={() => saveEdit(evento)} className="flex items-center text-xs font-bold text-white bg-primario px-2 py-1 rounded hover:bg-primario/90 cursor-pointer">
-                          <Check style={{ width: '12px', height: '12px', marginRight: '4px' }} /> Guardar
+                        <button onClick={() => saveEdit(evento)} className="text-xs font-bold text-white bg-primario px-3 py-1.5 rounded hover:bg-primario/90 cursor-pointer">
+                          Guardar
                         </button>
                       </div>
                     </div>

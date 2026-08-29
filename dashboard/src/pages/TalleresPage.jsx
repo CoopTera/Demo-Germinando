@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
-import { BookOpen, PencilSimple } from '@phosphor-icons/react';
 import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
 
@@ -48,7 +47,6 @@ export default function TalleresPage() {
     <PageTemplate 
       title="Gestión de Talleres" 
       subtitle="Administración de actividades y capacitaciones"
-      icon={BookOpen}
       busqueda={searchTerm}
       setBusqueda={setSearchTerm}
       filtros={['Todos', 'Abierto', 'En curso', 'Finalizado']}
@@ -97,8 +95,8 @@ export default function TalleresPage() {
                     </span>
                   </td>
                   <td className="text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>
-                    <button className="inline-flex items-center gap-1 text-xs font-medium text-pizarra hover:text-primario">
-                      <PencilSimple className="w-3.5 h-3.5" /> Editar
+                    <button className="text-xs font-semibold text-pizarra/70 hover:text-primario cursor-pointer">
+                      Editar
                     </button>
                   </td>
                 </tr>
@@ -116,7 +114,7 @@ export default function TalleresPage() {
               <div className="flex flex-wrap" style={{ gap: '6px' }}>
                   {(selectedItem.org_ids || []).map((id, i) => (
                     <span key={i} onClick={() => navigate('/organizaciones', { state: { openModalId: id } })} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate cursor-pointer hover:bg-primario/20 transition-colors" style={{ padding: '4px 10px', maxWidth: '100%' }} title={getOrgName(id)}>
-                      {getOrgName(id)} &rarr;
+                      {getOrgName(id)}
                     </span>
                   ))}
                 </div>

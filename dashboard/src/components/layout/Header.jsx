@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MagnifyingGlass, Bell, List, Warning, Tag, Clock, ArrowRight } from '@phosphor-icons/react';
+import { MagnifyingGlass, Bell, List, Warning, Tag, Clock } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { dropdownVariants } from '../../lib/motionTokens';
@@ -145,7 +145,6 @@ export default function Header({ onMenuClick }) {
                           <span className="text-sm font-semibold text-texto">{res.text}</span>
                           {res.subtext && <span className="text-xs text-pizarra/60">{res.subtext}</span>}
                         </div>
-                        <ArrowRight className="text-pizarra/30 group-hover:text-primario transition-colors group-hover:translate-x-0.5" style={{ width: '16px', height: '16px' }} />
                       </motion.button>
                     ))
                   ) : (
@@ -236,7 +235,7 @@ export default function Header({ onMenuClick }) {
                   }}
                   className="text-xs font-bold text-primario hover:underline cursor-pointer"
                 >
-                  Ver Central de Alertas y Oportunidades &rarr;
+                  Ver Central de Alertas y Oportunidades
                 </button>
               </div>
             </motion.div>

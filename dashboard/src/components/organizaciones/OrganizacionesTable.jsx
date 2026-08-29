@@ -1,5 +1,4 @@
 import React from 'react';
-import { PencilSimple, MapPin } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 
 const getEspecializacionColor = (esp) => {
@@ -66,8 +65,7 @@ export default function OrganizacionesTable({ data, onItemClick }) {
                   {org.nombre}
                 </td>
                 <td className="text-sm text-pizarra/80 font-medium border-r border-borde" title={org.localizacion} style={cellStyle(widths.col2)}>
-                  <div className="flex items-center" style={{ gap: '6px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    <MapPin className="text-pizarra/50 shrink-0" style={{ width: '14px', height: '14px' }} />
+                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{org.localizacion}</span>
                   </div>
                 </td>
@@ -84,8 +82,7 @@ export default function OrganizacionesTable({ data, onItemClick }) {
                   {typeof org.presupuesto === 'number' ? `$ ${org.presupuesto.toLocaleString('es-AR')}` : org.presupuesto}
                 </td>
                 <td className="text-center" style={cellStyle(widths.col7, { paddingRight: '24px' })}>
-                  <button className="inline-flex items-center justify-center w-full text-xs font-medium text-pizarra hover:text-primario transition-colors" style={{ gap: '4px' }}>
-                    <PencilSimple style={{ width: '14px', height: '14px' }} />
+                  <button className="text-xs font-semibold text-pizarra/70 hover:text-primario transition-colors cursor-pointer">
                     Editar
                   </button>
                 </td>

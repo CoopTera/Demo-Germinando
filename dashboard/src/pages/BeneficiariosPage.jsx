@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Users, Warning, CreditCard, Calendar, Clock } from '@phosphor-icons/react';
 import BeneficiariosTable from '../components/tables/BeneficiariosTable';
 import BeneficiariosGrid from '../components/tables/BeneficiariosGrid';
 import { useData } from '../context/DataContext';
@@ -17,7 +16,7 @@ const FILTROS_ESTADO = ['Todos', 'Activos', 'Sin seguimiento'];
 export default function BeneficiariosPage() {
   const { beneficiarios, importarBeneficiarios, eliminarBeneficiario, editarBeneficiario, organizaciones, talleres } = useData();
   const navigate = useNavigate();
-    const location = useLocation();
+  const location = useLocation();
   const [filtro, setFiltro] = useState('Todos');
   const [busqueda, setBusqueda] = useState(location.state?.filterOrg || location.state?.search || '');
   const [viewMode, setViewMode] = useState('list');
@@ -66,13 +65,9 @@ export default function BeneficiariosPage() {
 
   if (conAlerta > 0) {
     stats.push({
-      label: '', // label handled as value
-      value: `${conAlerta} sin seguimiento`,
-      bgColor: 'bg-naranja/10 border-naranja/30',
-      valueColor: 'text-naranja',
-      icon: Warning,
-      iconColor: 'text-naranja',
-      pulse: true
+      label: 'Sin seguimiento',
+      value: `${conAlerta} personas`,
+      valueColor: 'text-naranja'
     });
   }
 
@@ -119,19 +114,19 @@ export default function BeneficiariosPage() {
         <div className="flex-1 flex flex-col overflow-y-auto" style={{ gap: '24px', paddingRight: '8px' }}>
           <div className="grid grid-cols-2" style={{ gap: '16px' }}>
             <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
-              <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><CreditCard style={{ width: '14px', height: '14px' }} /> DNI</div>
+              <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">DNI</div>
               <p className="text-base font-semibold text-texto">{b.dni}</p>
             </div>
             <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
-              <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Calendar style={{ width: '14px', height: '14px' }} /> Fecha Inicio</div>
+              <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Fecha Inicio</div>
               <p className="text-base font-semibold text-texto">{fecha}</p>
             </div>
             <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
-              <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Clock style={{ width: '14px', height: '14px' }} /> Ãšltimo Registro</div>
+              <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Último Registro</div>
               <p className="text-base font-semibold text-texto">{ultimoReg}</p>
             </div>
             <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
-              <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}>Monto Beca</div>
+              <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Monto Beca</div>
               <p className="text-base font-bold text-primario">{formatCurrency(monto)}</p>
             </div>
           </div>
@@ -165,7 +160,7 @@ export default function BeneficiariosPage() {
              <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '8px' }}>Acciones Rápidas</h3>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <button onClick={() => setIsTallerModalOpen(true)} className="w-full bg-white border border-borde hover:border-primario hover:text-primario text-pizarra text-sm font-semibold rounded-lg transition-colors cursor-pointer" style={{ padding: '8px' }}>
-                  + Asignar a Taller
+                  Asignar a Taller
                 </button>
                 <button onClick={() => setIsSeguimientoModalOpen(true)} className="w-full bg-white border border-borde hover:border-primario hover:text-primario text-pizarra text-sm font-semibold rounded-lg transition-colors cursor-pointer" style={{ padding: '8px' }}>
                   Registrar Seguimiento
@@ -180,7 +175,6 @@ export default function BeneficiariosPage() {
   return (
     <>
       <PageTemplate
-        icon={Users}
         title="Beneficiarios"
         subtitle="Seguimiento de personas beneficiarias del programa"
         onImport={importarBeneficiarios}

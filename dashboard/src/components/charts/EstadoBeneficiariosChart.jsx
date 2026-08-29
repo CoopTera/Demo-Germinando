@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { Users } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
 import { beneficiariosData } from '../../data/mockData';
 
@@ -41,8 +40,7 @@ export default function EstadoBeneficiariosChart() {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
-      <div className="flex items-center mb-4" style={{ gap: '8px' }}>
-        <Users className="text-primario" style={{ width: '20px', height: '20px' }} />
+      <div className="mb-4">
         <h3 className="font-semibold text-pizarra text-base">
           Estado de Beneficiarios
         </h3>

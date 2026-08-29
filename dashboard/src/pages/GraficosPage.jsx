@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChartBar, TrendUp } from '@phosphor-icons/react';
 import EvolucionOrgs from '../components/charts/EvolucionOrgs';
 import PresupuestoArea from '../components/charts/PresupuestoArea';
 import EspecialidadChart from '../components/charts/EspecialidadChart';
@@ -20,8 +19,7 @@ export default function GraficosPage() {
     >
       {/* Page Title */}
       <motion.div variants={staggerItemVariants}>
-        <h1 className="text-2xl font-bold text-pizarra flex items-center" style={{ gap: '8px' }}>
-          <ChartBar weight="duotone" style={{ width: '24px', height: '24px' }} />
+        <h1 className="text-2xl font-bold text-pizarra">
           Gráficos
         </h1>
         <p className="text-sm text-pizarra/60" style={{ marginTop: '4px' }}>
@@ -31,14 +29,12 @@ export default function GraficosPage() {
 
       {/* Quick stats */}
       <motion.div variants={staggerItemVariants} className="flex flex-wrap items-center" style={{ gap: '16px' }}>
-        <motion.div whileHover={{ y: -1 }} className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px', gap: '8px' }}>
-          <TrendUp weight="bold" className="text-exito" style={{ width: '16px', height: '16px' }} />
-          <span className="text-pizarra/60">Crecimiento interanual:</span>{' '}
+        <motion.div whileHover={{ y: -1 }} className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px' }}>
+          <span className="text-pizarra/60 mr-1.5">Crecimiento interanual:</span>
           <span className="font-bold text-exito">+50% organizaciones</span>
         </motion.div>
-        <motion.div whileHover={{ y: -1 }} className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px', gap: '8px' }}>
-          <TrendUp weight="bold" className="text-primario" style={{ width: '16px', height: '16px' }} />
-          <span className="text-pizarra/60">Ejecución presupuestaria:</span>{' '}
+        <motion.div whileHover={{ y: -1 }} className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px' }}>
+          <span className="text-pizarra/60 mr-1.5">Ejecución presupuestaria:</span>
           <span className="font-bold text-primario">
             <AnimatedCounter value={95.7} suffix="%" />
           </span>

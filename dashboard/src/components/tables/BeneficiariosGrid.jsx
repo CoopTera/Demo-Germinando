@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Warning, CalendarBlank } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
@@ -59,7 +58,6 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
       style={{ gap: '20px' }}
     >
       {data.map((row) => {
-        const hasAlert = row.estado === 'Suspendido' || row.alerta;
         const org = row.programas || row.organizaciones;
         const fecha = row.inicioBeca || row.fechaInicio;
         const asistenciaNum = parseInt((row.asistencia || "0").replace('%', ''));
@@ -73,22 +71,15 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
             whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(73, 73, 99, 0.12)' }}
             whileTap={{ scale: 0.99 }}
             onClick={() => onItemClick && onItemClick(row)}
-            className={`bg-white rounded-xl border border-borde overflow-hidden cursor-pointer flex flex-col h-full ${
-              hasAlert ? 'border-naranja shadow-[0_4px_12px_rgba(255,116,2,0.08)]' : 'card-elevated'
-            }`}
+            className="bg-white rounded-xl border border-borde overflow-hidden cursor-pointer flex flex-col h-full card-elevated"
           >
             {/* Cabecera Tarjeta */}
-            <div className={`p-5 pb-4 border-b border-borde ${hasAlert ? 'bg-naranja/5' : 'bg-superficie-sec/30'}`}>
+            <div className="p-5 pb-4 border-b border-borde bg-superficie-sec/30">
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <h3 className="font-bold text-pizarra text-base leading-tight" title={row.nombre}>{row.nombre}</h3>
                   <p className="text-pizarra/60 text-xs mt-1 font-medium font-mono">{row.dni}</p>
                 </div>
-                {hasAlert && (
-                  <div className="bg-naranja/10 text-naranja p-1.5 rounded-full shrink-0" title="Alerta en seguimiento">
-                    <Warning weight="bold" style={{ width: '16px', height: '16px' }} />
-                  </div>
-                )}
               </div>
 
               <div className="flex flex-wrap" style={{ gap: '6px', marginBottom: '8px' }}>
@@ -117,8 +108,7 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
               <div className="grid grid-cols-2" style={{ gap: '12px' }}>
                 <div>
                   <p className="text-[10px] text-pizarra/60 font-bold uppercase tracking-wider mb-1">Ingreso</p>
-                  <p className="text-sm font-medium text-texto flex items-center" style={{ gap: '4px' }}>
-                    <CalendarBlank style={{ width: '14px', height: '14px', color: '#9ca3af' }} />
+                  <p className="text-sm font-medium text-texto">
                     {formatDate(fecha)}
                   </p>
                 </div>

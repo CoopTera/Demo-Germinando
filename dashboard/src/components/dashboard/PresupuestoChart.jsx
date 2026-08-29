@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { CurrencyDollar } from '@phosphor-icons/react';
 import AnimatedCounter from '../common/AnimatedCounter';
 
 const data = [
@@ -19,8 +18,7 @@ export default function PresupuestoChart({ animate = true }) {
       className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" 
       style={{ padding: '24px' }}
     >
-      <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-        <CurrencyDollar weight="duotone" className="w-5 h-5 text-pizarra" />
+      <div style={{ marginBottom: '24px' }}>
         <h2 className="font-semibold text-pizarra text-base">Presupuesto</h2>
       </div>
       <div className="flex-1 w-full relative min-h-[200px] flex items-center justify-center">

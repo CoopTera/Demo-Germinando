@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { BookmarkSimple } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import KPICard from '../components/dashboard/KPICard';
@@ -50,23 +49,17 @@ export default function DashboardPage() {
         <motion.button
           type="button"
           onClick={() => navigate('/oportunidades')}
-          whileHover={{ y: -3, boxShadow: '0 6px 16px rgba(60, 58, 229, 0.12)' }}
+          whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
-          className="group flex items-center bg-white border border-borde hover:border-primario/40 shadow-sm rounded-xl transition-all cursor-pointer text-left self-start sm:self-auto card-elevated"
-          style={{ padding: '10px 18px', gap: '14px' }}
+          className="group flex items-center bg-white border border-borde hover:border-primario/40 shadow-sm rounded-lg transition-all cursor-pointer text-left self-start sm:self-auto card-elevated"
+          style={{ padding: '10px 20px', gap: '12px' }}
           title="Ver pestaña de Oportunidades"
         >
-          <div 
-            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors group-hover:bg-primario group-hover:text-white"
-            style={{ backgroundColor: 'rgba(60, 58, 229, 0.08)', color: '#3C3AE5' }}
-          >
-            <BookmarkSimple weight="duotone" style={{ width: '22px', height: '22px' }} />
-          </div>
           <div className="flex items-baseline" style={{ gap: '8px' }}>
             <span className="text-2xl font-bold text-texto group-hover:text-primario transition-colors leading-none">
               {oportunidades.length}
             </span>
-            <span className="text-xs font-bold text-pizarra uppercase tracking-wider">
+            <span className="text-xs font-semibold text-pizarra/80 uppercase tracking-wider">
               Oportunidades
             </span>
           </div>

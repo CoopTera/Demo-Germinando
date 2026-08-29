@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { CurrencyDollar } from '@phosphor-icons/react';
 import { presupuestoData } from '../../data/mockData';
 
 const formatCurrency = (val) => {
@@ -48,8 +47,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 export default function PresupuestoArea() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
-      <div className="flex items-center" style={{ gap: '8px', marginBottom: '16px' }}>
-        <CurrencyDollar className="text-primario" style={{ width: '20px', height: '20px' }} />
+      <div style={{ marginBottom: '16px' }}>
         <h3 className="font-semibold text-pizarra text-base">
           Evolución de Presupuesto Ejecutado
         </h3>

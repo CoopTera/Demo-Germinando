@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { Target } from '@phosphor-icons/react';
 import { useData } from '../../context/DataContext';
 import { organizacionesData } from '../../data/mockData';
 
@@ -38,8 +37,7 @@ export default function EspecialidadChart() {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
-      <div className="flex items-center mb-4" style={{ gap: '8px' }}>
-        <Target className="text-primario" style={{ width: '20px', height: '20px' }} />
+      <div className="mb-4">
         <h3 className="font-semibold text-pizarra text-base">
           Distribución por Especialización
         </h3>

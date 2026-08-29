@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { MagnifyingGlass, Funnel, UploadSimple, Plus, List, SquaresFour } from '@phosphor-icons/react';
+import { MagnifyingGlass, Funnel, List, SquaresFour } from '@phosphor-icons/react';
 import { pageContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function PageTemplate({
-  icon: Icon,
   title,
   subtitle,
   onImport,
@@ -34,7 +33,7 @@ export default function PageTemplate({
 
   return (
     <motion.div 
-      className="flex flex-col"
+      className="flex flex-col" 
       style={{ gap: '24px' }}
       variants={pageContainerVariants}
       initial="hidden"
@@ -43,8 +42,7 @@ export default function PageTemplate({
       {/* Page Header */}
       <motion.div variants={staggerItemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-pizarra flex items-center" style={{ gap: '8px' }}>
-            {Icon && <Icon weight="duotone" style={{ width: '24px', height: '24px' }} />}
+          <h1 className="text-2xl font-bold text-pizarra">
             {title}
           </h1>
           <p className="text-sm text-pizarra/60" style={{ marginTop: '4px' }}>
@@ -67,9 +65,8 @@ export default function PageTemplate({
                 whileTap={{ scale: 0.98 }}
                 onClick={() => fileInputRef.current?.click()}
                 className="flex items-center border border-borde bg-white text-pizarra text-[14px] font-semibold rounded-md transition-colors shadow-sm cursor-pointer" 
-                style={{ padding: '10px 20px', gap: '8px' }}
+                style={{ padding: '10px 20px' }}
               >
-                <UploadSimple weight="bold" className="stroke-[2.5]" style={{ width: '18px', height: '18px' }} />
                 <span>Importar</span>
               </motion.button>
             </>
@@ -81,9 +78,8 @@ export default function PageTemplate({
               whileTap={{ scale: 0.98 }}
               onClick={onNew}
               className="flex items-center bg-primario hover:bg-primario/90 text-white text-[14px] font-semibold rounded-lg transition-all shadow-sm hover:shadow cursor-pointer" 
-              style={{ padding: '10px 20px', gap: '8px' }}
+              style={{ padding: '10px 20px' }}
             >
-              <Plus weight="bold" style={{ width: '16px', height: '16px' }} />
               {newButtonText || 'Nuevo Registro'}
             </motion.button>
           )}
@@ -97,11 +93,10 @@ export default function PageTemplate({
             <motion.div 
               key={idx} 
               whileHover={{ y: -1 }}
-              className={`bg-white rounded-lg border text-sm flex items-center card-elevated ${stat.bgColor || 'border-borde'}`} 
-              style={{ padding: '10px 16px', gap: stat.icon ? '8px' : '0' }}
+              className="bg-white rounded-lg border border-borde text-sm flex items-center card-elevated" 
+              style={{ padding: '10px 16px' }}
             >
-              {stat.icon && <stat.icon weight="duotone" className={`${stat.iconColor} ${stat.pulse ? 'animate-pulse-soft' : ''}`} style={{ width: '16px', height: '16px' }} />}
-              <span className={stat.labelColor || "text-pizarra/50"} style={{ marginRight: '4px' }}>{stat.label}:</span>
+              {stat.label && <span className={stat.labelColor || "text-pizarra/50"} style={{ marginRight: '4px' }}>{stat.label}:</span>}
               <span className={`font-bold ${stat.valueColor || 'text-pizarra'}`}>
                 {stat.value}
               </span>

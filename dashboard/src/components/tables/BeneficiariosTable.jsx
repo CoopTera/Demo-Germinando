@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Warning } from '@phosphor-icons/react';
 import { useTableResize } from '../../hooks/useTableResize';
 import { useTableSort } from '../../hooks/useTableSort';

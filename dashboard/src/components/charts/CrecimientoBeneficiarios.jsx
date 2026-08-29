@@ -1,6 +1,5 @@
 import React from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
-import { TrendUp } from '@phosphor-icons/react';
 
 const data = [
   { periodo: '2021', beneficiarios: 420 },
@@ -28,8 +27,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 export default function CrecimientoBeneficiarios() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
-      <div className="flex items-center mb-4" style={{ gap: '8px' }}>
-        <TrendUp className="text-exito" style={{ width: '20px', height: '20px' }} />
+      <div className="mb-4">
         <h3 className="font-semibold text-pizarra text-base">
           Crecimiento Interanual de Beneficiarios
         </h3>

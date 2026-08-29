@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Pulse } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { actividadReciente } from '../../data/mockData';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
@@ -28,10 +27,9 @@ export default function ActividadFeed({ animate = true }) {
       className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" 
       style={{ padding: '24px' }}
     >
-      <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-        <Pulse weight="duotone" style={{ width: '20px', height: '20px', color: '#494963' }} />
+      <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
         <h2 className="font-semibold text-pizarra text-base">Actividad Reciente</h2>
-        <span className="ml-auto text-xs text-pizarra/40 font-medium">Últimos 7 días</span>
+        <span className="text-xs text-pizarra/40 font-medium">Últimos 7 días</span>
       </div>
 
       <motion.div 

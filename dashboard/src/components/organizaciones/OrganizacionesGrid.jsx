@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Buildings, MapPin, FileText, Hammer, CurrencyDollar, PencilSimple } from '@phosphor-icons/react';
-import { staggerContainerVariants, staggerItemVariants, cardHoverVariants } from '../../lib/motionTokens';
+import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function OrganizacionesGrid({ data, onItemClick }) {
   if (data.length === 0) {
@@ -31,48 +30,33 @@ export default function OrganizacionesGrid({ data, onItemClick }) {
           style={{ padding: '20px' }}
         >
           <div className="flex justify-between items-start" style={{ marginBottom: '16px' }}>
-            <div className="flex" style={{ gap: '12px' }}>
-              <div className="rounded-full bg-superficie-sec flex items-center justify-center shrink-0 border border-borde" style={{ width: '40px', height: '40px' }}>
-                <Buildings className="text-pizarra/70" style={{ width: '20px', height: '20px' }} />
-              </div>
-              <div>
-                <h3 className="font-semibold text-texto text-[15px] leading-tight" style={{ marginBottom: '4px' }}>{org.nombre}</h3>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-primario bg-primario/10 rounded-sm" style={{ padding: '2px 8px' }}>
-                  {org.especializacion}
-                </span>
-              </div>
+            <div>
+              <h3 className="font-semibold text-texto text-[15px] leading-tight" style={{ marginBottom: '6px' }}>{org.nombre}</h3>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-primario bg-primario/10 rounded-sm" style={{ padding: '2px 8px' }}>
+                {org.especializacion}
+              </span>
             </div>
-            <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer" title="Editar">
-              <PencilSimple style={{ width: '16px', height: '16px' }} />
-            </button>
           </div>
 
-          <div className="flex items-center text-xs text-pizarra/80 font-medium" style={{ gap: '6px', marginBottom: '16px' }}>
-            <MapPin className="text-pizarra/50" style={{ width: '14px', height: '14px' }} />
+          <div className="text-xs text-pizarra/80 font-medium" style={{ marginBottom: '16px' }}>
             {org.localizacion}
           </div>
 
           <div className="grid grid-cols-2 mt-auto" style={{ gap: '12px', marginBottom: '16px' }}>
-            <div className="bg-canvas rounded border border-borde flex items-center" style={{ padding: '8px', gap: '8px' }}>
-              <FileText className="text-pizarra/60" style={{ width: '16px', height: '16px' }} />
-              <div>
-                <p className="text-[10px] text-pizarra/70 font-bold uppercase">Convenios</p>
-                <p className="text-sm font-semibold text-texto">{org.convenios}</p>
-              </div>
+            <div className="bg-canvas rounded border border-borde flex flex-col" style={{ padding: '8px 12px' }}>
+              <p className="text-[10px] text-pizarra/70 font-bold uppercase">Convenios</p>
+              <p className="text-sm font-semibold text-texto">{org.convenios}</p>
             </div>
-            <div className="bg-canvas rounded border border-borde flex items-center" style={{ padding: '8px', gap: '8px' }}>
-              <Hammer className="text-pizarra/60" style={{ width: '16px', height: '16px' }} />
-              <div>
-                <p className="text-[10px] text-pizarra/70 font-bold uppercase">Talleres</p>
-                <p className="text-sm font-semibold text-texto">{org.talleres}</p>
-              </div>
+            <div className="bg-canvas rounded border border-borde flex flex-col" style={{ padding: '8px 12px' }}>
+              <p className="text-[10px] text-pizarra/70 font-bold uppercase">Talleres</p>
+              <p className="text-sm font-semibold text-texto">{org.talleres}</p>
             </div>
           </div>
 
           <div className="border-t border-borde flex items-center justify-between" style={{ paddingTop: '12px' }}>
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-pizarra/50 uppercase mb-1 flex items-center" style={{ gap: '4px' }}>
-                <CurrencyDollar style={{ width: '12px', height: '12px' }} /> Presupuesto
+              <span className="text-xs font-bold text-pizarra/50 uppercase mb-1">
+                Presupuesto
               </span>
               <span className="text-sm font-bold text-texto">
                 {typeof org.presupuesto === 'number' ? `$ ${org.presupuesto.toLocaleString('es-AR')}` : org.presupuesto}

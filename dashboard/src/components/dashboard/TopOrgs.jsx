@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Buildings, Hammer, Users, CaretRight } from '@phosphor-icons/react';
 import { topOrganizaciones } from '../../data/mockData';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
@@ -19,8 +18,7 @@ export default function TopOrgs({ organizaciones = topOrganizaciones, animate = 
       style={{ padding: '24px' }}
     >
       {/* Title */}
-      <div className="flex items-center" style={{ gap: '10px', marginBottom: '24px' }}>
-        <Buildings weight="duotone" className="w-5 h-5 text-pizarra" />
+      <div style={{ marginBottom: '24px' }}>
         <h2 className="font-semibold text-pizarra text-base">Top 5 Organizaciones</h2>
       </div>
 
@@ -53,14 +51,8 @@ export default function TopOrgs({ organizaciones = topOrganizaciones, animate = 
             {/* Right side: Stats & Mini Progress Bar */}
             <div className="flex flex-col items-end gap-1.5 shrink-0">
               <div className="flex items-center gap-3 text-xs text-pizarra/70 font-medium">
-                <span className="flex items-center gap-1">
-                  <Hammer weight="duotone" className="w-3.5 h-3.5 text-pizarra/60" aria-hidden="true" />
-                  {org.talleres}
-                </span>
-                <span className="flex items-center gap-1 font-semibold text-pizarra">
-                  <Users weight="duotone" className="w-3.5 h-3.5 text-primario" aria-hidden="true" />
-                  {org.beneficiarios}
-                </span>
+                <span>{org.talleres} talleres</span>
+                <span className="font-semibold text-pizarra">{org.beneficiarios} personas</span>
               </div>
               {/* Visual bar */}
               <div className="w-24 h-2 rounded-full bg-superficie-sec overflow-hidden mt-0.5">
@@ -82,10 +74,9 @@ export default function TopOrgs({ organizaciones = topOrganizaciones, animate = 
         <button 
           type="button" 
           onClick={() => navigate('/organizaciones')}
-          className="text-xs text-primario font-semibold hover:underline flex items-center gap-1 outline-none focus-visible:ring-2 focus-visible:ring-primario rounded-sm cursor-pointer"
+          className="text-xs text-primario font-semibold hover:underline outline-none focus-visible:ring-2 focus-visible:ring-primario rounded-sm cursor-pointer"
         >
           Ver ranking completo
-          <CaretRight weight="bold" className="w-3.5 h-3.5" aria-hidden="true" />
         </button>
       </div>
     </motion.div>

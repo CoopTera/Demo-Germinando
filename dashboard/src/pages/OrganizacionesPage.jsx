@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Buildings, MapPin, Hammer, Users, CurrencyDollar, Target, Briefcase, FilePdf } from '@phosphor-icons/react';
+import { FilePdf } from '@phosphor-icons/react';
 import { useData } from '../context/DataContext';
 import OrganizacionesTable from '../components/organizaciones/OrganizacionesTable';
 import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid';
@@ -74,18 +74,17 @@ export default function OrganizacionesPage() {
     if (!org) return null;
     return (
       <div className="flex flex-col" style={{ gap: '20px' }}>
-        <div className="flex items-center text-sm font-semibold text-pizarra/80 mb-2" style={{ gap: '6px' }}>
-          <MapPin style={{ width: '16px', height: '16px' }} className="text-pizarra/50" />
+        <div className="text-sm font-semibold text-pizarra/80 mb-2">
           {org.localizacion}
         </div>
 
         <div className="grid grid-cols-2" style={{ gap: '16px' }}>
           <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
-            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><Target style={{ width: '14px', height: '14px' }} /> Especialización</div>
+            <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Especialización</div>
             <p className="text-sm font-bold text-texto">{org.especializacion}</p>
           </div>
           <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
-            <div className="flex items-center text-xs font-bold text-pizarra/50 uppercase mb-1" style={{ gap: '4px' }}><CurrencyDollar style={{ width: '14px', height: '14px' }} /> Presupuesto</div>
+            <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Presupuesto</div>
             <p className="text-base font-bold text-texto">{org.presupuesto}</p>
           </div>
           <div 
@@ -95,10 +94,8 @@ export default function OrganizacionesPage() {
             title={`Ver talleres de ${org.nombre}`}
           >
             <div className="flex items-center justify-between text-xs font-bold text-pizarra/50 uppercase mb-1">
-              <div className="flex items-center" style={{ gap: '4px' }}>
-                <Hammer style={{ width: '14px', height: '14px' }} /> Talleres
-              </div>
-              <span className="text-[10px] text-primario group-hover:underline">VER TODOS &rarr;</span>
+              <span>Talleres</span>
+              <span className="text-[10px] text-primario font-semibold group-hover:underline">Ver todos</span>
             </div>
             <p className="text-base font-bold text-texto">{org.talleres}</p>
           </div>
@@ -109,10 +106,8 @@ export default function OrganizacionesPage() {
             title={`Ver beneficiarios de ${org.nombre}`}
           >
             <div className="flex items-center justify-between text-xs font-bold text-pizarra/50 uppercase mb-1">
-              <div className="flex items-center" style={{ gap: '4px' }}>
-                <Users style={{ width: '14px', height: '14px' }} /> Beneficiarios
-              </div>
-              <span className="text-[10px] text-primario font-bold bg-primario/10 px-1.5 py-0.5 rounded">Ver todos &rarr;</span>
+              <span>Beneficiarios</span>
+              <span className="text-[10px] text-primario font-semibold bg-primario/10 px-1.5 py-0.5 rounded">Ver todos</span>
             </div>
             <p className="text-base font-semibold text-texto">{org.beneficiarios || '-'}</p>
           </div>
@@ -124,7 +119,6 @@ export default function OrganizacionesPage() {
   return (
     <>
       <PageTemplate
-        icon={Buildings}
         title="Organizaciones"
         subtitle="Gestión de unidades productivas del programa"
         onImport={importarDesdeExcel}
@@ -143,7 +137,6 @@ export default function OrganizacionesPage() {
       >
         {/* City filter chips with layoutId */}
         <div className="flex items-center flex-wrap" style={{ gap: '8px', marginBottom: '20px' }}>
-          <MapPin weight="duotone" className="text-pizarra/50 shrink-0" style={{ width: '16px', height: '16px' }} />
           <span className="text-xs font-semibold text-pizarra/50 uppercase tracking-wider shrink-0" style={{ marginRight: '4px' }}>Ciudad:</span>
           {ciudades.map(c => {
             const isSelected = ciudadActiva === c;
@@ -201,8 +194,8 @@ export default function OrganizacionesPage() {
               const orgConvenios = convenios.filter(c => c.org_id === selectedItem.id);
               return orgConvenios.length > 0 ? (
                 <div style={{ marginTop: '20px' }}>
-                  <h4 className="text-xs font-bold text-pizarra/70 uppercase tracking-wider flex items-center" style={{ gap: '6px', marginBottom: '12px' }}>
-                    <Briefcase style={{ width: '14px', height: '14px' }} /> Convenios vinculados ({orgConvenios.length})
+                  <h4 className="text-xs font-bold text-pizarra/70 uppercase tracking-wider" style={{ marginBottom: '12px' }}>
+                    Convenios vinculados ({orgConvenios.length})
                   </h4>
                   <div className="flex flex-col" style={{ gap: '8px' }}>
                     {orgConvenios.map(conv => (
