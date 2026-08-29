@@ -86,7 +86,7 @@ export default function Sidebar({ isOpen, onClose }) {
           </div>
 
           {/* Navigation Sections */}
-          <nav className="overflow-y-auto overflow-x-hidden" style={{ paddingTop: '32px', paddingBottom: '32px' }}>
+          <nav className="overflow-y-auto" style={{ paddingTop: '32px', paddingBottom: '32px' }}>
             {navSections.map((section) => (
               <div key={section.category} className="mb-2">
                 <div className="flex flex-col">
@@ -117,8 +117,8 @@ export default function Sidebar({ isOpen, onClose }) {
                               <motion.div
                                 initial={{ scaleX: 0, opacity: 0 }}
                                 animate={{ scaleX: 1, opacity: 1 }}
-                                style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8' }}
-                                className="absolute inset-y-0 right-0 left-4 rounded-l-2xl z-20"
+                                style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8', right: '-2px' }}
+                                className="absolute inset-y-0 -right-[2px] left-4 rounded-l-2xl z-20"
                                 transition={{
                                   type: 'spring',
                                   stiffness: 320,
@@ -190,8 +190,8 @@ export default function Sidebar({ isOpen, onClose }) {
                     <motion.div
                       initial={{ scaleX: 0, opacity: 0 }}
                       animate={{ scaleX: 1, opacity: 1 }}
-                      style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8' }}
-                      className="absolute inset-y-0 right-0 left-4 rounded-l-2xl z-20"
+                      style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8', right: '-2px' }}
+                      className="absolute inset-y-0 -right-[2px] left-4 rounded-l-2xl z-20"
                       transition={{
                         type: 'spring',
                         stiffness: 320,
