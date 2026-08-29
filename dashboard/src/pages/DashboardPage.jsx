@@ -1,4 +1,4 @@
-import { ArrowRight, BookmarkSimple } from '@phosphor-icons/react';
+import { BookmarkSimple } from '@phosphor-icons/react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import KPICard from '../components/dashboard/KPICard';
@@ -57,27 +57,21 @@ export default function DashboardPage() {
           whileHover={{ y: -2, transition: { duration: 0.2 } }}
           whileTap={{ scale: 0.98 }}
           className="group flex items-center bg-white border border-borde hover:border-primario/40 shadow-sm hover:shadow-md rounded-xl transition-all cursor-pointer text-left self-start sm:self-auto card-elevated"
-          style={{ padding: '12px 20px', gap: '16px' }}
+          style={{ padding: '10px 18px', gap: '14px' }}
           title="Ver pestaña de Oportunidades"
         >
           <div 
-            className="w-11 h-11 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors"
             style={{ backgroundColor: 'rgba(60, 58, 229, 0.08)', color: '#3C3AE5' }}
           >
             <BookmarkSimple weight="duotone" style={{ width: '22px', height: '22px' }} />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center" style={{ gap: '8px' }}>
-              <span className="text-2xl font-bold text-texto group-hover:text-primario transition-colors leading-none">
-                {oportunidades.length}
-              </span>
-              <span className="text-xs font-bold text-pizarra uppercase tracking-wider">
-                Oportunidades
-              </span>
-            </div>
-            <span className="text-xs text-primario font-medium flex items-center group-hover:translate-x-0.5 transition-transform" style={{ gap: '4px', marginTop: '2px' }}>
-              Ver convocatorias activas
-              <ArrowRight weight="bold" style={{ width: '12px', height: '12px' }} />
+          <div className="flex items-baseline" style={{ gap: '8px' }}>
+            <span className="text-2xl font-bold text-texto group-hover:text-primario transition-colors leading-none">
+              {oportunidades.length}
+            </span>
+            <span className="text-xs font-bold text-pizarra uppercase tracking-wider">
+              Oportunidades
             </span>
           </div>
         </motion.button>
