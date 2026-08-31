@@ -50,16 +50,16 @@ export default function DashboardPage() {
         <motion.button
           type="button"
           onClick={() => navigate('/oportunidades')}
-          whileHover={{ scale: 1.05, y: -2 }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative group bg-white border border-borde hover:border-primario/40 shadow-sm rounded-xl transition-all cursor-pointer flex items-center justify-center self-start sm:self-auto card-elevated"
+          className="relative group bg-white rounded-2xl transition-all cursor-pointer flex items-center justify-center self-start sm:self-auto card-elevated"
           style={{ width: '52px', height: '52px' }}
           title="Ver Oportunidades"
         >
           <Catalog size={24} className="text-pizarra group-hover:text-primario transition-colors" />
           {oportunidades && oportunidades.length > 0 && (
             <span 
-              className="absolute bg-primario text-white text-xs font-bold rounded-full flex items-center justify-center border-2 border-white shadow-md"
+              className="absolute bg-primario text-white text-xs font-bold rounded-full flex items-center justify-center border-2 border-white"
               style={{ minWidth: '26px', height: '26px', padding: '0 6px', top: '-8px', right: '-8px' }}
             >
               {oportunidades.length}

@@ -12,17 +12,18 @@ import {
 import { presupuestoData } from '../../data/mockData';
 
 const formatCurrency = (val) => {
-  return new Intl.NumberFormat('es-AR', {
+  const formatted = new Intl.NumberFormat('es-AR', {
     style: 'currency',
     currency: 'ARS',
     maximumFractionDigits: 0,
   }).format(val);
+  return formatted.replace(/\$\s*/g, '$\u00A0');
 };
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 rounded-lg shadow border border-borde text-xs font-sans">
+      <div className="bg-white p-3 rounded-xl card-elevated text-xs font-sans">
         <p className="font-semibold text-pizarra mb-2 border-b border-borde pb-1">{label}</p>
         {payload.map((entry, index) => (
           <div key={`item-${index}`} className="flex items-center justify-between gap-4 py-1">
@@ -33,7 +34,7 @@ const CustomTooltip = ({ active, payload, label }) => {
               />
               {entry.name}:
             </span>
-            <span className="font-semibold text-texto">
+            <span className="font-semibold text-texto whitespace-nowrap">
               {formatCurrency(entry.value)}
             </span>
           </div>
@@ -46,7 +47,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function PresupuestoArea() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
+    <div className="bg-white rounded-2xl card-elevated" style={{ padding: '20px' }}>
       <div style={{ marginBottom: '16px' }}>
         <h3 className="font-semibold text-pizarra text-base">
           Evolución de Presupuesto Ejecutado

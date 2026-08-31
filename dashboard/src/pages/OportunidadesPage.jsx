@@ -71,8 +71,8 @@ export default function OportunidadesPage() {
                 <motion.div 
                   key={alerta.id} 
                   variants={staggerItemVariants}
-                  whileHover={{ y: -2 }}
-                  className="bg-white rounded-md border border-borde shadow-sm flex flex-col relative overflow-hidden card-elevated" 
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-white rounded-2xl flex flex-col relative overflow-hidden card-elevated" 
                   style={{ padding: '20px' }}
                 >
                   <div className="flex flex-col">
@@ -94,7 +94,7 @@ export default function OportunidadesPage() {
             })}
             
             {filteredAlertas.length === 0 && (
-              <div className="bg-white rounded-md border border-borde text-center text-pizarra/50 font-medium shadow-sm flex flex-col items-center justify-center" style={{ padding: '40px 20px', gap: '12px' }}>
+              <div className="bg-white rounded-2xl border border-borde text-center text-pizarra/50 font-medium flex flex-col items-center justify-center" style={{ padding: '40px 20px', gap: '12px' }}>
                 No hay alertas que coincidan con la búsqueda.
               </div>
             )}

@@ -43,8 +43,8 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="bg-white rounded-xl card-elevated p-12 text-center border border-borde">
-        <p className="text-pizarra/70 text-sm">No se encontraron beneficiarios registrados.</p>
+      <div className="bg-white rounded-2xl text-center text-pizarra/60 font-medium card-elevated" style={{ padding: '64px 0' }}>
+        No se encontraron beneficiarios que coincidan con la búsqueda.
       </div>
     );
   }
@@ -68,13 +68,13 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
           <motion.div
             key={row.id || row.dni}
             variants={staggerItemVariants}
-            whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(73, 73, 99, 0.12)' }}
-            whileTap={{ scale: 0.99 }}
+            whileHover={{ scale: 1.025 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => onItemClick && onItemClick(row)}
-            className="bg-white rounded-xl border border-borde overflow-hidden cursor-pointer flex flex-col h-full card-elevated"
+            className="bg-white rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full card-elevated"
           >
             {/* Cabecera Tarjeta */}
-            <div className="p-5 pb-4 border-b border-borde bg-superficie-sec/30">
+            <div className="p-5 pb-4 bg-superficie-sec/50">
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <h3 className="font-bold text-pizarra text-base leading-tight" title={row.nombre}>{row.nombre}</h3>

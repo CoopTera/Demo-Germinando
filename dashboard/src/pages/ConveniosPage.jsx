@@ -46,8 +46,9 @@ export default function ConveniosPage() {
   });
 
   const formatCurrency = (amount) => {
-    if (typeof amount !== 'number') return '$ 0';
-    return amount.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+    if (typeof amount !== 'number') return '$\u00A00';
+    const formatted = amount.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+    return formatted.replace(/\$\s*/g, '$\u00A0');
   };
 
   const thStyle = (width, extra = {}) => ({
@@ -82,7 +83,7 @@ export default function ConveniosPage() {
         { label: 'Presupuesto Total', value: formatCurrency(convenios.reduce((acc, c) => acc + c.monto, 0)) }
       ]}
     >
-      <div className="bg-white rounded-xl shadow-sm border border-borde overflow-hidden">
+      <div className="bg-white rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
             <thead className="bg-superficie-sec border-b border-borde">
@@ -106,7 +107,7 @@ export default function ConveniosPage() {
                     </td>
                     <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)} title={getOrgName(conv.org_id)}>{getOrgName(conv.org_id)}</td>
                     <td className="text-sm text-texto border-r border-borde" style={thStyle(widths.col3)}>{conv.fechaFirma}</td>
-                    <td className="text-sm font-bold text-texto text-right border-r border-borde" style={thStyle(widths.col4)}>{formatCurrency(conv.monto)}</td>
+                    <td className="text-sm font-bold text-texto text-right border-r border-borde whitespace-nowrap" style={thStyle(widths.col4)}>{formatCurrency(conv.monto)}</td>
                     <td className="text-sm text-center border-r border-borde" style={{...thStyle(widths.col5), padding: '8px 16px'}}>
                       <div className="flex flex-col items-center justify-center" style={{ gap: '4px' }}>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${

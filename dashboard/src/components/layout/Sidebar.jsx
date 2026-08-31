@@ -55,7 +55,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
       {/* Sidebar Container */}
       <aside 
-        className={`fixed lg:static inset-y-0 left-0 w-[280px] h-screen shrink-0 text-white flex flex-col justify-between z-50 shadow-2xl lg:shadow-none select-none transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 w-[280px] h-screen shrink-0 text-white flex flex-col justify-between z-50 border-r border-white/10 lg:border-r-0 select-none transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
         style={{ backgroundColor: '#6B1330' }}
@@ -66,8 +66,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden shadow-sm"
-              style={{ padding: '6px' }}
+              className="w-10 h-10 flex items-center justify-center shrink-0"
             >
               <img 
                 src={LogoSantaFe} 
@@ -117,7 +116,7 @@ export default function Sidebar({ isOpen, onClose }) {
                               <motion.div
                                 initial={{ scaleX: 0, opacity: 0 }}
                                 animate={{ scaleX: 1, opacity: 1 }}
-                                style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8', right: '-2px' }}
+                                style={{ transformOrigin: 'right center', backgroundColor: '#EBEDF2', right: '-2px' }}
                                 className="absolute inset-y-0 -right-[2px] left-4 rounded-l-2xl z-20"
                                 transition={{
                                   type: 'spring',
@@ -135,7 +134,7 @@ export default function Sidebar({ isOpen, onClose }) {
                                   viewBox="0 0 16 16" 
                                   fill="none"
                                 >
-                                  <path d="M0 16 C 8.836 16 16 8.836 16 0 L 16 16 Z" fill="#F5F6F8" />
+                                  <path d="M0 16 C 8.836 16 16 8.836 16 0 L 16 16 Z" fill="#EBEDF2" />
                                 </motion.svg>
                                 {/* Bottom scoop fillet */}
                                 <motion.svg 
@@ -146,7 +145,7 @@ export default function Sidebar({ isOpen, onClose }) {
                                   viewBox="0 0 16 16" 
                                   fill="none"
                                 >
-                                  <path d="M0 0 C 8.836 0 16 7.164 16 16 L 16 0 Z" fill="#F5F6F8" />
+                                  <path d="M0 0 C 8.836 0 16 7.164 16 16 L 16 0 Z" fill="#EBEDF2" />
                                 </motion.svg>
                               </motion.div>
                             )}
@@ -190,7 +189,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     <motion.div
                       initial={{ scaleX: 0, opacity: 0 }}
                       animate={{ scaleX: 1, opacity: 1 }}
-                      style={{ transformOrigin: 'right center', backgroundColor: '#F5F6F8', right: '-2px' }}
+                      style={{ transformOrigin: 'right center', backgroundColor: '#EBEDF2', right: '-2px' }}
                       className="absolute inset-y-0 -right-[2px] left-4 rounded-l-2xl z-20"
                       transition={{
                         type: 'spring',
@@ -208,7 +207,7 @@ export default function Sidebar({ isOpen, onClose }) {
                         viewBox="0 0 16 16" 
                         fill="none"
                       >
-                        <path d="M0 16 C 8.836 16 16 8.836 16 0 L 16 16 Z" fill="#F5F6F8" />
+                        <path d="M0 16 C 8.836 16 16 8.836 16 0 L 16 16 Z" fill="#EBEDF2" />
                       </motion.svg>
                       {/* Bottom scoop fillet */}
                       <motion.svg 
@@ -219,7 +218,7 @@ export default function Sidebar({ isOpen, onClose }) {
                         viewBox="0 0 16 16" 
                         fill="none"
                       >
-                        <path d="M0 0 C 8.836 0 16 7.164 16 16 L 16 0 Z" fill="#F5F6F8" />
+                        <path d="M0 0 C 8.836 0 16 7.164 16 16 L 16 0 Z" fill="#EBEDF2" />
                       </motion.svg>
                     </motion.div>
                   )}

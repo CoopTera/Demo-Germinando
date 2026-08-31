@@ -24,7 +24,7 @@ export default function ActividadFeed({ animate = true }) {
       initial={animate ? { opacity: 0, y: 16 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={animate ? { duration: 0.35, delay: 0.15 } : { duration: 0 }}
-      className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" 
+      className="bg-white rounded-2xl h-full flex flex-col card-elevated" 
       style={{ padding: '24px' }}
     >
       <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
@@ -62,7 +62,7 @@ export default function ActividadFeed({ animate = true }) {
             {/* Avatar */}
             <motion.div 
               whileHover={{ scale: 1.1 }}
-              className="rounded-full bg-pizarra/10 flex items-center justify-center text-pizarra font-bold text-xs shrink-0 z-10 border-[3px] border-white shadow-xs group-hover:bg-primario group-hover:text-white transition-colors" 
+              className="rounded-full bg-pizarra/10 flex items-center justify-center text-pizarra font-bold text-xs shrink-0 z-10 border-[3px] border-white group-hover:bg-primario group-hover:text-white transition-colors" 
               style={{ width: '40px', height: '40px' }}
             >
               {item.avatar}

@@ -6,15 +6,25 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
   const isPositive = typeof variacion === 'number' ? variacion > 0 : false;
   const isNegative = typeof variacion === 'number' ? variacion < 0 : false;
 
+  const getFontSize = (val) => {
+    const str = String(val || '').trim();
+    const len = str.length;
+    if (len <= 5) return '30px';
+    if (len <= 8) return '26px';
+    if (len <= 11) return '23px';
+    if (len <= 14) return '20px';
+    return '18px';
+  };
+
   return (
     <motion.div
       initial={animate ? { opacity: 0, y: 16 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={animate ? { duration: 0.35, delay: index * 0.08, ease: 'easeOut' } : { duration: 0 }}
-      whileHover={{ y: -3, transition: { duration: 0.2, ease: 'easeOut' } }}
-      className="bg-white rounded-md shadow-sm card-elevated flex flex-col cursor-default border border-borde"
+      whileHover={{ scale: 1.025, transition: { duration: 0.2, ease: 'easeOut' } }}
+      className="bg-white rounded-2xl card-elevated flex flex-col cursor-default"
       style={{
-        padding: '20px 24px',
+        padding: '20px 22px',
         gap: '12px',
       }}
     >
@@ -22,8 +32,17 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
         {titulo}
       </h2>
 
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-        <span style={{ fontSize: '32px', fontWeight: 800, color: '#1a1a2e', lineHeight: 1 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', minWidth: 0, overflow: 'visible' }} className="whitespace-nowrap">
+        <span 
+          style={{ 
+            fontSize: getFontSize(valor), 
+            fontWeight: 800, 
+            color: '#1a1a2e', 
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em' 
+          }} 
+          className="whitespace-nowrap select-none"
+        >
           <AnimatedCounter value={valor} animate={animate} />
         </span>
       </div>

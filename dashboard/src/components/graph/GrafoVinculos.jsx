@@ -179,12 +179,12 @@ export default function GrafoVinculos() {
   }, [graphData, graphConfig.repulsion, graphConfig.linkDistance]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-borde overflow-hidden relative" style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="bg-white rounded-2xl overflow-hidden relative" style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
       
       {/* Floating Legend - Top Left */}
       <div style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 10, display: 'flex', gap: '8px', flexWrap: 'wrap', pointerEvents: 'none' }}>
         {LEGEND_ITEMS.map((item) => (
-          <div key={item.label} className="bg-white border border-borde shadow-sm" style={{ padding: '6px 12px', borderRadius: '99px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div key={item.label} className="bg-white" style={{ padding: '6px 12px', borderRadius: '99px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: item.color, display: 'inline-block' }} />
             <span style={{ fontSize: '12px', fontWeight: 600, color: '#494963' }}>{item.label}</span>
           </div>
@@ -195,7 +195,7 @@ export default function GrafoVinculos() {
       <div style={{ position: 'absolute', top: '24px', right: '24px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-end' }}>
         <button 
           onClick={() => setShowControls(!showControls)}
-          className="bg-white border border-borde shadow-sm hover:border-primario text-pizarra hover:text-primario transition-colors cursor-pointer"
+          className="bg-white text-pizarra hover:text-primario transition-colors cursor-pointer"
           style={{ padding: '10px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           title="Ajustes del Grafo"
         >
@@ -203,7 +203,7 @@ export default function GrafoVinculos() {
         </button>
 
         {showControls && (
-          <div className="bg-white border border-borde shadow-lg rounded-xl" style={{ padding: '20px', width: '280px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div className="bg-white rounded-2xl" style={{ padding: '20px', width: '280px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a2e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Filtros de Nodos</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

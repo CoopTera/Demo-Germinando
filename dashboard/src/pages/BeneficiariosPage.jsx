@@ -113,26 +113,26 @@ export default function BeneficiariosPage() {
         {/* Columna Izquierda: Datos y Timeline */}
         <div className="flex-1 flex flex-col overflow-y-auto" style={{ gap: '24px', paddingRight: '8px' }}>
           <div className="grid grid-cols-2" style={{ gap: '16px' }}>
-            <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
+            <div className="bg-white rounded-xl card-elevated" style={{ padding: '16px' }}>
               <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">DNI</div>
               <p className="text-base font-semibold text-texto">{b.dni}</p>
             </div>
-            <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
+            <div className="bg-white rounded-xl card-elevated" style={{ padding: '16px' }}>
               <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Fecha Inicio</div>
               <p className="text-base font-semibold text-texto">{fecha}</p>
             </div>
-            <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
+            <div className="bg-white rounded-xl card-elevated" style={{ padding: '16px' }}>
               <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Último Registro</div>
               <p className="text-base font-semibold text-texto">{ultimoReg}</p>
             </div>
-            <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '16px' }}>
+            <div className="bg-white rounded-xl card-elevated" style={{ padding: '16px' }}>
               <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Monto Beca</div>
-              <p className="text-base font-bold text-primario">{formatCurrency(monto)}</p>
+              <p className="text-base font-bold text-primario whitespace-nowrap">{formatCurrency(monto)}</p>
             </div>
           </div>
           
-          <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '20px' }}>
-            <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider border-b border-borde" style={{ marginBottom: '16px', paddingBottom: '8px' }}>Programas y Organizaciones</h3>
+          <div className="bg-white rounded-xl card-elevated" style={{ padding: '20px' }}>
+            <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '16px', paddingBottom: '8px' }}>Programas y Organizaciones</h3>
             <div className="flex flex-wrap" style={{ gap: '8px' }}>
               {orgs.length > 0 ? orgs.map((org, idx) => (
                 <button key={idx} onClick={() => handleOrgClick(org)} className="bg-primario/10 hover:bg-primario text-primario hover:text-white transition-colors text-xs rounded-full font-bold uppercase tracking-wider cursor-pointer" style={{ padding: '6px 12px' }}>
@@ -142,27 +142,27 @@ export default function BeneficiariosPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-borde shadow-sm flex-1" style={{ padding: '20px' }}>
-            <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider border-b border-borde" style={{ marginBottom: '8px', paddingBottom: '8px' }}>Línea de Tiempo</h3>
+          <div className="bg-white rounded-xl card-elevated flex-1" style={{ padding: '20px' }}>
+            <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '8px', paddingBottom: '8px' }}>Línea de Tiempo</h3>
             <EntityTimeline historial={b.historial} onEdit={handleEditEvent} onDelete={handleDeleteEvent} />
           </div>
         </div>
 
         {/* Columna Derecha: Grafo */}
         <div className="w-full lg:w-[350px] shrink-0 flex flex-col" style={{ gap: '24px' }}>
-          <div className="bg-white rounded-xl border border-borde shadow-sm" style={{ padding: '20px' }}>
-            <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider border-b border-borde" style={{ marginBottom: '16px', paddingBottom: '8px' }}>Red de Vínculos</h3>
+          <div className="bg-white rounded-xl card-elevated" style={{ padding: '20px' }}>
+            <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '16px', paddingBottom: '8px' }}>Red de Vínculos</h3>
             <p className="text-xs text-pizarra/60" style={{ marginBottom: '16px' }}>Mapeo de conexiones directas del beneficiario.</p>
             <MiniGraph rootEntityId={b.id} rootEntityType="beneficiario" />
           </div>
           
-          <div className="bg-canvas rounded-xl border border-borde shadow-sm mt-auto" style={{ padding: '20px' }}>
+          <div className="bg-white rounded-xl card-elevated mt-auto" style={{ padding: '20px' }}>
              <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '8px' }}>Acciones Rápidas</h3>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <button onClick={() => setIsTallerModalOpen(true)} className="w-full bg-white border border-borde hover:border-primario hover:text-primario text-pizarra text-sm font-semibold rounded-lg transition-colors cursor-pointer" style={{ padding: '8px' }}>
+                <button onClick={() => setIsTallerModalOpen(true)} className="w-full bg-canvas hover:bg-primario hover:text-white text-pizarra text-sm font-semibold rounded-xl transition-colors cursor-pointer" style={{ padding: '10px' }}>
                   Asignar a Taller
                 </button>
-                <button onClick={() => setIsSeguimientoModalOpen(true)} className="w-full bg-white border border-borde hover:border-primario hover:text-primario text-pizarra text-sm font-semibold rounded-lg transition-colors cursor-pointer" style={{ padding: '8px' }}>
+                <button onClick={() => setIsSeguimientoModalOpen(true)} className="w-full bg-canvas hover:bg-primario hover:text-white text-pizarra text-sm font-semibold rounded-xl transition-colors cursor-pointer" style={{ padding: '10px' }}>
                   Registrar Seguimiento
                 </button>
              </div>
@@ -204,8 +204,8 @@ export default function BeneficiariosPage() {
         title={selectedItem?.nombre || 'Detalle del Beneficiario'}
         actions={
           <>
-            <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-md transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
-            <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-md shadow-sm transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
+            <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-xl transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
+            <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
           </>
         }
       >
@@ -218,11 +218,11 @@ export default function BeneficiariosPage() {
         title="Confirmar Eliminación"
       >
         <div className="flex flex-col items-center text-center py-6">
-          <h3 className="text-lg font-bold text-texto mb-2">Â¿Eliminar Beneficiario?</h3>
+          <h3 className="text-lg font-bold text-texto mb-2">¿Eliminar Beneficiario?</h3>
           <p className="text-sm text-pizarra/80 mb-6">Esta acción no se puede deshacer. Se perderán todos los datos asociados a "{selectedItem?.nombre}".</p>
           <div className="flex justify-center gap-3">
-            <button onClick={() => setIsDeletingItem(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-md transition-colors cursor-pointer border border-borde px-4 py-2">Cancelar</button>
-            <button onClick={confirmDelete} className="text-sm font-semibold text-white bg-critico hover:bg-critico/90 rounded-md shadow-sm transition-colors cursor-pointer px-4 py-2">Sí, eliminar</button>
+            <button onClick={() => setIsDeletingItem(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-xl transition-colors cursor-pointer border border-borde px-4 py-2">Cancelar</button>
+            <button onClick={confirmDelete} className="text-sm font-semibold text-white bg-critico hover:bg-critico/90 rounded-xl transition-colors cursor-pointer px-4 py-2">Sí, eliminar</button>
           </div>
         </div>
       </Modal>
@@ -299,7 +299,7 @@ export default function BeneficiariosPage() {
             />
           </div>
           <div className="flex justify-end mt-4" style={{ gap: '8px' }}>
-            <button onClick={() => setIsSeguimientoModalOpen(false)} className="px-4 py-2 text-sm font-semibold text-pizarra border border-borde rounded-md hover:bg-canvas">Cancelar</button>
+            <button onClick={() => setIsSeguimientoModalOpen(false)} className="px-4 py-2 text-sm font-semibold text-pizarra border border-borde rounded-xl hover:bg-canvas transition-colors cursor-pointer">Cancelar</button>
             <button 
               onClick={() => {
                 if(!seguimientoNota.trim()) return;
@@ -312,7 +312,7 @@ export default function BeneficiariosPage() {
                 setIsSeguimientoModalOpen(false);
                 setSeguimientoNota('');
               }} 
-              className="px-4 py-2 text-sm font-semibold text-white bg-primario rounded-md hover:bg-primario/90 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-semibold text-white bg-primario rounded-xl hover:bg-primario/90 disabled:opacity-50 transition-colors cursor-pointer"
               disabled={!seguimientoNota.trim()}
             >
               Guardar

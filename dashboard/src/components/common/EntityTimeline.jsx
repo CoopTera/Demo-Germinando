@@ -79,7 +79,7 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
               {/* Icon Circle */}
               <motion.div 
                 whileHover={{ scale: 1.15 }}
-                className={`relative z-10 rounded-full border-2 border-white flex items-center justify-center shrink-0 shadow-xs ${getIconBg(evento.tipo)}`} 
+                className={`relative z-10 rounded-full border-2 border-white flex items-center justify-center shrink-0 ${getIconBg(evento.tipo)}`} 
                 style={{ width: '36px', height: '36px' }}
               >
                 {getIcon(evento.tipo)}
@@ -114,7 +114,7 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
                 {/* Box Content */}
                 <motion.div 
                   whileHover={{ borderColor: 'rgba(60, 58, 229, 0.3)' }}
-                  className="bg-white rounded-lg border border-borde shadow-sm transition-colors" 
+                  className="bg-white rounded-xl border border-borde transition-colors" 
                   style={{ padding: '12px', marginTop: '8px' }}
                 >
                   {editingId === evento.id ? (

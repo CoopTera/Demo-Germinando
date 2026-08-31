@@ -34,20 +34,20 @@ export default function ProfilePage() {
         {/* Left Column: ID & Basic Info */}
         <motion.div variants={itemVariants} className="lg:col-span-1 flex flex-col" style={{ gap: '24px' }}>
           {/* Avatar Card */}
-          <div className="bg-white rounded-md shadow-sm border border-borde flex flex-col items-center text-center card-elevated" style={{ padding: '32px' }}>
-            <div className="bg-pizarra rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-md" style={{ width: '96px', height: '96px', marginBottom: '16px' }}>
+          <div className="bg-white rounded-2xl flex flex-col items-center text-center card-elevated" style={{ padding: '32px' }}>
+            <div className="bg-pizarra rounded-full flex items-center justify-center text-white text-3xl font-bold" style={{ width: '96px', height: '96px', marginBottom: '16px' }}>
               DG
             </div>
             <h2 className="text-xl font-bold text-texto" style={{ marginBottom: '4px' }}>Director General</h2>
-            <p className="text-sm text-primario font-semibold rounded-full" style={{ marginBottom: '16px', backgroundColor: 'rgba(60, 58, 229, 0.1)', padding: '4px 12px' }}>Administrador Global</p>
+            <p className="text-sm text-primario font-semibold rounded-full" style={{ marginBottom: '16px', backgroundColor: 'rgba(107, 19, 48, 0.1)', padding: '4px 12px' }}>Administrador Global</p>
             <p className="text-sm text-pizarra/70" style={{ marginBottom: '24px' }}>Ministerio de Desarrollo Social<br/>Programa Germinando</p>
-            <button className="w-full bg-canvas hover:bg-superficie-sec text-texto text-sm font-semibold rounded border border-borde transition-colors cursor-pointer" style={{ padding: '10px 0' }}>
+            <button className="w-full bg-canvas hover:bg-superficie-sec text-texto text-sm font-semibold rounded-xl transition-colors cursor-pointer card-elevated" style={{ padding: '10px 0' }}>
               Cambiar Fotografía
             </button>
           </div>
 
           {/* Contact Details */}
-          <div className="bg-white rounded-md shadow-sm border border-borde card-elevated" style={{ padding: '24px' }}>
+          <div className="bg-white rounded-2xl card-elevated" style={{ padding: '24px' }}>
             <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '20px' }}>Información de Contacto</h3>
             <div className="flex flex-col" style={{ gap: '16px' }}>
               <div className="flex items-center" style={{ gap: '12px' }}>
@@ -64,8 +64,8 @@ export default function ProfilePage() {
                   <Phone size={16} className="text-pizarra/70" />
                 </div>
                 <div>
-                  <p className="text-xs text-pizarra/60 font-semibold uppercase">Teléfono Directo</p>
-                  <p className="text-sm font-medium text-texto">+54 9 341 555-0192</p>
+                  <p className="text-xs text-pizarra/60 font-semibold uppercase">Teléfono</p>
+                  <p className="text-sm font-medium text-texto">+54 (342) 457-1234 int. 402</p>
                 </div>
               </div>
               <div className="flex items-center" style={{ gap: '12px' }}>
@@ -74,7 +74,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <p className="text-xs text-pizarra/60 font-semibold uppercase">Sede de Trabajo</p>
-                  <p className="text-sm font-medium text-texto">Rosario, Santa Fe</p>
+                  <p className="text-sm font-medium text-texto">Casa de Gobierno, 2do Piso, Santa Fe</p>
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@ export default function ProfilePage() {
         {/* Right Column: Settings & Pulse */}
         <motion.div variants={itemVariants} className="lg:col-span-2 flex flex-col" style={{ gap: '24px' }}>
           {/* Work Details */}
-          <div className="bg-white rounded-md shadow-sm border border-borde card-elevated" style={{ padding: '24px' }}>
+          <div className="bg-white rounded-2xl card-elevated" style={{ padding: '24px' }}>
             <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '20px' }}>Detalles del Cargo</h3>
             <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '24px' }}>
               <div>
@@ -119,33 +119,33 @@ export default function ProfilePage() {
           </div>
 
           {/* Edit Profile Form */}
-          <div className="bg-white rounded-md shadow-sm border border-borde card-elevated" style={{ padding: '24px' }}>
+          <div className="bg-white rounded-2xl card-elevated" style={{ padding: '24px' }}>
             <h3 className="text-sm font-bold text-pizarra uppercase tracking-wider" style={{ marginBottom: '20px' }}>Actualizar Información</h3>
             <form className="flex flex-col" style={{ gap: '20px' }}>
               <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '20px' }}>
                 <div className="flex flex-col" style={{ gap: '6px' }}>
                   <label className="text-xs font-bold text-texto uppercase">Nombre Completo</label>
-                  <input type="text" defaultValue="Director General" className="bg-canvas border border-borde rounded text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario/40 transition-all" style={{ padding: '10px' }} />
+                  <input type="text" defaultValue="Director General" className="bg-canvas rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 transition-all" style={{ padding: '10px 14px' }} />
                 </div>
                 <div className="flex flex-col" style={{ gap: '6px' }}>
                   <label className="text-xs font-bold text-texto uppercase">Correo Electrónico</label>
-                  <input type="email" defaultValue="dg@germinando.gob.ar" className="bg-canvas border border-borde rounded text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario/40 transition-all" style={{ padding: '10px' }} />
+                  <input type="email" defaultValue="dg@germinando.gob.ar" className="bg-canvas rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 transition-all" style={{ padding: '10px 14px' }} />
                 </div>
                 <div className="flex flex-col" style={{ gap: '6px' }}>
                   <label className="text-xs font-bold text-texto uppercase">Teléfono</label>
-                  <input type="text" defaultValue="+54 9 341 555-0192" className="bg-canvas border border-borde rounded text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario/40 transition-all" style={{ padding: '10px' }} />
+                  <input type="text" defaultValue="+54 9 341 555-0192" className="bg-canvas rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 transition-all" style={{ padding: '10px 14px' }} />
                 </div>
                 <div className="flex flex-col" style={{ gap: '6px' }}>
                   <label className="text-xs font-bold text-texto uppercase">Sede</label>
-                  <select className="bg-canvas border border-borde rounded text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 focus:border-primario/40 transition-all" style={{ padding: '10px' }}>
+                  <select className="bg-canvas rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primario/30 transition-all cursor-pointer" style={{ padding: '10px 14px' }}>
                     <option>Rosario, Santa Fe</option>
                     <option>Santa Fe Capital</option>
                     <option>Reconquista, Santa Fe</option>
                   </select>
                 </div>
               </div>
-              <div className="border-t border-borde flex justify-end" style={{ paddingTop: '20px', marginTop: '8px' }}>
-                <button type="button" className="bg-primario hover:bg-primario/90 text-white text-sm font-semibold rounded transition-colors shadow-sm cursor-pointer" style={{ padding: '10px 24px' }}>
+              <div className="flex justify-end" style={{ paddingTop: '16px', marginTop: '8px' }}>
+                <button type="button" className="bg-primario hover:bg-primario/90 text-white text-sm font-semibold rounded-xl transition-all cursor-pointer card-elevated" style={{ padding: '10px 24px' }}>
                   Guardar Cambios
                 </button>
               </div>

@@ -28,7 +28,8 @@ export default function AnimatedCounter({ value, duration = 1.0, prefix = '', su
     }
 
     const num = parseFloat(cleanStr) || 0;
-    const resolvedPrefix = prefix || (hasDollar ? '$ ' : '');
+    const rawPrefix = prefix || (hasDollar ? '$\u00A0' : '');
+    const resolvedPrefix = rawPrefix.replace(/\$\s*/g, '$\u00A0');
     const resolvedSuffix = suffix || (hasPercent ? '%' : '');
 
     return { num, prefix: resolvedPrefix, suffix: resolvedSuffix, decimals };
@@ -76,11 +77,11 @@ export default function AnimatedCounter({ value, duration = 1.0, prefix = '', su
   }, [targetNum, duration, animate, resolvedPrefix, resolvedSuffix]);
 
   if (isNaN(targetNum)) {
-    return <span>{value}</span>;
+    return <span className="whitespace-nowrap">{value}</span>;
   }
 
   return (
-    <span className="inline-block tabular-nums">
+    <span className="inline-block tabular-nums whitespace-nowrap">
       {displayValue}
     </span>
   );

@@ -61,7 +61,7 @@ export default function TalleresPage() {
         { label: 'Inscriptos Activos', value: talleres.reduce((acc, t) => acc + t.inscriptos, 0) }
       ]}
     >
-      <div className="bg-white rounded-xl shadow-sm border border-borde overflow-hidden">
+      <div className="bg-white rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
             <thead className="bg-superficie-sec border-b border-borde">

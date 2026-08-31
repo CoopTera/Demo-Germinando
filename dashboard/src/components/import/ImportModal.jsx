@@ -100,7 +100,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-pizarra/30 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-xl shadow-2xl z-50 p-6 flex flex-col gap-4 border border-borde">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl z-50 p-6 flex flex-col gap-4 card-elevated">
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-borde">
             <div className="flex items-center gap-2.5">
@@ -248,7 +248,7 @@ export default function ImportModal({ isOpen, onClose, onImport }) {
               type="button"
               disabled={!tipo || !file}
               onClick={handleImportSubmit}
-              className="px-3.5 py-2 text-xs font-semibold text-white bg-primario rounded-lg hover:bg-primario/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-xs"
+              className="px-3.5 py-2 text-xs font-semibold text-white bg-primario rounded-lg hover:bg-primario/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               Importar Datos
             </button>

@@ -13,11 +13,22 @@ const data = [
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 rounded-lg shadow border border-borde text-xs">
-        <p className="font-semibold text-pizarra">{label}</p>
-        <p className="text-texto font-normal mt-1">
-          <span className="font-bold">{payload[0].value.toLocaleString('es-AR')}</span> beneficiarios
-        </p>
+      <div className="bg-white p-3 rounded-xl card-elevated text-xs">
+        <p className="font-semibold text-pizarra mb-2 border-b border-borde pb-1">{label}</p>
+        {payload.map((entry, index) => (
+          <div key={`item-${index}`} className="flex items-center justify-between gap-4 py-1">
+            <span className="flex items-center gap-1.5 text-texto font-normal">
+              <span
+                className="w-2.5 h-2.5 rounded-full inline-block"
+                style={{ backgroundColor: entry.color }}
+              />
+              {entry.name}:
+            </span>
+            <span className="font-bold font-mono text-texto">
+              {Number(entry.value).toLocaleString('es-AR')}
+            </span>
+          </div>
+        ))}
       </div>
     );
   }
@@ -26,7 +37,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function CrecimientoBeneficiarios() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
+    <div className="bg-white rounded-2xl card-elevated" style={{ padding: '20px' }}>
       <div className="mb-4">
         <h3 className="font-semibold text-pizarra text-base">
           Crecimiento Interanual de Beneficiarios

@@ -8,11 +8,11 @@
   --color-pizarra: #494963;
   --color-amarillo: #FFCB02;
   --color-critico: #E42153;
-  --color-canvas: #F5F6F8;
+  --color-canvas: #EBEDF2;
   --color-superficie: #FFFFFF;
-  --color-superficie-sec: #EAE9EE;
-  --color-texto: #333333;
-  --color-borde: #E3E1E2;
+  --color-superficie-sec: #E4E6EC;
+  --color-texto: #2D2D3A;
+  --color-borde: #E2E4EB;
   --color-exito: #22C55E;
   --color-sidebar-bg: #6B1330;
   --color-sidebar-active: #4D0A20;
@@ -26,8 +26,8 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #F5F6F8;
-  color: #333333;
+  background-color: #EBEDF2;
+  color: #2D2D3A;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -39,21 +39,20 @@ h1, h2, h3, h4, h5, h6 {
 /* ─── Scrollbar ─── */
 ::-webkit-scrollbar { width: 5px; height: 0px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #E3E1E2; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #D0D3DC; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #494963; }
 
-/* ─── Card Shadows ─── */
+/* ─── Borderless Flat Card Surfaces with Scale-Up Hover ─── */
 .card-elevated {
-  box-shadow:
-    0 1px 3px rgba(73, 73, 99, 0.06),
-    0 4px 12px rgba(73, 73, 99, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  transition: transform 0.22s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 .card-elevated:hover {
-  box-shadow:
-    0 4px 12px rgba(73, 73, 99, 0.1),
-    0 8px 24px rgba(73, 73, 99, 0.12);
-  transform: translateY(-2px);
+  box-shadow: none !important;
+  border: none !important;
+  transform: scale(1.018);
 }
 
 /* ─── Animations ─── */

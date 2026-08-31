@@ -110,7 +110,7 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
   if (graphData.nodes.length === 0) return null;
 
   return (
-    <div ref={containerRef} className="w-full bg-canvas rounded-xl border border-borde overflow-hidden" style={{ height: '300px' }}>
+    <div ref={containerRef} className="w-full bg-canvas rounded-xl overflow-hidden" style={{ height: '300px' }}>
       <ForceGraph2D
         ref={fgRef}
         graphData={graphData}
@@ -120,7 +120,7 @@ export default function MiniGraph({ rootEntityId, rootEntityType }) {
         nodeVal={(node) => node.size}
         linkColor={() => '#E3E1E2'}
         linkWidth={1.5}
-        backgroundColor="#F5F6F8"
+        backgroundColor="#EBEDF2"
         nodeCanvasObject={handleNodeCanvasObject}
         cooldownTicks={100}
         d3AlphaDecay={0.02}

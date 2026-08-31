@@ -9,7 +9,7 @@ export default function EvolucionChart({ animate = true }) {
       initial={animate ? { opacity: 0, y: 16 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={animate ? { duration: 0.35, delay: 0.05 } : { duration: 0 }}
-      className="bg-white rounded-md shadow-sm border border-borde h-full flex flex-col card-elevated" 
+      className="bg-white rounded-2xl h-full flex flex-col card-elevated" 
       style={{ padding: '24px' }}
     >
       <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
@@ -29,7 +29,7 @@ export default function EvolucionChart({ animate = true }) {
             <XAxis dataKey="periodo" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#494963' }} dy={10} />
             <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#494963' }} />
             <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: '1px solid #E3E1E2', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)' }}
+              contentStyle={{ borderRadius: '12px', border: '1px solid #DCD9E2', backgroundColor: '#FFFFFF' }}
               itemStyle={{ fontSize: '13px', fontWeight: 600 }}
               labelStyle={{ fontSize: '12px', color: '#494963', marginBottom: '4px' }}
             />

@@ -73,8 +73,8 @@ export default function OrganizacionForm({ onClose, initialData = null }) {
       </div>
       
       <div className="flex justify-end border-t border-borde mt-4" style={{ paddingTop: '16px', gap: '12px' }}>
-        <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-semibold text-pizarra hover:bg-canvas rounded-md transition-colors cursor-pointer border border-borde">Cancelar</button>
-        <button type="submit" className="px-4 py-2 text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-md shadow-sm transition-colors cursor-pointer">Guardar Organización</button>
+        <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-semibold text-pizarra hover:bg-canvas rounded-xl transition-colors cursor-pointer border border-borde">Cancelar</button>
+        <button type="submit" className="px-4 py-2 text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer">Guardar Organización</button>
       </div>
     </form>
   );

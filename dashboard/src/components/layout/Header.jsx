@@ -78,7 +78,7 @@ export default function Header({ onMenuClick }) {
   };
 
   return (
-    <header className="bg-superficie border-b border-borde flex items-center justify-between sticky top-0 z-40 shrink-0" style={{ height: '80px', padding: '0 clamp(24px, 5vw, 48px)', gap: '16px' }}>
+    <header className="bg-superficie flex items-center justify-between sticky top-0 z-40 shrink-0" style={{ height: '80px', padding: '0 clamp(24px, 5vw, 48px)', gap: '16px' }}>
       {/* Left side: Hamburger + Search */}
       <div className="flex items-center" style={{ gap: '16px' }}>
         <button 
@@ -112,7 +112,7 @@ export default function Header({ onMenuClick }) {
             onBlur={() => {
               if (!searchTerm) setIsSearchFocused(false);
             }}
-            className="w-full bg-canvas text-texto placeholder:text-pizarra/60 text-[14px] rounded-md focus:outline-none focus:ring-2 focus:ring-primario/30 border border-transparent focus:border-primario/40 transition-all font-medium shadow-sm"
+            className="w-full bg-canvas text-texto placeholder:text-pizarra/60 text-[14px] rounded-xl focus:outline-none focus:ring-2 focus:ring-primario/30 transition-all font-medium"
             style={{ padding: '12px 16px 12px 42px' }}
           />
           
@@ -124,11 +124,11 @@ export default function Header({ onMenuClick }) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-borde overflow-hidden flex flex-col" 
+                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl overflow-hidden flex flex-col z-50 card-elevated" 
                 style={{ maxHeight: '400px' }}
               >
-                <div className="px-4 py-2 bg-canvas/50 border-b border-borde text-xs font-bold text-pizarra/60 uppercase">
-                  Resultados de búsqueda
+                <div className="px-4 py-2 bg-canvas/50 text-xs font-bold text-pizarra/60 uppercase">
+                  Resultados
                 </div>
                 <div className="overflow-y-auto">
                   {searchResults.length > 0 ? (
@@ -137,7 +137,7 @@ export default function Header({ onMenuClick }) {
                         key={i}
                         whileHover={{ backgroundColor: 'rgba(245, 246, 248, 1)' }}
                         onClick={() => handleSearchNavigate(res)}
-                        className="w-full text-left px-4 py-3 border-b border-borde last:border-b-0 transition-colors flex items-center justify-between group cursor-pointer"
+                        className="w-full text-left px-4 py-3 transition-colors flex items-center justify-between group cursor-pointer"
                       >
                         <div className="flex flex-col">
                           <span className="text-xs font-bold text-primario mb-0.5">{res.type}</span>
@@ -191,9 +191,9 @@ export default function Header({ onMenuClick }) {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-borde overflow-hidden flex flex-col z-50"
+              className="absolute top-full right-0 mt-2 w-80 bg-white rounded-2xl overflow-hidden flex flex-col z-50 card-elevated"
             >
-              <div className="p-4 border-b border-borde flex items-center justify-between bg-canvas/50">
+              <div className="p-4 flex items-center justify-between bg-canvas/50">
                 <h3 className="font-bold text-pizarra text-sm">Notificaciones</h3>
                 <span className="text-xs font-bold bg-naranja/10 text-naranja px-2 py-0.5 rounded-full">{alertas.length} nuevas</span>
               </div>

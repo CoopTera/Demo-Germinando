@@ -40,7 +40,7 @@ export default function OrganizacionesTable({ data, onItemClick }) {
   });
 
   return (
-    <div className="bg-white rounded-md shadow-sm border border-borde overflow-hidden">
+    <div className="bg-white rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
           <thead>
@@ -78,8 +78,8 @@ export default function OrganizacionesTable({ data, onItemClick }) {
                 <td className="text-sm text-texto font-bold text-center border-r border-borde" style={cellStyle(widths.col5)}>
                   {org.talleres}
                 </td>
-                <td className="text-sm font-bold text-texto text-right border-r border-borde" style={cellStyle(widths.col6)}>
-                  {typeof org.presupuesto === 'number' ? `$ ${org.presupuesto.toLocaleString('es-AR')}` : org.presupuesto}
+                <td className="text-sm font-bold text-texto text-right border-r border-borde whitespace-nowrap" style={cellStyle(widths.col6)}>
+                  {typeof org.presupuesto === 'number' ? `$\u00A0${org.presupuesto.toLocaleString('es-AR')}` : String(org.presupuesto || '').replace(/\$\s*/g, '$\u00A0')}
                 </td>
                 <td className="text-center" style={cellStyle(widths.col7, { paddingRight: '24px' })}>
                   <button className="text-xs font-semibold text-pizarra/70 hover:text-primario transition-colors cursor-pointer">

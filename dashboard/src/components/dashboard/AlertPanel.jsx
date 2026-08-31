@@ -15,7 +15,7 @@ export default function AlertPanel() {
   const [list] = useState(alertas);
 
   return (
-    <div className="bg-white rounded-md shadow-sm border border-borde flex flex-col h-full overflow-hidden">
+    <div className="bg-white rounded-2xl flex flex-col h-full overflow-hidden card-elevated">
       {/* Title */}
       <div className="flex items-center justify-between p-8 pb-4">
         <h2 className="font-semibold text-pizarra text-base">Central de Alertas</h2>

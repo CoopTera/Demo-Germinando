@@ -15,7 +15,7 @@ import { evolucionOrgsData } from '../../data/mockData';
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 rounded-lg shadow border border-borde text-xs font-sans">
+      <div className="bg-white p-3 rounded-xl card-elevated text-xs font-sans">
         <p className="font-semibold text-pizarra mb-2 border-b border-borde pb-1">{label}</p>
         {payload.map((entry, index) => (
           <div key={`item-${index}`} className="flex items-center justify-between gap-4 py-1">
@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function EvolucionOrgs() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-borde" style={{ padding: '20px' }}>
+    <div className="bg-white rounded-2xl card-elevated" style={{ padding: '20px' }}>
       <div style={{ marginBottom: '16px' }}>
         <h3 className="font-semibold text-pizarra text-base">
           Evolución de Organizaciones y Beneficiarios

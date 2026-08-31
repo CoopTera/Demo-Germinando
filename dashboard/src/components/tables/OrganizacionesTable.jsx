@@ -19,7 +19,7 @@ export default function OrganizacionesTable({ data = [] }) {
   };
 
   return (
-    <div className="bg-white rounded-xl card-elevated animate-fade-in-up border border-borde overflow-hidden">
+    <div className="bg-white rounded-2xl animate-fade-in-up overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider">

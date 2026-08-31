@@ -23,10 +23,10 @@ export default function Modal({ isOpen, onClose, title, children }) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-white rounded-xl shadow-2xl relative flex flex-col overflow-hidden w-full z-10 border border-borde/80"
+            className="bg-white rounded-2xl relative flex flex-col overflow-hidden w-full z-10 card-elevated"
             style={{ maxWidth: '600px', maxHeight: '90vh' }}
           >
-            <div className="flex items-center justify-between border-b border-borde bg-superficie-sec/30" style={{ padding: '20px 24px' }}>
+            <div className="flex items-center justify-between bg-superficie-sec/30" style={{ padding: '20px 24px' }}>
               <h2 className="text-xl font-bold text-pizarra">{title}</h2>
               <motion.button 
                 whileHover={{ scale: 1.1, backgroundColor: '#F5F6F8' }}

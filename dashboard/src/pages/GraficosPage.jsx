@@ -29,13 +29,13 @@ export default function GraficosPage() {
 
       {/* Quick stats */}
       <motion.div variants={staggerItemVariants} className="flex flex-wrap items-center" style={{ gap: '16px' }}>
-        <motion.div whileHover={{ y: -1 }} className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px' }}>
+        <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-2xl text-sm card-elevated flex items-center" style={{ padding: '12px 20px' }}>
           <span className="text-pizarra/60 mr-1.5">Crecimiento interanual:</span>
           <span className="font-bold text-exito">+50% organizaciones</span>
         </motion.div>
-        <motion.div whileHover={{ y: -1 }} className="bg-white rounded-lg border border-borde text-sm card-elevated flex items-center" style={{ padding: '10px 16px' }}>
+        <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-2xl text-sm card-elevated flex items-center" style={{ padding: '12px 20px' }}>
           <span className="text-pizarra/60 mr-1.5">Ejecución presupuestaria:</span>
-          <span className="font-bold text-primario">
+          <span className="font-bold text-primario whitespace-nowrap">
             <AnimatedCounter value={95.7} suffix="%" />
           </span>
         </motion.div>

@@ -51,7 +51,7 @@ export default function OrganizacionesPage() {
     return {
       total: organizaciones.length,
       convenios: organizaciones.reduce((acc, org) => acc + (org.convenios || 0), 0),
-      presupuestoTotal: organizaciones.length > 0 ? '$ 15.610.000' : '$ 0'
+      presupuestoTotal: organizaciones.length > 0 ? '$\u00A015.610.000' : '$\u00A00'
     };
   }, [organizaciones]);
 
@@ -79,16 +79,17 @@ export default function OrganizacionesPage() {
         </div>
 
         <div className="grid grid-cols-2" style={{ gap: '16px' }}>
-          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
+          <div className="bg-canvas rounded-xl" style={{ padding: '16px' }}>
             <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Especialización</div>
             <p className="text-sm font-bold text-texto">{org.especializacion}</p>
           </div>
-          <div className="bg-canvas rounded border border-borde" style={{ padding: '16px' }}>
+          <div className="bg-canvas rounded-xl" style={{ padding: '16px' }}>
             <div className="text-xs font-bold text-pizarra/50 uppercase mb-1">Presupuesto</div>
-            <p className="text-base font-bold text-texto">{org.presupuesto}</p>
+            <p className="text-base font-bold text-texto whitespace-nowrap">{typeof org.presupuesto === 'number' ? `$\u00A0${org.presupuesto.toLocaleString('es-AR')}` : String(org.presupuesto || '').replace(/\$\s*/g, '$\u00A0')}</p>
           </div>
-          <div 
-            className="group bg-canvas rounded border border-borde cursor-pointer hover:border-primario hover:bg-primario/5 transition-colors" 
+          <motion.div 
+            whileHover={{ scale: 1.03 }}
+            className="group bg-canvas rounded-xl cursor-pointer hover:bg-primario/10 transition-colors" 
             style={{ padding: '16px' }}
             onClick={() => navigate('/talleres', { state: { filterOrg: org.nombre } })}
             title={`Ver talleres de ${org.nombre}`}
@@ -98,9 +99,10 @@ export default function OrganizacionesPage() {
               <span className="text-[10px] text-primario font-semibold group-hover:underline">Ver todos</span>
             </div>
             <p className="text-base font-bold text-texto">{org.talleres}</p>
-          </div>
-          <div 
-            className="bg-canvas rounded border border-borde cursor-pointer hover:border-primario hover:bg-primario/5 transition-colors" 
+          </motion.div>
+          <motion.div 
+            whileHover={{ scale: 1.03 }}
+            className="bg-canvas rounded-xl cursor-pointer hover:bg-primario/10 transition-colors" 
             style={{ padding: '16px' }}
             onClick={() => navigate('/beneficiarios', { state: { filterOrg: org.nombre } })}
             title={`Ver beneficiarios de ${org.nombre}`}
@@ -110,7 +112,7 @@ export default function OrganizacionesPage() {
               <span className="text-[10px] text-primario font-semibold bg-primario/10 px-1.5 py-0.5 rounded">Ver todos</span>
             </div>
             <p className="text-base font-semibold text-texto">{org.beneficiarios || '-'}</p>
-          </div>
+          </motion.div>
         </div>
       </div>
     );
@@ -127,48 +129,38 @@ export default function OrganizacionesPage() {
         stats={stats}
         busqueda={busqueda}
         setBusqueda={setBusqueda}
-        filtros={FILTROS}
-        filtroActivo={filtroActivo}
-        setFiltroActivo={setFiltroActivo}
+        filterGroups={[
+          {
+            label: 'Categoría',
+            options: FILTROS,
+            active: filtroActivo,
+            onChange: setFiltroActivo,
+            defaultVal: 'Todas',
+            layoutId: 'activeOrgCategoryPill'
+          },
+          {
+            label: 'Ciudad',
+            options: ciudades,
+            active: ciudadActiva,
+            onChange: setCiudadActiva,
+            defaultVal: 'Todas',
+            layoutId: 'activeOrgCityPill',
+            formatLabel: (c) => c === 'Todas' ? 'Todas las ciudades' : c.replace(', Santa Fe', '')
+          }
+        ]}
         viewMode={viewMode}
         setViewMode={setViewMode}
         totalItems={organizaciones.length}
         filteredItemsCount={filteredData.length}
       >
-        {/* City filter chips with layoutId */}
-        <div className="flex items-center flex-wrap" style={{ gap: '8px', marginBottom: '20px' }}>
-          <span className="text-xs font-semibold text-pizarra/50 uppercase tracking-wider shrink-0" style={{ marginRight: '4px' }}>Ciudad:</span>
-          {ciudades.map(c => {
-            const isSelected = ciudadActiva === c;
-            return (
-              <button
-                key={c}
-                onClick={() => setCiudadActiva(c)}
-                className={`relative whitespace-nowrap rounded-full text-xs font-semibold cursor-pointer border transition-colors ${
-                  isSelected
-                    ? 'text-white border-pizarra shadow-sm'
-                    : 'bg-white text-pizarra/70 border-borde hover:border-pizarra/30 hover:text-pizarra'
-                }`}
-                style={{ padding: '5px 12px' }}
-              >
-                {isSelected && (
-                  <motion.div
-                    layoutId="activeCityFilterPill"
-                    className="absolute inset-0 rounded-full bg-pizarra -z-0"
-                    transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                  />
-                )}
-                <span className="relative z-10">{c === 'Todas' ? 'Todas las ciudades' : c.replace(', Santa Fe', '')}</span>
-              </button>
-            );
-          })}
+        {/* Table / Grid with generous separation */}
+        <div className="pt-2">
+          {viewMode === 'list' ? (
+            <OrganizacionesTable data={filteredData} onItemClick={setSelectedItem} />
+          ) : (
+            <OrganizacionesGrid data={filteredData} onItemClick={setSelectedItem} />
+          )}
         </div>
-
-        {viewMode === 'list' ? (
-          <OrganizacionesTable data={filteredData} onItemClick={setSelectedItem} />
-        ) : (
-          <OrganizacionesGrid data={filteredData} onItemClick={setSelectedItem} />
-        )}
       </PageTemplate>
 
       <Modal 
@@ -181,8 +173,8 @@ export default function OrganizacionesPage() {
             <h3 className="text-lg font-bold text-texto" style={{ marginBottom: '8px' }}>¿Eliminar Organización?</h3>
             <p className="text-sm text-pizarra/80" style={{ marginBottom: '24px' }}>Esta acción no se puede deshacer. Se perderán todos los datos asociados a "{selectedItem?.nombre}".</p>
             <div className="flex justify-center" style={{ gap: '12px' }}>
-              <button onClick={() => setIsDeletingItem(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-md transition-colors cursor-pointer border border-borde" style={{ padding: '8px 16px' }}>Cancelar</button>
-              <button onClick={confirmDelete} className="text-sm font-semibold text-white bg-critico hover:bg-critico/90 rounded-md shadow-sm transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Sí, eliminar</button>
+              <button onClick={() => setIsDeletingItem(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-xl transition-colors cursor-pointer border border-borde" style={{ padding: '8px 16px' }}>Cancelar</button>
+              <button onClick={confirmDelete} className="text-sm font-semibold text-white bg-critico hover:bg-critico/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Sí, eliminar</button>
             </div>
           </div>
         ) : (
@@ -199,7 +191,7 @@ export default function OrganizacionesPage() {
                   </h4>
                   <div className="flex flex-col" style={{ gap: '8px' }}>
                     {orgConvenios.map(conv => (
-                      <div key={conv.id} className="bg-canvas border border-borde rounded-md flex items-center justify-between" style={{ padding: '12px 16px' }}>
+                      <div key={conv.id} className="bg-canvas border border-borde rounded-xl flex items-center justify-between" style={{ padding: '12px 16px' }}>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-texto truncate">{conv.nombre}</p>
                           <p className="text-xs text-pizarra/60">Firma: {conv.fechaFirma} · Vto: {conv.fechaVencimiento}</p>
@@ -224,8 +216,8 @@ export default function OrganizacionesPage() {
             })()}
 
             <div className="flex justify-end border-t border-borde" style={{ marginTop: '20px', paddingTop: '16px', gap: '12px' }}>
-              <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-md transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
-              <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-md shadow-sm transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
+              <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-xl transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
+              <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
             </div>
           </>
         )}

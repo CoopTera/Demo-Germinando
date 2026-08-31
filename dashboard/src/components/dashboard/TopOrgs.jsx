@@ -14,7 +14,7 @@ export default function TopOrgs({ organizaciones = topOrganizaciones, animate = 
       initial={animate ? { opacity: 0, y: 16 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={animate ? { duration: 0.35, delay: 0.15 } : { duration: 0 }}
-      className="bg-white rounded-md border border-borde h-full flex flex-col card-elevated" 
+      className="bg-white rounded-2xl h-full flex flex-col card-elevated" 
       style={{ padding: '24px' }}
     >
       {/* Title */}

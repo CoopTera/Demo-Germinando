@@ -39,7 +39,7 @@ export default function OportunidadesTable({ data }) {
   });
 
   return (
-    <div className="bg-white rounded-xl border border-borde overflow-hidden shadow-sm flex flex-col">
+    <div className="bg-white rounded-2xl overflow-hidden flex flex-col">
       <div className="overflow-x-auto">
         <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
           <thead>
