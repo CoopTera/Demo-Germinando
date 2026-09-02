@@ -37,8 +37,8 @@ export default function GrafoVinculos() {
     const updateDimensions = () => {
       if (containerRef.current) {
         const width = containerRef.current.clientWidth;
-        // Tomamos el alto disponible en la pantalla restando el sidebar/header aproximado
-        const height = Math.max(600, window.innerHeight - 200);
+        // Tomamos una altura óptima para el contenedor embebido
+        const height = Math.max(500, Math.min(600, window.innerHeight - 250));
         if (width > 0) setDimensions({ width, height });
       }
     };

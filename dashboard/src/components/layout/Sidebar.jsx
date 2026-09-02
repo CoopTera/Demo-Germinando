@@ -7,7 +7,6 @@ import {
   Enterprise,
   Group,
   ChartBar,
-  Network_2,
   Catalog,
   Document,
   Education,
@@ -21,7 +20,6 @@ const navItems = [
   { name: 'Convenios', path: '/convenios', icon: Document },
   { name: 'Talleres', path: '/talleres', icon: Education },
   { name: 'Gráficos', path: '/graficos', icon: ChartBar },
-  { name: 'Grafo de Vínculos', path: '/grafo', icon: Network_2 },
 ];
 
 function ActivePill({ collapsed }) {

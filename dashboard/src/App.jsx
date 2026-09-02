@@ -1,10 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import DashboardPage from './pages/DashboardPage';
 import OrganizacionesPage from './pages/OrganizacionesPage';
 import BeneficiariosPage from './pages/BeneficiariosPage';
 import GraficosPage from './pages/GraficosPage';
-import GrafoPage from './pages/GrafoPage';
 import OportunidadesPage from './pages/OportunidadesPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
@@ -19,7 +18,7 @@ function App() {
             <Route path="/beneficiarios" element={<BeneficiariosPage />} />
             <Route path="/oportunidades" element={<OportunidadesPage />} />
             <Route path="/graficos" element={<GraficosPage />} />
-            <Route path="/grafo" element={<GrafoPage />} />
+            <Route path="/grafo" element={<Navigate to="/graficos" replace />} />
             <Route path="*" element={<div style={{padding: '50px', background: 'blue', color: 'white'}}>404 ROUTE NOT MATCHED</div>} />
           </Route>
         </Routes>
