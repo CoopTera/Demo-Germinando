@@ -51,17 +51,24 @@ export default function PresupuestoChart({ animate = true }) {
           <span className="text-3xl font-bold text-texto">
             <AnimatedCounter value={85} suffix="%" animate={animate} />
           </span>
-          <span className="text-[11px] font-semibold text-pizarra/60 uppercase tracking-wider">Ejecutado</span>
+          <span className="text-sm font-bold text-pizarra mt-1">$ 13.268.500</span>
+          <span className="text-[10px] font-semibold text-pizarra/60 uppercase tracking-wider mt-0.5">Ejecutado</span>
         </div>
       </div>
-      <div className="flex justify-between items-center" style={{ marginTop: '16px' }}>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-naranja" />
-          <span className="text-xs text-texto font-medium">Ejecutado (85%)</span>
+      <div className="flex justify-between items-start" style={{ marginTop: '16px' }}>
+        <div className="flex items-start gap-2">
+          <div className="w-3 h-3 rounded-full bg-naranja mt-1 shrink-0" />
+          <div className="flex flex-col">
+            <span className="text-xs text-texto font-medium">Ejecutado (85%)</span>
+            <span className="text-xs font-bold text-pizarra/60 mt-0.5">$ 13.268.500</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-superficie-sec" />
-          <span className="text-xs text-texto font-medium">Disponible (15%)</span>
+        <div className="flex items-start gap-2">
+          <div className="w-3 h-3 rounded-full bg-superficie-sec mt-1 shrink-0" />
+          <div className="flex flex-col">
+            <span className="text-xs text-texto font-medium">Disponible (15%)</span>
+            <span className="text-xs font-bold text-pizarra/60 mt-0.5">$ 2.341.500</span>
+          </div>
         </div>
       </div>
     </motion.div>

@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Notification, Menu, Warning, Tag, Time } from '@carbon/icons-react';
+import { Search, Notification, Menu, Warning, Tag, Time, ChevronLeft, ChevronRight } from '@carbon/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { dropdownVariants } from '../../lib/motionTokens';
 
-export default function Header({ onMenuClick }) {
+export default function Header({ onMenuClick, collapsed, onToggleCollapse }) {
   const { organizaciones, beneficiarios, convenios, talleres, alertas } = useData();
   const navigate = useNavigate();
   
@@ -78,9 +78,23 @@ export default function Header({ onMenuClick }) {
   };
 
   return (
-    <header className="bg-superficie flex items-center justify-between sticky top-0 z-40 shrink-0" style={{ height: '80px', padding: '0 clamp(24px, 5vw, 48px)', gap: '16px' }}>
+    <header className="bg-superficie flex items-center justify-between sticky top-0 z-40 shrink-0" style={{ height: '96px', padding: '0 clamp(24px, 5vw, 48px)', gap: '16px' }}>
       {/* Left side: Hamburger + Search */}
       <div className="flex items-center" style={{ gap: '16px' }}>
+
+        {/* Desktop Sidebar Collapse Button */}
+        <motion.button 
+          type="button"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onToggleCollapse}
+          className="hidden lg:flex items-center justify-center text-pizarra/70 hover:text-pizarra hover:bg-canvas rounded-xl transition-colors cursor-pointer"
+          style={{ padding: '10px', marginLeft: '-20px' }}
+          title={collapsed ? 'Expandir menú lateral' : 'Contraer menú lateral'}
+        >
+          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </motion.button>
+
         <button 
           type="button" 
           onClick={onMenuClick}
@@ -89,7 +103,7 @@ export default function Header({ onMenuClick }) {
         >
           <Menu size={24} />
         </button>
-        
+
         <motion.div 
           layout
           className="relative hidden sm:block z-50 transition-all duration-200" 
@@ -158,6 +172,7 @@ export default function Header({ onMenuClick }) {
         </motion.div>
       </div>
 
+
       {/* Right side: Notifications */}
       <div className="flex items-center relative" ref={notifRef}>
         <motion.button
@@ -191,11 +206,12 @@ export default function Header({ onMenuClick }) {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="absolute top-full right-0 mt-2 w-80 bg-white rounded-2xl overflow-hidden flex flex-col z-50 card-elevated"
+              className="absolute right-0 bg-white rounded-2xl overflow-hidden flex flex-col z-50 card-elevated"
+              style={{ top: '100%', marginTop: '8px', width: '320px' }}
             >
-              <div className="p-4 flex items-center justify-between bg-canvas/50">
+              <div className="flex items-center justify-between bg-canvas/50" style={{ padding: '16px' }}>
                 <h3 className="font-bold text-pizarra text-sm">Notificaciones</h3>
-                <span className="text-xs font-bold bg-naranja/10 text-naranja px-2 py-0.5 rounded-full">{alertas.length} nuevas</span>
+                <span className="text-xs font-bold bg-naranja/10 text-naranja rounded-full" style={{ padding: '2px 8px' }}>{alertas.length} nuevas</span>
               </div>
               
               <div className="overflow-y-auto" style={{ maxHeight: '350px' }}>
@@ -208,25 +224,26 @@ export default function Header({ onMenuClick }) {
                         setIsNotifOpen(false);
                         navigate('/oportunidades');
                       }}
-                      className="p-4 border-b border-borde last:border-0 transition-colors cursor-pointer flex gap-3"
+                      className="border-b border-borde last:border-0 transition-colors cursor-pointer flex"
+                      style={{ padding: '16px', gap: '12px' }}
                     >
-                      <div className="shrink-0 mt-1">
+                      <div className="shrink-0" style={{ marginTop: '4px' }}>
                         {getAlertIcon(alerta.tipo, alerta.prioridad)}
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-texto leading-snug">{alerta.mensaje}</p>
-                        <p className="text-xs text-pizarra/60 mt-1">{new Date(alerta.fecha).toLocaleDateString('es-AR')}</p>
+                        <p className="text-xs text-pizarra/60" style={{ marginTop: '4px' }}>{new Date(alerta.fecha).toLocaleDateString('es-AR')}</p>
                       </div>
                     </motion.div>
                   ))
                 ) : (
-                  <div className="p-6 text-center text-sm font-medium text-pizarra/60">
+                  <div className="text-center text-sm font-medium text-pizarra/60" style={{ padding: '24px' }}>
                     No hay notificaciones pendientes.
                   </div>
                 )}
               </div>
 
-              <div className="p-3 border-t border-borde bg-canvas/50 text-center">
+              <div className="border-t border-borde bg-canvas/50 text-center" style={{ padding: '12px' }}>
                 <button 
                   onClick={() => {
                     setIsNotifOpen(false);

@@ -30,7 +30,7 @@ export default function TalleresPage() {
   });
 
   const thStyle = (width, extra = {}) => ({
-    width: `${width}px`, minWidth: `${width}px`, maxWidth: `${width}px`,
+    ...(width ? { width: `${width}px`, minWidth: `${width}px`, maxWidth: `${width}px` } : {}),
     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
     padding: '12px 16px', position: 'relative', userSelect: 'none',
     ...extra
@@ -42,6 +42,20 @@ export default function TalleresPage() {
          onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
          onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'} />
   );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filtroActivo]);
+
+  const paginatedTalleres = React.useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredTalleres.slice(start, start + pageSize);
+  }, [filteredTalleres, currentPage, pageSize]);
+
+  const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
 
   return (
     <PageTemplate 
@@ -56,28 +70,30 @@ export default function TalleresPage() {
       newButtonText="Nuevo Taller"
       totalItems={talleres.length}
       filteredItemsCount={filteredTalleres.length}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+      pageSize={pageSize}
+      setPageSize={setPageSize}
       stats={[
         { label: 'Total Talleres', value: talleres.length },
         { label: 'Inscriptos Activos', value: talleres.reduce((acc, t) => acc + t.inscriptos, 0) }
       ]}
     >
-      <div className="bg-white rounded-2xl overflow-hidden">
+      <div className="bg-white rounded-2xl overflow-hidden card-elevated">
         <div className="overflow-x-auto">
-          <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
+          <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
             <thead className="bg-superficie-sec border-b border-borde">
               <tr>
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>NOMBRE DEL TALLER<Resizer colKey="col1" /></th>
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col2)}>ORGANIZACIÓN A CARGO<Resizer colKey="col2" /></th>
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col3)}>CUPO MÁXIMO<Resizer colKey="col3" /></th>
                 <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col4)}>INSCRIPTOS<Resizer colKey="col4" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col5)}>ESTADO<Resizer colKey="col5" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>ACCIONES</th>
+                <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(null, { paddingRight: '24px' })}>ESTADO</th>
               </tr>
             </thead>
             <tbody>
-              {filteredTalleres.map((taller) => (
+              {paginatedTalleres.map((taller) => (
                 <tr key={taller.id} onClick={() => setSelectedItem(taller)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
-                  <td className="text-sm font-semibold text-texto border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={taller.nombre}>{taller.nombre}</td>
                   <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)}>
                       <div className="flex flex-wrap" style={{ gap: '4px' }}>
                         {(taller.org_ids || []).map((id, i) => (
@@ -89,15 +105,10 @@ export default function TalleresPage() {
                     </td>
                   <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col3)}>{taller.cupo}</td>
                   <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col4)}>{taller.inscriptos}</td>
-                  <td className="text-sm text-center border-r border-borde" style={thStyle(widths.col5)}>
+                  <td className="text-sm text-center" style={thStyle(widths.col5, { paddingRight: '24px' })}>
                     <span className={`px-2 py-1 rounded-full text-xs font-bold ${taller.estado === 'En curso' ? 'bg-primario/10 text-primario' : taller.estado === 'Finalizado' ? 'bg-pizarra/10 text-pizarra' : 'bg-exito/10 text-exito'}`}>
                       {taller.estado}
                     </span>
-                  </td>
-                  <td className="text-center" style={thStyle(widths.col6, { paddingRight: '24px' })}>
-                    <button className="text-xs font-semibold text-pizarra/70 hover:text-primario cursor-pointer">
-                      Editar
-                    </button>
                   </td>
                 </tr>
               ))}
@@ -128,6 +139,10 @@ export default function TalleresPage() {
                 <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Estado</label>
                 <p className="text-sm font-medium text-texto">{selectedItem.estado}</p>
               </div>
+            </div>
+            <div className="flex justify-end border-t border-borde pt-4 mt-4" style={{ gap: '12px' }}>
+              <button onClick={() => { /* set deleting */ }} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-xl transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
+              <button onClick={() => { /* set editing */ }} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
             </div>
           </div>
         )}

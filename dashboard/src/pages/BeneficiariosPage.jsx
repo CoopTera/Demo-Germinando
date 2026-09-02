@@ -172,6 +172,18 @@ export default function BeneficiariosPage() {
     );
   };
 
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(10);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [busqueda, filtro]);
+
+  const paginatedData = React.useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, currentPage, pageSize]);
+
   return (
     <>
       <PageTemplate
@@ -190,11 +202,15 @@ export default function BeneficiariosPage() {
         setViewMode={setViewMode}
         totalItems={beneficiarios.length}
         filteredItemsCount={filteredData.length}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
       >
         {viewMode === 'list' ? (
-          <BeneficiariosTable data={filteredData} onItemClick={setSelectedItem} />
+          <BeneficiariosTable data={paginatedData} onItemClick={setSelectedItem} />
         ) : (
-          <BeneficiariosGrid data={filteredData} onItemClick={setSelectedItem} />
+          <BeneficiariosGrid data={paginatedData} onItemClick={setSelectedItem} />
         )}
       </PageTemplate>
 

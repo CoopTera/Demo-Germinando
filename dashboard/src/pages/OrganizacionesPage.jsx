@@ -47,6 +47,14 @@ export default function OrganizacionesPage() {
     }
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [busqueda, filtroActivo, ciudadActiva]);
+
   const statsObj = useMemo(() => {
     return {
       total: organizaciones.length,
@@ -69,6 +77,11 @@ export default function OrganizacionesPage() {
       return matchesSearch && matchesFilter && matchesCiudad;
     });
   }, [organizaciones, busqueda, filtroActivo, ciudadActiva]);
+
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, currentPage, pageSize]);
 
   const getDetailContent = (org) => {
     if (!org) return null;
@@ -152,13 +165,17 @@ export default function OrganizacionesPage() {
         setViewMode={setViewMode}
         totalItems={organizaciones.length}
         filteredItemsCount={filteredData.length}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
       >
         {/* Table / Grid with generous separation */}
         <div className="pt-2">
           {viewMode === 'list' ? (
-            <OrganizacionesTable data={filteredData} onItemClick={setSelectedItem} />
+            <OrganizacionesTable data={paginatedData} onItemClick={setSelectedItem} />
           ) : (
-            <OrganizacionesGrid data={filteredData} onItemClick={setSelectedItem} />
+            <OrganizacionesGrid data={paginatedData} onItemClick={setSelectedItem} />
           )}
         </div>
       </PageTemplate>
@@ -191,20 +208,25 @@ export default function OrganizacionesPage() {
                   </h4>
                   <div className="flex flex-col" style={{ gap: '8px' }}>
                     {orgConvenios.map(conv => (
-                      <div key={conv.id} className="bg-canvas border border-borde rounded-xl flex items-center justify-between" style={{ padding: '12px 16px' }}>
+                      <button 
+                        key={conv.id} 
+                        onClick={() => navigate('/convenios', { state: { openModalId: conv.id } })}
+                        className="bg-canvas border border-borde rounded-xl flex items-center justify-between text-left hover:bg-superficie-sec hover:border-primario/30 transition-all cursor-pointer" 
+                        style={{ padding: '12px 16px' }}
+                      >
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-texto truncate">{conv.nombre}</p>
+                          <p className="text-sm font-semibold text-texto truncate group-hover:text-primario">{conv.nombre}</p>
                           <p className="text-xs text-pizarra/60">Firma: {conv.fechaFirma} · Vto: {conv.fechaVencimiento}</p>
                         </div>
                         <div className="flex items-center shrink-0" style={{ gap: '12px' }}>
                           <span className={`text-xs font-bold rounded-full ${conv.estado === 'Activo' ? 'bg-exito/10 text-exito' : 'bg-naranja/10 text-naranja'}`} style={{ padding: '3px 10px' }}>
                             {conv.estado}
                           </span>
-                          <button className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer" title="Ver documento (demo)">
+                          <div className="text-pizarra/40 hover:text-primario transition-colors cursor-pointer" title="Ver documento (demo)">
                             <DocumentPdf size={20} />
-                          </button>
+                          </div>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>

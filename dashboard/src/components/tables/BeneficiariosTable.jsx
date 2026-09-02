@@ -53,12 +53,18 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
   };
 
   const cellStyle = (width, extraPadding = {}) => ({
-    width: `${width}px`,
+    ...(width ? { width: `${width}px` } : {}),
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     padding: '16px 20px',
     ...extraPadding
+  });
+
+  const thStyle = (width, extraPadding = {}) => ({
+    ...(width ? cellStyle(width, extraPadding) : { padding: '16px 20px', ...extraPadding }),
+    position: 'relative',
+    userSelect: 'none'
   });
 
   const Resizer = ({ colKey }) => (
@@ -72,19 +78,15 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
     />
   );
 
-  const thStyle = (width, extraPadding = {}) => ({
-    ...cellStyle(width, { padding: '12px 20px', ...extraPadding }),
-    position: 'relative',
-    userSelect: 'none'
-  });
+  const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="bg-white rounded-2xl animate-fade-in-up overflow-hidden">
+    <div className="bg-white rounded-2xl overflow-hidden card-elevated">
       <div className="overflow-x-auto">
-        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
-          <thead className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider">
-            <tr>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col1)}>
+        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
+          <thead>
+            <tr className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider border-b border-borde">
+              <th scope="col" className="border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>
                 <SortableHeader label="DNI" sortKey="dni" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col1" />
               </th>
@@ -105,14 +107,14 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                 <Resizer colKey="col5" />
               </th>
               <th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>
-                <span className="truncate">Tiempo en Prog.</span>
+                <span className="truncate">Tiempo de Beca</span>
                 <Resizer colKey="col6" />
               </th>
               <th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col7)}>
                 <SortableHeader label="Asistencia" sortKey="asistencia" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col7" />
               </th>
-              <th scope="col" className="text-center" style={thStyle(widths.col8)}>
+              <th scope="col" className="text-center" style={thStyle(null, { paddingRight: '24px' })}>
                 <SortableHeader label="Estado" sortKey="estado" sortConfig={sortConfig} requestSort={requestSort} />
               </th>
             </tr>
@@ -190,7 +192,7 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                     <td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col7)}>
                       {row.asistencia || '-'}
                     </td>
-                    <td className="text-sm text-center" style={cellStyle(widths.col8)}>
+                    <td className="text-sm text-center" style={cellStyle(null, { paddingRight: '24px' })}>
                       {row.estado === 'Activo' ? (
                         <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
                           Activo

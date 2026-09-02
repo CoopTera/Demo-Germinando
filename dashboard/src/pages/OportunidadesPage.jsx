@@ -5,7 +5,7 @@ import PageTemplate from '../components/layout/PageTemplate';
 import OportunidadesGrid from '../components/oportunidades/OportunidadesGrid';
 import { staggerContainerVariants, staggerItemVariants } from '../lib/motionTokens';
 
-const FILTROS = ['Todas', 'Licitaciones', 'Fondos', 'Capacitaciones'];
+const FILTROS = ['Todas', 'Licitaciones', 'Compras Públicas', 'Fondos', 'Capacitaciones'];
 
 export default function OportunidadesPage() {
   const [busqueda, setBusqueda] = useState('');
@@ -23,6 +23,7 @@ export default function OportunidadesPage() {
                             opt.organizador?.toLowerCase().includes(busqueda.toLowerCase());
       const matchesFiltro = filtroActivo === 'Todas' || 
                             (filtroActivo === 'Licitaciones' && opt.titulo?.toLowerCase().includes('licitación')) ||
+                            (filtroActivo === 'Compras Públicas' && opt.titulo?.toLowerCase().includes('compra pública')) ||
                             (filtroActivo === 'Fondos' && opt.titulo?.toLowerCase().includes('fondo')) ||
                             (filtroActivo === 'Capacitaciones' && opt.titulo?.toLowerCase().includes('capacitación'));
       return matchesSearch && matchesFiltro;
@@ -76,15 +77,15 @@ export default function OportunidadesPage() {
                   style={{ padding: '20px' }}
                 >
                   <div className="flex flex-col">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${bgPrioridad} ${textPrioridad}`}>
+                    <div className="flex items-center justify-between" style={{ marginBottom: '8px' }}>
+                      <span className={`inline-block rounded-full text-[10px] font-bold uppercase tracking-wider ${bgPrioridad} ${textPrioridad}`} style={{ padding: '2px 8px' }}>
                         Prioridad {alerta.prioridad}
                       </span>
                       <p className="text-xs text-pizarra/50 font-medium">{new Date(alerta.fecha).toLocaleDateString('es-AR')}</p>
                     </div>
-                    <h3 className="font-semibold text-texto text-[14px] leading-snug mb-1">{alerta.mensaje}</h3>
+                    <h3 className="font-semibold text-texto text-[14px] leading-snug" style={{ marginBottom: '4px' }}>{alerta.mensaje}</h3>
                   </div>
-                  <div className="flex justify-end mt-4 pt-3 border-t border-borde">
+                  <div className="flex justify-end border-t border-borde" style={{ marginTop: '16px', paddingTop: '12px' }}>
                     <button className="text-xs font-semibold text-primario hover:underline cursor-pointer">
                       Resolver acción
                     </button>

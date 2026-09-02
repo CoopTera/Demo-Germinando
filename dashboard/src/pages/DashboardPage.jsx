@@ -106,21 +106,21 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* Row 2: Charts */}
-      <motion.div variants={staggerItemVariants} className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: 'clamp(24px, 3vw, 40px)' }}>
-        <div className="lg:col-span-2">
+      <motion.div variants={staggerItemVariants} className="grid grid-cols-1 lg:grid-cols-3 h-[400px]" style={{ gap: 'clamp(24px, 3vw, 40px)' }}>
+        <div className="lg:col-span-2 h-[400px]">
           <EvolucionChart animate={isFirstLoad} />
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 h-[400px]">
           <PresupuestoChart animate={isFirstLoad} />
         </div>
       </motion.div>
 
       {/* Row 3: Feed + Top 5 */}
-      <motion.div variants={staggerItemVariants} className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: '56px' }}>
-        <div>
+      <motion.div variants={staggerItemVariants} className="grid grid-cols-1 lg:grid-cols-2 h-[420px]" style={{ gap: '56px' }}>
+        <div className="h-[420px]">
           <ActividadFeed animate={isFirstLoad} />
         </div>
-        <div>
+        <div className="h-[420px]">
           <TopOrgs animate={isFirstLoad} />
         </div>
       </motion.div>

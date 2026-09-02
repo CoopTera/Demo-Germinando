@@ -10,7 +10,18 @@ export default function MainLayout() {
   const [importOpen, setImportOpen] = useState(false);
   const [importResult, setImportResult] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try { return localStorage.getItem('sidebar-collapsed') === 'true'; } catch { return false; }
+  });
   const mainRef = useRef(null);
+
+  const handleToggleCollapse = () => {
+    setSidebarCollapsed(prev => {
+      const next = !prev;
+      try { localStorage.setItem('sidebar-collapsed', String(next)); } catch {}
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (!mainRef.current) return;
@@ -36,16 +47,23 @@ export default function MainLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden relative">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={handleToggleCollapse}
+      />
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-canvas overflow-hidden">
         <Header 
           onImportClick={() => setImportOpen(true)} 
           onMenuClick={() => setSidebarOpen(true)}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={handleToggleCollapse}
         />
         <main ref={mainRef} className="flex-1 overflow-y-auto scroll-smooth">
-          <div className="max-w-[1600px] mx-auto w-full" style={{ padding: 'clamp(24px, 8vw, 80px)' }}>
+          <div className="w-full" style={{ padding: 'clamp(24px, 4vw, 48px)' }}>
             <Outlet context={{ importResult }} />
           </div>
         </main>

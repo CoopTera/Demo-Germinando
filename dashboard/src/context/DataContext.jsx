@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import * as xlsx from 'xlsx';
-import { organizacionesData, beneficiariosData, conveniosData, talleresData } from '../data/mockData';
+import { organizacionesData, beneficiariosData, conveniosData, talleresData, alertas as alertasData } from '../data/mockData';
 
 const DataContext = createContext();
 
@@ -20,6 +20,7 @@ export const DataProvider = ({ children }) => {
   );
   const [convenios, setConvenios] = useState(conveniosData);
   const [talleres, setTalleres] = useState(talleresData);
+  const [alertas, setAlertas] = useState(alertasData);
   const [hasDashboardAnimated, setHasDashboardAnimated] = useState(false);
 
   const importarDesdeExcel = (file) => {
@@ -124,6 +125,8 @@ export const DataProvider = ({ children }) => {
       setConvenios,
       talleres,
       setTalleres,
+      alertas,
+      setAlertas,
       hasDashboardAnimated,
       setHasDashboardAnimated
     }}>

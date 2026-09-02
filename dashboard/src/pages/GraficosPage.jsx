@@ -42,12 +42,12 @@ export default function GraficosPage() {
       </motion.div>
 
       {/* Charts Grid */}
-      <motion.div variants={staggerItemVariants} className="grid grid-cols-1 xl:grid-cols-2" style={{ gap: '24px' }}>
-        <EvolucionOrgs />
-        <PresupuestoArea />
-        <EspecialidadChart />
-        <EstadoBeneficiariosChart />
-        <CrecimientoBeneficiarios />
+      <motion.div variants={staggerItemVariants} className="grid grid-cols-1 xl:grid-cols-2" style={{ gap: 'clamp(32px, 4vw, 56px)' }}>
+        <div className="h-[400px]"><EvolucionOrgs /></div>
+        <div className="h-[400px]"><PresupuestoArea /></div>
+        <div className="h-[400px]"><EspecialidadChart /></div>
+        <div className="h-[400px]"><EstadoBeneficiariosChart /></div>
+        <div className="h-[400px] xl:col-span-2"><CrecimientoBeneficiarios /></div>
       </motion.div>
     </motion.div>
   );

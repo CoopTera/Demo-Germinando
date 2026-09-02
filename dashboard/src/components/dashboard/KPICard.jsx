@@ -28,7 +28,7 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
         gap: '12px',
       }}
     >
-      <h2 style={{ fontSize: '12px', fontWeight: 600, color: '#494963', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+      <h2 className="truncate" style={{ fontSize: '12px', fontWeight: 600, color: '#494963', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
         {titulo}
       </h2>
 

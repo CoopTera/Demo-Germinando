@@ -14,7 +14,7 @@ export default function OrganizacionesTable({ data, onItemClick }) {
   });
 
   const cellStyle = (width, extraPadding = {}) => ({
-    width: `${width}px`,
+    ...(width ? { width: `${width}px` } : {}),
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
@@ -34,24 +34,26 @@ export default function OrganizacionesTable({ data, onItemClick }) {
   );
 
   const thStyle = (width, extraPadding = {}) => ({
-    ...cellStyle(width, extraPadding),
+    ...(width ? cellStyle(width, extraPadding) : { padding: '12px 16px', ...extraPadding }),
     position: 'relative',
     userSelect: 'none'
   });
 
+  // Calculate total fixed width
+  const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
+
   return (
     <div className="bg-white rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
+        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
           <thead>
             <tr className="bg-superficie-sec border-b border-borde">
               <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>NOMBRE<Resizer colKey="col1" /></th>
               <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col2)}>LOCALIZACIÓN<Resizer colKey="col2" /></th>
               <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col3)}>ESPECIALIZACIÓN<Resizer colKey="col3" /></th>
               <th className="text-xs font-bold text-pizarra tracking-wider text-center border-r border-borde" style={thStyle(widths.col4)}>CONVENIOS<Resizer colKey="col4" /></th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-center border-r border-borde" style={thStyle(widths.col5)}>TALLERES<Resizer colKey="col5" /></th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-right border-r border-borde" style={thStyle(widths.col6)}>PRESUPUESTO<Resizer colKey="col6" /></th>
-              <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(widths.col7, { paddingRight: '24px' })}>ACCIONES</th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-center border-r border-borde" style={thStyle(widths.col5)}>TALLERES ACTIVOS<Resizer colKey="col5" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider text-right" style={thStyle(null, { paddingRight: '24px' })}>PRESUPUESTO</th>
             </tr>
           </thead>
           <tbody>
@@ -78,19 +80,14 @@ export default function OrganizacionesTable({ data, onItemClick }) {
                 <td className="text-sm text-texto font-bold text-center border-r border-borde" style={cellStyle(widths.col5)}>
                   {org.talleres}
                 </td>
-                <td className="text-sm font-bold text-texto text-right border-r border-borde whitespace-nowrap" style={cellStyle(widths.col6)}>
+                <td className="text-sm font-bold text-texto text-right whitespace-nowrap" style={cellStyle(null, { paddingRight: '24px' })}>
                   {typeof org.presupuesto === 'number' ? `$\u00A0${org.presupuesto.toLocaleString('es-AR')}` : String(org.presupuesto || '').replace(/\$\s*/g, '$\u00A0')}
-                </td>
-                <td className="text-center" style={cellStyle(widths.col7, { paddingRight: '24px' })}>
-                  <button className="text-xs font-semibold text-pizarra/70 hover:text-primario transition-colors cursor-pointer">
-                    Editar
-                  </button>
                 </td>
               </tr>
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan="7" className="text-center text-pizarra/60 font-medium" style={{ padding: '32px 16px' }}>
+                <td colSpan="6" className="text-center text-pizarra/60 font-medium" style={{ padding: '32px 16px' }}>
                   No hay organizaciones cargadas. Importá un Excel para comenzar.
                 </td>
               </tr>

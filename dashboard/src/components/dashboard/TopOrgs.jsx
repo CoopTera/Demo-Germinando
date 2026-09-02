@@ -13,12 +13,12 @@ export default function TopOrgs({ organizaciones = topOrganizaciones, animate = 
     <motion.div 
       initial={animate ? { opacity: 0, y: 16 } : false}
       animate={{ opacity: 1, y: 0 }}
-      transition={animate ? { duration: 0.35, delay: 0.15 } : { duration: 0 }}
-      className="bg-white rounded-2xl h-full flex flex-col card-elevated" 
+      transition={animate ? { duration: 0.35, delay: 0.2 } : { duration: 0 }}
+      className="bg-white rounded-2xl flex flex-col card-elevated h-full min-h-[420px]" 
       style={{ padding: '24px' }}
     >
       {/* Title */}
-      <div style={{ marginBottom: '24px' }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
         <h2 className="font-semibold text-pizarra text-base">Top 5 Organizaciones</h2>
       </div>
 

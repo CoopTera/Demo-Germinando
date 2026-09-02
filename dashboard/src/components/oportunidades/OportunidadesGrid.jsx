@@ -30,7 +30,7 @@ export default function OportunidadesGrid({ data }) {
         >
           <div className="flex justify-between items-start" style={{ marginBottom: '16px' }}>
             <span className="inline-flex items-center rounded-full text-xs font-bold uppercase tracking-wider bg-canvas text-pizarra" style={{ padding: '4px 12px' }}>
-              {item.titulo?.includes('Licitación') ? 'Licitación' : item.titulo?.includes('Fondo') ? 'Fondo' : 'Capacitación'}
+              {item.titulo?.includes('Licitación') ? 'Licitación' : item.titulo?.includes('Compra Pública') ? 'Compra Pública' : item.titulo?.includes('Fondo') ? 'Fondo' : 'Capacitación'}
             </span>
           </div>
           
