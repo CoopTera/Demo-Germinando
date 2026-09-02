@@ -99,7 +99,7 @@ export default function DashboardPage() {
           valor="$ 15.610.000"
           variacion={null}
           periodo="Ejercicio 2026"
-          presupuesto={{ porcentaje: 74 }}
+          presupuesto={{ porcentaje: 85 }}
           index={3}
           animate={isFirstLoad}
         />
