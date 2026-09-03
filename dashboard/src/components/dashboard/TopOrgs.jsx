@@ -27,7 +27,7 @@ export default function TopOrgs({ organizaciones = topOrganizaciones, animate = 
         variants={animate ? staggerContainerVariants : undefined}
         initial={animate ? 'hidden' : false}
         animate="show"
-        className="flex flex-col overflow-y-auto flex-1"
+        className="flex flex-col overflow-y-auto flex-1 min-h-0 pr-2 custom-scrollbar"
       >
         {list.map((org, index) => (
           <motion.div

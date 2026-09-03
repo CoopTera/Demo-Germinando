@@ -24,6 +24,7 @@ export default function PageTemplate({
   setCurrentPage,
   pageSize,
   setPageSize,
+  tableControls,
   children
 }) {
   const fileInputRef = useRef(null);
@@ -126,17 +127,16 @@ export default function PageTemplate({
       {stats.length > 0 && (
         <motion.div variants={staggerItemVariants} className="flex flex-wrap items-center" style={{ gap: '16px' }}>
           {stats.map((stat, idx) => (
-            <motion.div 
+            <div 
               key={idx} 
-              whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-2xl text-sm flex items-center card-elevated" 
-              style={{ padding: '12px 20px' }}
+              className="bg-white rounded-2xl text-sm flex items-center shadow-sm cursor-default" 
+              style={{ padding: '12px 20px', border: '1px solid #E2E4EB' }}
             >
               {stat.label && <span className={stat.labelColor || "text-pizarra/50"} style={{ marginRight: '6px' }}>{stat.label}:</span>}
               <span className={`font-bold whitespace-nowrap ${stat.valueColor || 'text-pizarra'}`}>
                 {stat.value}
               </span>
-            </motion.div>
+            </div>
           ))}
         </motion.div>
       )}
@@ -192,6 +192,12 @@ export default function PageTemplate({
                   className={`transition-transform duration-200 ${isFilterOpen ? 'rotate-180' : ''} ${hasActiveFilter ? 'text-white' : 'text-pizarra/40'}`} 
                 />
               </motion.button>
+            )}
+
+            {tableControls && (
+              <div className="flex items-center">
+                {tableControls}
+              </div>
             )}
           </div>
 

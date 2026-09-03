@@ -13,58 +13,49 @@ export default function GraficosPage() {
   return (
     <motion.div 
       className="flex flex-col" 
-      style={{ gap: '32px' }}
+      style={{ gap: '24px' }}
       variants={pageContainerVariants}
       initial="hidden"
       animate="show"
     >
-      {/* Page Title */}
-      <motion.div variants={staggerItemVariants}>
-        <h1 className="text-2xl font-bold text-pizarra">
-          Gráficos
-        </h1>
-        <p className="text-sm text-pizarra/60" style={{ marginTop: '4px' }}>
-          Análisis de evolución del programa y grafo de relaciones
-        </p>
-      </motion.div>
-
-      {/* Quick stats */}
-      <motion.div variants={staggerItemVariants} className="flex flex-wrap items-center" style={{ gap: '16px' }}>
-        <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-2xl text-sm card-elevated flex items-center" style={{ padding: '12px 20px' }}>
-          <span className="text-pizarra/60 mr-1.5">Crecimiento interanual:</span>
-          <span className="font-bold text-exito">+50% organizaciones</span>
-        </motion.div>
-        <motion.div whileHover={{ scale: 1.03 }} className="bg-white rounded-2xl text-sm card-elevated flex items-center" style={{ padding: '12px 20px' }}>
-          <span className="text-pizarra/60 mr-1.5">Ejecución presupuestaria:</span>
-          <span className="font-bold text-primario whitespace-nowrap">
-            <AnimatedCounter value={95.7} suffix="%" />
-          </span>
-        </motion.div>
-      </motion.div>
-
-      {/* Grafo de Vínculos Section */}
-      <motion.div variants={staggerItemVariants} className="flex flex-col" style={{ gap: '16px' }}>
-        <div className="flex flex-col">
-          <h2 className="text-xl font-bold text-pizarra">Grafo de Vínculos</h2>
-          <p className="text-sm text-pizarra/60" style={{ marginTop: '2px' }}>
-            Mapa de relaciones entre organizaciones, convenios, talleres y beneficiarios
+      {/* Header section */}
+      <motion.div variants={staggerItemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-pizarra">
+            Gráficos
+          </h1>
+          <p className="text-sm text-pizarra/60" style={{ marginTop: '4px' }}>
+            Análisis de evolución del programa y grafo de relaciones
           </p>
         </div>
-        <div className="card-elevated rounded-2xl overflow-hidden">
-          <GrafoVinculos />
+
+        {/* Quick stats badges */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="bg-white rounded-2xl text-xs font-medium card-elevated flex items-center" style={{ padding: '10px 16px' }}>
+            <span className="text-pizarra/60 mr-1.5">Crecimiento interanual:</span>
+            <span className="font-bold text-exito">+50% organizaciones</span>
+          </div>
+          <div className="bg-white rounded-2xl text-xs font-medium card-elevated flex items-center" style={{ padding: '10px 16px' }}>
+            <span className="text-pizarra/60 mr-1.5">Ejecución presupuestaria:</span>
+            <span className="font-bold text-primario whitespace-nowrap">
+              <AnimatedCounter value={95.7} suffix="%" />
+            </span>
+          </div>
         </div>
       </motion.div>
 
-      {/* Charts Grid */}
-      <motion.div variants={staggerItemVariants} className="flex flex-col" style={{ gap: '16px' }}>
-        <h2 className="text-xl font-bold text-pizarra">Métricas y Evolución</h2>
-        <div className="grid grid-cols-1 xl:grid-cols-2" style={{ gap: 'clamp(32px, 4vw, 56px)' }}>
-          <div className="h-[400px]"><EvolucionOrgs /></div>
-          <div className="h-[400px]"><PresupuestoArea /></div>
-          <div className="h-[400px]"><EspecialidadChart /></div>
-          <div className="h-[400px]"><EstadoBeneficiariosChart /></div>
-          <div className="h-[400px] xl:col-span-2"><CrecimientoBeneficiarios /></div>
-        </div>
+      {/* Grid of 6 equal half-width cards */}
+      <motion.div 
+        variants={staggerItemVariants} 
+        className="grid grid-cols-1 lg:grid-cols-2" 
+        style={{ gap: '24px' }}
+      >
+        <div className="h-[400px]"><GrafoVinculos /></div>
+        <div className="h-[400px]"><EvolucionOrgs /></div>
+        <div className="h-[400px]"><PresupuestoArea /></div>
+        <div className="h-[400px]"><EspecialidadChart /></div>
+        <div className="h-[400px]"><EstadoBeneficiariosChart /></div>
+        <div className="h-[400px]"><CrecimientoBeneficiarios /></div>
       </motion.div>
     </motion.div>
   );

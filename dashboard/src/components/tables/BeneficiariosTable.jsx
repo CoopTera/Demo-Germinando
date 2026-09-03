@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTableResize } from '../../hooks/useTableResize';
 import { useTableSort } from '../../hooks/useTableSort';
 import SortableHeader from './SortableHeader';
+import ColumnSelector from '../common/ColumnSelector';
 import { useData } from '../../context/DataContext';
 
-export default function BeneficiariosTable({ data = [], onItemClick }) {
+export default function BeneficiariosTable({ data = [], onItemClick, visibleCols = {} }) {
   const { talleres } = useData();
   const { widths, startResize } = useTableResize({
     col1: 100, col2: 180, col3: 200, col4: 200, col5: 120, col6: 140, col7: 100, col8: 120
@@ -70,53 +71,52 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
   const Resizer = ({ colKey }) => (
     <div 
       onMouseDown={(e) => startResize(e, colKey)}
-      style={{
-        position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10
-      }}
-      onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
-      onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'}
-    />
+      className="group"
+      style={{ position: 'absolute', right: -4, top: 0, bottom: 0, width: '8px', cursor: 'col-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <div className="w-[2px] h-4 bg-pizarra/20 group-hover:bg-primario transition-colors rounded-full" />
+    </div>
   );
 
   const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden card-elevated">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde">
       <div className="overflow-x-auto">
         <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
           <thead>
             <tr className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider border-b border-borde">
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>
+              {visibleCols.col1 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>
                 <SortableHeader label="DNI" sortKey="dni" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col1" />
-              </th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>
+              </th>)}
+              {visibleCols.col2 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>
                 <SortableHeader label="Nombre" sortKey="nombre" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col2" />
-              </th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>
+              </th>)}
+              {visibleCols.col3 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>
                 <SortableHeader label="Organización" sortKey="programas" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col3" />
-              </th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>
+              </th>)}
+              {visibleCols.col4 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>
                 <span className="truncate">Talleres</span>
                 <Resizer colKey="col4" />
-              </th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col5)}>
+              </th>)}
+              {visibleCols.col5 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col5)}>
                 <SortableHeader label="Ingreso" sortKey="inicioBeca" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col5" />
-              </th>
-              <th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>
+              </th>)}
+              {visibleCols.col6 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>
                 <span className="truncate">Tiempo de Beca</span>
                 <Resizer colKey="col6" />
-              </th>
-              <th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col7)}>
+              </th>)}
+              {visibleCols.col7 && (<th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col7)}>
                 <SortableHeader label="Asistencia" sortKey="asistencia" sortConfig={sortConfig} requestSort={requestSort} />
                 <Resizer colKey="col7" />
-              </th>
-              <th scope="col" className="text-center" style={thStyle(null, { paddingRight: '24px' })}>
+              </th>)}
+              {visibleCols.col8 && (<th scope="col" className="text-center" style={thStyle(null, { paddingRight: '24px' })}>
                 <SortableHeader label="Estado" sortKey="estado" sortConfig={sortConfig} requestSort={requestSort} />
-              </th>
+              </th>)}
             </tr>
           </thead>
           <tbody className="divide-y divide-borde">
@@ -141,13 +141,13 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                         : `hover:bg-canvas ${index % 2 === 0 ? '' : 'bg-canvas/50'}`
                     }`}
                   >
-                    <td className="text-sm text-texto font-medium border-r border-borde" title={row.dni} style={cellStyle(widths.col1)}>
+                    {visibleCols.col1 && (<td className="text-sm text-texto font-medium border-r border-borde" title={row.dni} style={cellStyle(widths.col1)}>
                       {row.dni}
-                    </td>
-                    <td className="text-sm text-texto font-semibold border-r border-borde" title={row.nombre} style={cellStyle(widths.col2)}>
+                    </td>)}
+                    {visibleCols.col2 && (<td className="text-sm text-texto font-semibold border-r border-borde" title={row.nombre} style={cellStyle(widths.col2)}>
                       {row.nombre}
-                    </td>
-                    <td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col3)}>
+                    </td>)}
+                    {visibleCols.col3 && (<td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col3)}>
                         <div className="flex flex-wrap" style={{ gap: '4px' }}>
                           {org ? (
                             org.split(',').map((o, i) => (
@@ -164,8 +164,8 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                             <span className="text-gray-400 text-xs">Sin organización</span>
                           )}
                         </div>
-                    </td>
-                    <td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col4)}>
+                    </td>)}
+                    {visibleCols.col4 && (<td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col4)}>
                         <div className="flex flex-wrap" style={{ gap: '4px' }}>
                           {benTalleres.length > 0 ? (
                             benTalleres.map((o, i) => (
@@ -182,17 +182,17 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                             <span className="text-gray-400 text-xs">-</span>
                           )}
                         </div>
-                    </td>
-                    <td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col5)}>
+                    </td>)}
+                    {visibleCols.col5 && (<td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col5)}>
                       {formatDate(fecha)}
-                    </td>
-                    <td className="text-sm text-texto font-medium border-r border-borde" title={tiempoProg} style={cellStyle(widths.col6)}>
+                    </td>)}
+                    {visibleCols.col6 && (<td className="text-sm text-texto font-medium border-r border-borde" title={tiempoProg} style={cellStyle(widths.col6)}>
                       {tiempoProg}
-                    </td>
-                    <td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col7)}>
+                    </td>)}
+                    {visibleCols.col7 && (<td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col7)}>
                       {row.asistencia || '-'}
-                    </td>
-                    <td className="text-sm text-center" style={cellStyle(null, { paddingRight: '24px' })}>
+                    </td>)}
+                    {visibleCols.col8 && (<td className="text-sm text-center" style={cellStyle(null, { paddingRight: '24px' })}>
                       {row.estado === 'Activo' ? (
                         <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
                           Activo
@@ -206,7 +206,7 @@ export default function BeneficiariosTable({ data = [], onItemClick }) {
                           {row.estado}
                         </span>
                       )}
-                    </td>
+                    </td>)}
                   </tr>
                 );
               })

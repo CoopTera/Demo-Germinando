@@ -28,9 +28,9 @@ export const kpiData = {
 };
 
 export const alertas = [
-  { id: 1, tipo: "convenio_vencimiento", icono: "calendar", mensaje: "Convenio #2024-089 — Asoc. Manos Unidas vence en 15 días", fecha: "2026-09-10", prioridad: "critica" },
+  { id: 1, tipo: "convenio_vencimiento", icono: "calendar", mensaje: "Programa Reciclar — Cooperativa Sol Naciente vence pronto", fecha: "2026-08-30", prioridad: "critica" },
   { id: 2, tipo: "oportunidad", icono: "tag", mensaje: "Compra Pública: Alimentos", fecha: "2026-08-26", prioridad: "alta" },
-  { id: 3, tipo: "sin_actualizacion", icono: "clock", mensaje: "Taller Gestión de Residuos sin inscriptos", fecha: "2026-08-25", prioridad: "media" }
+  { id: 3, tipo: "sin_actualizacion", icono: "clock", mensaje: "Taller Gestión de Residuos (Recicladores Unidos) sin inscriptos", fecha: "2026-08-25", prioridad: "media" }
 ];
 
 export const topOrganizaciones = [

@@ -27,9 +27,9 @@ export default function EstadoBeneficiariosChart() {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 rounded-xl card-elevated text-xs">
+        <div className="bg-white rounded-lg shadow-md border border-borde text-xs font-sans" style={{ padding: '8px 12px' }}>
           <p className="font-semibold text-pizarra">{payload[0].name}</p>
-          <p className="text-texto font-normal mt-1">
+          <p className="text-texto mt-1">
             <span className="font-bold">{payload[0].value}</span> beneficiarios
           </p>
         </div>
@@ -39,14 +39,14 @@ export default function EstadoBeneficiariosChart() {
   };
 
   return (
-    <div className="bg-white rounded-2xl card-elevated" style={{ padding: '20px' }}>
-      <div className="mb-4">
+    <div className="bg-white rounded-2xl shadow-sm border border-borde h-full flex flex-col" style={{ padding: '20px' }}>
+      <div style={{ marginBottom: '16px' }}>
         <h3 className="font-semibold text-pizarra text-base">
           Estado de Beneficiarios
         </h3>
       </div>
 
-      <div style={{ height: '300px', width: '100%' }}>
+      <div className="flex-1 w-full min-h-0 flex items-center justify-center relative">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

@@ -21,7 +21,6 @@ export default function KPICard({ titulo, valor, variacion, periodo, presupuesto
       initial={animate ? { opacity: 0, y: 16 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={animate ? { duration: 0.35, delay: index * 0.08, ease: 'easeOut' } : { duration: 0 }}
-      whileHover={{ scale: 1.025, transition: { duration: 0.2, ease: 'easeOut' } }}
       className="bg-white rounded-2xl card-elevated flex flex-col cursor-default"
       style={{
         padding: '20px 22px',

@@ -11,6 +11,7 @@ export default function TalleresPage() {
   const { talleres, organizaciones } = useData();
   const [searchTerm, setSearchTerm] = useState(location.state?.filterOrg || location.state?.search || '');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [filtroActivo, setFiltroActivo] = useState('Todos');
 
   const { widths, startResize } = useTableResize({
@@ -37,10 +38,13 @@ export default function TalleresPage() {
   });
 
   const Resizer = ({ colKey }) => (
-    <div onMouseDown={(e) => startResize(e, colKey)}
-         style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10 }}
-         onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
-         onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'} />
+    <div 
+      onMouseDown={(e) => startResize(e, colKey)}
+      className="group"
+      style={{ position: 'absolute', right: -4, top: 0, bottom: 0, width: '8px', cursor: 'col-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <div className="w-[2px] h-4 bg-pizarra/20 group-hover:bg-primario transition-colors rounded-full" />
+    </div>
   );
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,7 +70,7 @@ export default function TalleresPage() {
       filtros={['Todos', 'Abierto', 'En curso', 'Finalizado']}
       filtroActivo={filtroActivo}
       setFiltroActivo={setFiltroActivo}
-      onNew={() => console.log('Nuevo Taller')}
+      onNew={() => setIsNewModalOpen(true)}
       newButtonText="Nuevo Taller"
       totalItems={talleres.length}
       filteredItemsCount={filteredTalleres.length}
@@ -79,7 +83,7 @@ export default function TalleresPage() {
         { label: 'Inscriptos Activos', value: talleres.reduce((acc, t) => acc + t.inscriptos, 0) }
       ]}
     >
-      <div className="bg-white rounded-2xl overflow-hidden card-elevated">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde">
         <div className="overflow-x-auto">
           <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
             <thead className="bg-superficie-sec border-b border-borde">
@@ -94,18 +98,21 @@ export default function TalleresPage() {
             <tbody>
               {paginatedTalleres.map((taller) => (
                 <tr key={taller.id} onClick={() => setSelectedItem(taller)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
+                  <td className="text-sm font-semibold text-texto border-r border-borde truncate" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={taller.nombre}>
+                    {taller.nombre}
+                  </td>
                   <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)}>
-                      <div className="flex flex-wrap" style={{ gap: '4px' }}>
-                        {(taller.org_ids || []).map((id, i) => (
-                          <span key={i} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate cursor-pointer hover:bg-primario/20 transition-colors" style={{ padding: '2px 8px', maxWidth: '100%' }} onClick={(e) => { e.stopPropagation(); navigate('/organizaciones', { state: { filterOrg: getOrgName(id) } }); }} title={getOrgName(id)}>
-                            {getOrgName(id)}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
+                    <div className="flex flex-wrap" style={{ gap: '4px' }}>
+                      {(taller.org_ids || []).map((id, i) => (
+                        <span key={i} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate hover:bg-primario/20 transition-colors" style={{ padding: '2px 8px', maxWidth: '100%' }} onClick={(e) => { e.stopPropagation(); navigate('/organizaciones', { state: { filterOrg: getOrgName(id) } }); }} title={getOrgName(id)}>
+                          {getOrgName(id)}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
                   <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col3)}>{taller.cupo}</td>
                   <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col4)}>{taller.inscriptos}</td>
-                  <td className="text-sm text-center" style={thStyle(widths.col5, { paddingRight: '24px' })}>
+                  <td className="text-sm text-center" style={thStyle(null, { paddingRight: '24px' })}>
                     <span className={`px-2 py-1 rounded-full text-xs font-bold ${taller.estado === 'En curso' ? 'bg-primario/10 text-primario' : taller.estado === 'Finalizado' ? 'bg-pizarra/10 text-pizarra' : 'bg-exito/10 text-exito'}`}>
                       {taller.estado}
                     </span>
@@ -146,6 +153,41 @@ export default function TalleresPage() {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Form Modal */}
+      <Modal isOpen={isNewModalOpen} onClose={() => setIsNewModalOpen(false)} title="Nuevo Taller">
+        <form onSubmit={(e) => { e.preventDefault(); setIsNewModalOpen(false); }} className="flex flex-col" style={{ gap: '16px' }}>
+          <div>
+            <label className="block text-sm font-bold text-pizarra mb-1">Nombre del Taller</label>
+            <input type="text" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} placeholder="Ej: Taller de Oficios..." />
+          </div>
+          <div>
+            <label className="block text-sm font-bold text-pizarra mb-1">Organización a Cargo</label>
+            <select required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20 cursor-pointer" style={{ padding: '10px 16px' }}>
+              <option value="">Seleccionar...</option>
+              {organizaciones.map(org => <option key={org.id} value={org.id}>{org.nombre}</option>)}
+            </select>
+          </div>
+          <div className="grid grid-cols-2" style={{ gap: '16px' }}>
+            <div>
+              <label className="block text-sm font-bold text-pizarra mb-1">Cupo Máximo</label>
+              <input type="number" required min="1" className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} placeholder="Ej: 30" />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-pizarra mb-1">Estado</label>
+              <select required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20 cursor-pointer" style={{ padding: '10px 16px' }}>
+                <option value="Abierto">Abierto</option>
+                <option value="En curso">En curso</option>
+                <option value="Finalizado">Finalizado</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex justify-end border-t border-borde" style={{ gap: '12px', marginTop: '16px', paddingTop: '16px' }}>
+            <button type="button" onClick={() => setIsNewModalOpen(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-xl transition-colors cursor-pointer border border-borde" style={{ padding: '8px 16px' }}>Cancelar</button>
+            <button type="submit" className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Guardar Taller</button>
+          </div>
+        </form>
       </Modal>
     </PageTemplate>
   );

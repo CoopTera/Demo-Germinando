@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { evolucionOrgsData } from '../../data/mockData';
 
 export default function EvolucionChart({ animate = true }) {
+  const [rango, setRango] = useState(12);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const options = [
+    { value: 3, label: 'Últimos 3 meses' },
+    { value: 6, label: 'Últimos 6 meses' },
+    { value: 9, label: 'Últimos 9 meses' },
+    { value: 12, label: 'Últimos 12 meses' },
+    { value: 24, label: 'Últimos 24 meses' }
+  ];
+
+  const datosFiltrados = evolucionOrgsData.slice(-rango);
+
   return (
     <motion.div 
       initial={animate ? { opacity: 0, y: 16 } : false}
@@ -14,11 +27,50 @@ export default function EvolucionChart({ animate = true }) {
     >
       <div className="flex items-center justify-between" style={{ marginBottom: '24px' }}>
         <h2 className="font-semibold text-pizarra text-base">Evolución de Impacto</h2>
-        <span className="text-xs font-medium text-pizarra/50 bg-superficie-sec px-3 py-1 rounded-full">Últimos 12 meses</span>
+        <div className="relative">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="text-xs font-medium text-pizarra/80 bg-superficie-sec border border-borde outline-none cursor-pointer hover:bg-canvas transition-all rounded-full flex items-center justify-between"
+            style={{ padding: '4px 12px', minWidth: '130px' }}
+          >
+            {options.find(o => o.value === rango)?.label}
+            <svg xmlns="http://www.w3.org/2000/svg" className={`w-3 h-3 ml-2 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          {isDropdownOpen && (
+            <>
+              {/* Overlay invisible para cerrar al clickear afuera */}
+              <div 
+                className="fixed inset-0 z-40" 
+                onClick={() => setIsDropdownOpen(false)}
+              />
+              <div className="absolute right-0 mt-1 w-full min-w-[130px] bg-white border border-borde rounded-xl shadow-lg z-50 overflow-hidden py-1">
+                {options.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => {
+                      setRango(opt.value);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-2 text-xs font-medium transition-colors cursor-pointer ${
+                      rango === opt.value 
+                        ? 'bg-primario/10 text-primario' 
+                        : 'text-pizarra hover:bg-superficie-sec hover:text-texto'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
       <div className="flex-1 w-full min-h-[250px]">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={evolucionOrgsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <AreaChart data={datosFiltrados} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorBen" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#6B1330" stopOpacity={0.15}/>

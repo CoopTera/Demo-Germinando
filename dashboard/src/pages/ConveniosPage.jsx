@@ -6,11 +6,14 @@ import Modal from '../components/common/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ConveniosPage() {
-  const { convenios, organizaciones, setConvenios } = useData();
+  const { convenios, organizaciones, talleres, setConvenios } = useData();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+  const [isEditingItem, setIsEditingItem] = useState(false);
+  const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [filtroActivo, setFiltroActivo] = useState('Todos');
 
   useEffect(() => {
@@ -72,10 +75,13 @@ export default function ConveniosPage() {
   const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
 
   const Resizer = ({ colKey }) => (
-    <div onMouseDown={(e) => startResize(e, colKey)}
-         style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10 }}
-         onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
-         onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'} />
+    <div 
+      onMouseDown={(e) => startResize(e, colKey)}
+      className="group"
+      style={{ position: 'absolute', right: -4, top: 0, bottom: 0, width: '8px', cursor: 'col-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <div className="w-[2px] h-4 bg-pizarra/20 group-hover:bg-primario transition-colors rounded-full" />
+    </div>
   );
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,7 +105,7 @@ export default function ConveniosPage() {
       filtros={['Todos', 'Activo', 'Próximos a vencer', 'Por vencer', 'En revisión', 'Finalizado']}
       filtroActivo={filtroActivo}
       setFiltroActivo={setFiltroActivo}
-      onNew={() => console.log('Nuevo Convenio')}
+      onNew={() => setIsNewModalOpen(true)}
       newButtonText="Nuevo Convenio"
       totalItems={convenios.length}
       filteredItemsCount={filteredConvenios.length}
@@ -112,7 +118,7 @@ export default function ConveniosPage() {
         { label: 'Presupuesto Total', value: formatCurrency(convenios.reduce((acc, c) => acc + c.monto, 0)) }
       ]}
     >
-      <div className="bg-white rounded-2xl overflow-hidden card-elevated">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde">
         <div className="overflow-x-auto">
           <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
             <thead className="bg-superficie-sec border-b border-borde">
@@ -163,38 +169,110 @@ export default function ConveniosPage() {
 
       <Modal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} title={selectedItem?.nombre || 'Detalle de Convenio'}>
         {selectedItem && (
-          <div className="space-y-4">
+          <>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Organización</label>
+                <button 
+                  onClick={() => {
+                    setSelectedItem(null);
+                    navigate('/organizaciones', { state: { openModalId: selectedItem.org_id } });
+                  }}
+                  className="text-sm font-semibold text-primario hover:underline cursor-pointer block text-left"
+                >
+                  {getOrgName(selectedItem.org_id)}
+                </button>
+              </div>
+              <div>
+                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Monto Asignado</label>
+                <p className="text-lg font-bold text-texto">{formatCurrency(selectedItem.monto)}</p>
+              </div>
+              <div>
+                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Estado</label>
+                <p className="text-sm font-medium text-texto">{selectedItem.estado}</p>
+              </div>
+              <div className="flex gap-4">
+                <button className="flex-1 bg-white border border-borde text-pizarra hover:bg-canvas rounded-md py-2 font-medium text-sm transition-colors cursor-pointer">
+                  Ver Documento (PDF)
+                </button>
+              </div>
+            </div>
+
+            {/* Mini-listado de talleres vinculados */}
+            {(() => {
+              const convTalleres = talleres.filter(t => t.convenio_id === selectedItem.id);
+              return convTalleres.length > 0 ? (
+                <div style={{ marginTop: '20px' }}>
+                  <h4 className="text-xs font-bold text-pizarra/70 uppercase tracking-wider" style={{ marginBottom: '12px' }}>
+                    Talleres vinculados ({convTalleres.length})
+                  </h4>
+                  <div className="flex flex-col" style={{ gap: '8px' }}>
+                    {convTalleres.map(taller => (
+                      <button 
+                        key={taller.id} 
+                        onClick={() => navigate('/talleres', { state: { filterOrg: taller.nombre } })}
+                        className="bg-canvas border border-borde rounded-xl flex items-center justify-between text-left hover:bg-superficie-sec hover:border-primario/30 transition-all cursor-pointer" 
+                        style={{ padding: '12px 16px' }}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-texto truncate group-hover:text-primario">{taller.nombre}</p>
+                          <p className="text-xs text-pizarra/60">Cupo: {taller.inscriptos}/{taller.cupo}</p>
+                        </div>
+                        <div className="flex items-center shrink-0" style={{ gap: '12px' }}>
+                          <span className={`text-xs font-bold rounded-full ${taller.estado === 'En curso' ? 'bg-primario/10 text-primario' : 'bg-pizarra/10 text-pizarra'}`} style={{ padding: '3px 10px' }}>
+                            {taller.estado}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
+            <div className="flex justify-end border-t border-borde" style={{ marginTop: '20px', paddingTop: '16px', gap: '12px' }}>
+              <button onClick={() => setIsDeletingItem(true)} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-xl transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
+              <button onClick={() => setIsEditingItem(true)} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
+            </div>
+          </>
+        )}
+      </Modal>
+
+      {/* Form Modal */}
+      <Modal isOpen={isNewModalOpen} onClose={() => setIsNewModalOpen(false)} title="Nuevo Convenio">
+        <form onSubmit={(e) => { e.preventDefault(); setIsNewModalOpen(false); }} className="flex flex-col" style={{ gap: '16px' }}>
+          <div>
+            <label className="block text-sm font-bold text-pizarra mb-1">Nombre del Convenio</label>
+            <input type="text" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} placeholder="Ej: Convenio Marco..." />
+          </div>
+          <div className="grid grid-cols-2" style={{ gap: '16px' }}>
             <div>
-              <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Organización</label>
-              <button 
-                onClick={() => {
-                  setSelectedItem(null);
-                  navigate('/organizaciones', { state: { openModalId: selectedItem.org_id } });
-                }}
-                className="text-sm font-semibold text-primario hover:underline cursor-pointer block text-left"
-              >
-                {getOrgName(selectedItem.org_id)}
-              </button>
+              <label className="block text-sm font-bold text-pizarra mb-1">Organización</label>
+              <select required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20 cursor-pointer" style={{ padding: '10px 16px' }}>
+                <option value="">Seleccionar...</option>
+                {organizaciones.map(org => <option key={org.id} value={org.id}>{org.nombre}</option>)}
+              </select>
             </div>
             <div>
-              <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Monto Asignado</label>
-              <p className="text-lg font-bold text-texto">{formatCurrency(selectedItem.monto)}</p>
-            </div>
-            <div>
-              <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Estado</label>
-              <p className="text-sm font-medium text-texto">{selectedItem.estado}</p>
-            </div>
-            <div className="flex gap-4">
-              <button className="flex-1 bg-white border border-borde text-pizarra hover:bg-canvas rounded-md py-2 font-medium text-sm transition-colors cursor-pointer">
-                Ver Documento (PDF)
-              </button>
-            </div>
-            <div className="flex justify-end border-t border-borde pt-4 mt-4" style={{ gap: '12px' }}>
-              <button onClick={() => { /* set deleting */ }} className="text-sm font-semibold text-critico hover:bg-critico/10 rounded-xl transition-colors cursor-pointer border border-critico/20" style={{ padding: '8px 16px' }}>Eliminar</button>
-              <button onClick={() => { /* set editing */ }} className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Editar</button>
+              <label className="block text-sm font-bold text-pizarra mb-1">Monto Asignado ($)</label>
+              <input type="number" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} placeholder="Ej: 500000" />
             </div>
           </div>
-        )}
+          <div className="grid grid-cols-2" style={{ gap: '16px' }}>
+            <div>
+              <label className="block text-sm font-bold text-pizarra mb-1">Fecha de Firma</label>
+              <input type="date" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-pizarra mb-1">Fecha de Vencimiento</label>
+              <input type="date" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} />
+            </div>
+          </div>
+          <div className="flex justify-end border-t border-borde" style={{ gap: '12px', marginTop: '16px', paddingTop: '16px' }}>
+            <button type="button" onClick={() => setIsNewModalOpen(false)} className="text-sm font-semibold text-pizarra hover:bg-canvas rounded-xl transition-colors cursor-pointer border border-borde" style={{ padding: '8px 16px' }}>Cancelar</button>
+            <button type="submit" className="text-sm font-semibold text-white bg-primario hover:bg-primario/90 rounded-xl transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Guardar Convenio</button>
+          </div>
+        </form>
       </Modal>
     </PageTemplate>
   );

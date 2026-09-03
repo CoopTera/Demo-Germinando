@@ -5,9 +5,11 @@ import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
 import Modal from '../components/common/Modal';
 import Drawer from '../components/common/Drawer';
+import ColumnSelector from '../components/common/ColumnSelector';
 import EntityTimeline from '../components/common/EntityTimeline';
 import MiniGraph from '../components/graph/MiniGraph';
 import BeneficiarioForm from '../components/forms/BeneficiarioForm';
+import CustomSelect from '../components/common/CustomSelect';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -25,6 +27,42 @@ export default function BeneficiariosPage() {
   const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   
+  const [visibleCols, setVisibleCols] = useState(() => {
+    const defaultCols = { col1: true, col2: true, col3: true, col4: true, col5: true, col6: true, col7: true, col8: true };
+    try {
+      const saved = localStorage.getItem('cols_beneficiarios');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) {}
+    return defaultCols;
+  });
+
+  const [orderedColumns, setOrderedColumns] = useState(() => {
+    const defaultOrder = [
+      { id: 'col1', label: 'DNI' },
+      { id: 'col2', label: 'Nombre' },
+      { id: 'col3', label: 'Organización' },
+      { id: 'col4', label: 'Talleres' },
+      { id: 'col5', label: 'Ingreso' },
+      { id: 'col6', label: 'Tiempo de Beca' },
+      { id: 'col7', label: 'Asistencia' },
+      { id: 'col8', label: 'Estado' }
+    ];
+    try {
+      const savedOrder = localStorage.getItem('order_beneficiarios');
+      if (savedOrder) {
+        const parsed = JSON.parse(savedOrder);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch(e) {}
+    return defaultOrder;
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('order_beneficiarios', JSON.stringify(orderedColumns));
+  }, [orderedColumns]);
   const [isTallerModalOpen, setIsTallerModalOpen] = useState(false);
   const [selectedTallerId, setSelectedTallerId] = useState('');
   
@@ -206,9 +244,20 @@ export default function BeneficiariosPage() {
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}
         setPageSize={setPageSize}
+        tableControls={
+          viewMode === 'list' && (
+            <ColumnSelector 
+              columns={orderedColumns} 
+              setColumns={setOrderedColumns}
+              visibleColumns={visibleCols} 
+              setVisibleColumns={setVisibleCols} 
+              storageKey="cols_beneficiarios" 
+            />
+          )
+        }
       >
         {viewMode === 'list' ? (
-          <BeneficiariosTable data={paginatedData} onItemClick={setSelectedItem} />
+          <BeneficiariosTable data={paginatedData} onItemClick={setSelectedItem} visibleCols={visibleCols} orderedColumns={orderedColumns} />
         ) : (
           <BeneficiariosGrid data={paginatedData} onItemClick={setSelectedItem} />
         )}
@@ -264,20 +313,15 @@ export default function BeneficiariosPage() {
         <div className="flex flex-col" style={{ gap: '16px', padding: '16px 0' }}>
           <div>
             <label className="block text-sm font-bold text-pizarra mb-2">Seleccionar Taller</label>
-            <select 
+            <CustomSelect 
               value={selectedTallerId} 
-              onChange={(e) => setSelectedTallerId(e.target.value)}
-              className="w-full bg-canvas border border-borde rounded-lg text-texto focus:outline-none focus:border-primario"
-              style={{ padding: '12px' }}
-            >
-              <option value="">-- Elija un taller --</option>
-              {talleres.map(t => (
-                <option key={t.id} value={t.id}>{t.nombre}</option>
-              ))}
-            </select>
+              onChange={setSelectedTallerId}
+              options={talleres.map(t => ({ value: t.id.toString(), label: t.nombre }))}
+              placeholder="-- Elija un taller --"
+            />
           </div>
-          <div className="flex justify-end mt-4" style={{ gap: '8px' }}>
-            <button onClick={() => setIsTallerModalOpen(false)} className="px-4 py-2 text-sm font-semibold text-pizarra border border-borde rounded-md hover:bg-canvas">Cancelar</button>
+          <div className="flex justify-end mt-4" style={{ gap: '12px' }}>
+            <button onClick={() => setIsTallerModalOpen(false)} className="text-sm font-semibold text-pizarra border border-borde rounded-xl hover:bg-canvas transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Cancelar</button>
             <button 
               onClick={() => {
                 if(!selectedTallerId) return;
@@ -291,7 +335,8 @@ export default function BeneficiariosPage() {
                 setIsTallerModalOpen(false);
                 setSelectedTallerId('');
               }} 
-              className="px-4 py-2 text-sm font-semibold text-white bg-primario rounded-md hover:bg-primario/90 disabled:opacity-50"
+              className="text-sm font-semibold text-white bg-primario rounded-xl hover:bg-primario/90 disabled:opacity-50 transition-colors cursor-pointer"
+              style={{ padding: '8px 16px' }}
               disabled={!selectedTallerId}
             >
               Asignar
@@ -309,13 +354,13 @@ export default function BeneficiariosPage() {
               value={seguimientoNota} 
               onChange={(e) => setSeguimientoNota(e.target.value)}
               placeholder="Detalles de la entrevista, avances, observaciones..."
-              className="w-full bg-canvas border border-borde rounded-lg text-texto focus:outline-none focus:border-primario resize-none"
+              className="w-full bg-canvas border border-borde rounded-xl text-texto focus:outline-none focus:ring-2 focus:ring-primario/20 resize-none transition-all"
               rows={4}
               style={{ padding: '12px' }}
             />
           </div>
-          <div className="flex justify-end mt-4" style={{ gap: '8px' }}>
-            <button onClick={() => setIsSeguimientoModalOpen(false)} className="px-4 py-2 text-sm font-semibold text-pizarra border border-borde rounded-xl hover:bg-canvas transition-colors cursor-pointer">Cancelar</button>
+          <div className="flex justify-end mt-4" style={{ gap: '12px' }}>
+            <button onClick={() => setIsSeguimientoModalOpen(false)} className="text-sm font-semibold text-pizarra border border-borde rounded-xl hover:bg-canvas transition-colors cursor-pointer" style={{ padding: '8px 16px' }}>Cancelar</button>
             <button 
               onClick={() => {
                 if(!seguimientoNota.trim()) return;
@@ -328,7 +373,8 @@ export default function BeneficiariosPage() {
                 setIsSeguimientoModalOpen(false);
                 setSeguimientoNota('');
               }} 
-              className="px-4 py-2 text-sm font-semibold text-white bg-primario rounded-xl hover:bg-primario/90 disabled:opacity-50 transition-colors cursor-pointer"
+              className="text-sm font-semibold text-white bg-primario rounded-xl hover:bg-primario/90 disabled:opacity-50 transition-colors cursor-pointer"
+              style={{ padding: '8px 16px' }}
               disabled={!seguimientoNota.trim()}
             >
               Guardar

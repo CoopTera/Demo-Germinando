@@ -43,6 +43,8 @@ export default function PresupuestoChart({ animate = true }) {
             <Tooltip 
               formatter={(value) => `${value}%`}
               contentStyle={{ borderRadius: '8px', border: '1px solid #E3E1E2', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
+              wrapperStyle={{ zIndex: 100 }}
+              allowEscapeViewBox={{ x: true, y: true }}
             />
           </PieChart>
         </ResponsiveContainer>

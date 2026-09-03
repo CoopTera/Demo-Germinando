@@ -15,8 +15,7 @@ export default function GrafoVinculos() {
   const { organizaciones, beneficiarios, convenios, talleres } = useData();
   const containerRef = useRef(null);
   const fgRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 900, height: 700 });
-  const [showControls, setShowControls] = useState(true);
+  const [dimensions, setDimensions] = useState({ width: 900, height: 700 });  const [showControls, setShowControls] = useState(false);
   
   // Controles de visualización tipo Obsidian
   const [layers, setLayers] = useState({
@@ -37,9 +36,8 @@ export default function GrafoVinculos() {
     const updateDimensions = () => {
       if (containerRef.current) {
         const width = containerRef.current.clientWidth;
-        // Tomamos una altura óptima para el contenedor embebido
-        const height = Math.max(500, Math.min(600, window.innerHeight - 250));
-        if (width > 0) setDimensions({ width, height });
+        const height = containerRef.current.clientHeight || 300;
+        if (width > 0 && height > 0) setDimensions({ width, height });
       }
     };
     updateDimensions();
@@ -84,14 +82,11 @@ export default function GrafoVinculos() {
         const primaryOrg = organizaciones.find(o => o.nombre === ben.programas);
         
         if (ben.talleres && ben.talleres.length > 0 && layers.talleres) {
-          // If they explicitly have talleres assigned, link them directly
           ben.talleres.forEach(tId => {
             links.push({ source: bId, target: `tall-${tId}` });
           });
-          // Also link to primary org if they have one
           if (primaryOrg) links.push({ source: bId, target: `org-${primaryOrg.id}` });
         } else if (primaryOrg) {
-          // Fallback logic for mock data without explicit talleres
           const orgTalleres = talleres.filter(t => (t.org_ids || []).includes(primaryOrg.id));
           if (layers.talleres && orgTalleres.length > 0) {
             const randomTaller = orgTalleres[index % orgTalleres.length];
@@ -130,7 +125,6 @@ export default function GrafoVinculos() {
   const handleNodeCanvasObject = useCallback((node, ctx, globalScale) => {
     const label = node.label;
     const fontSize = 12 / globalScale;
-    // Apply the nodeSizeMultiplier at render time instead of data time
     const nodeSize = node.baseSize * graphConfig.nodeSizeMultiplier;
     const nodeRadius = Math.sqrt(nodeSize) * 1.5;
 
@@ -173,110 +167,112 @@ export default function GrafoVinculos() {
     if (fgRef.current) {
       fgRef.current.d3Force('charge').strength(-graphConfig.repulsion);
       fgRef.current.d3Force('link').distance(link => link.isCrossLink ? graphConfig.linkDistance * 3 : graphConfig.linkDistance);
-      // Re-heat the simulation so it adjusts to new physics
       fgRef.current.d3ReheatSimulation();
     }
   }, [graphData, graphConfig.repulsion, graphConfig.linkDistance]);
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden relative" style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="bg-white rounded-2xl shadow-sm border border-borde h-full w-full overflow-hidden relative flex flex-col" style={{ padding: '20px' }}>
       
-      {/* Floating Legend - Top Left */}
-      <div style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 10, display: 'flex', gap: '8px', flexWrap: 'wrap', pointerEvents: 'none' }}>
+      {/* Header section */}
+      <div className="flex items-center justify-between mb-2 shrink-0">
+        <h3 className="font-semibold text-pizarra text-base">
+          Grafo de Vínculos
+        </h3>
+        <button 
+          type="button"
+          onClick={() => setShowControls(!showControls)}
+          className="text-pizarra/70 hover:text-pizarra hover:bg-canvas transition-colors cursor-pointer rounded-lg border border-borde/60"
+          style={{ padding: '6px' }}
+          title="Ajustes del Grafo"
+        >
+          <SettingsAdjust size={18} />
+        </button>
+      </div>
+
+      {/* Legend items */}
+      <div className="flex items-center gap-2 flex-wrap mb-3 shrink-0">
         {LEGEND_ITEMS.map((item) => (
-          <div key={item.label} className="bg-white" style={{ padding: '6px 12px', borderRadius: '99px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: item.color, display: 'inline-block' }} />
-            <span style={{ fontSize: '12px', fontWeight: 600, color: '#494963' }}>{item.label}</span>
+          <div key={item.label} className="bg-canvas text-[11px] font-medium text-pizarra px-2.5 py-0.5 rounded-full flex items-center gap-1.5 border border-borde/50">
+            <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: item.color }} />
+            <span>{item.label}</span>
           </div>
         ))}
       </div>
 
-      {/* Floating Controls - Top Right */}
-      <div style={{ position: 'absolute', top: '24px', right: '24px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-end' }}>
-        <button 
-          onClick={() => setShowControls(!showControls)}
-          className="bg-white text-pizarra hover:text-primario transition-colors cursor-pointer"
-          style={{ padding: '10px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          title="Ajustes del Grafo"
-        >
-          <SettingsAdjust size={20} />
-        </button>
-
-        {showControls && (
-          <div className="bg-white rounded-2xl" style={{ padding: '20px', width: '280px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div>
-              <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a2e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Filtros de Nodos</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {Object.entries(layers).map(([key, value]) => (
-                  <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={value} 
-                      onChange={(e) => setLayers(p => ({...p, [key]: e.target.checked}))} 
-                      style={{ accentColor: '#6B1330', width: '16px', height: '16px' }}
-                    />
-                    <span style={{ fontSize: '13px', fontWeight: 500, color: '#494963' }}>
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
+      {/* Settings popover */}
+      {showControls && (
+        <div className="absolute top-14 right-5 bg-white rounded-2xl shadow-xl border border-borde w-64 z-30 flex flex-col" style={{ padding: '16px', gap: '16px' }}>
+          <div>
+            <h4 style={{ fontSize: '12px', fontWeight: 700, color: '#1a1a2e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Filtros</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {Object.entries(layers).map(([key, value]) => (
+                <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={value} 
+                    onChange={(e) => setLayers(p => ({...p, [key]: e.target.checked}))} 
+                    style={{ accentColor: '#6B1330', width: '14px', height: '14px' }}
+                  />
+                  <span style={{ fontSize: '12px', fontWeight: 500, color: '#494963' }}>
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </span>
+                </label>
+              ))}
             </div>
+          </div>
 
-            <div style={{ height: '1px', backgroundColor: '#EAE9EE', width: '100%' }} />
+          <div style={{ height: '1px', backgroundColor: '#EAE9EE', width: '100%' }} />
 
-            <div>
-              <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a2e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>Físicas</h4>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {/* Slider Repulsion */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#494963' }}>Repulsión</span>
-                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>{graphConfig.repulsion}</span>
-                  </div>
-                  <input 
-                    type="range" min="50" max="600" step="10"
-                    value={graphConfig.repulsion}
-                    onChange={(e) => setGraphConfig(p => ({...p, repulsion: parseInt(e.target.value)}))}
-                    style={{ width: '100%', accentColor: '#6B1330' }}
-                  />
+          <div>
+            <h4 style={{ fontSize: '12px', fontWeight: 700, color: '#1a1a2e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>Físicas</h4>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#494963' }}>Repulsión</span>
+                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>{graphConfig.repulsion}</span>
                 </div>
+                <input 
+                  type="range" min="50" max="600" step="10"
+                  value={graphConfig.repulsion}
+                  onChange={(e) => setGraphConfig(p => ({...p, repulsion: parseInt(e.target.value)}))}
+                  style={{ width: '100%', accentColor: '#6B1330' }}
+                />
+              </div>
 
-                {/* Slider Link Distance */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#494963' }}>Largo de enlaces</span>
-                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>{graphConfig.linkDistance}</span>
-                  </div>
-                  <input 
-                    type="range" min="10" max="150" step="5"
-                    value={graphConfig.linkDistance}
-                    onChange={(e) => setGraphConfig(p => ({...p, linkDistance: parseInt(e.target.value)}))}
-                    style={{ width: '100%', accentColor: '#6B1330' }}
-                  />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#494963' }}>Largo de enlaces</span>
+                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>{graphConfig.linkDistance}</span>
                 </div>
+                <input 
+                  type="range" min="10" max="150" step="5"
+                  value={graphConfig.linkDistance}
+                  onChange={(e) => setGraphConfig(p => ({...p, linkDistance: parseInt(e.target.value)}))}
+                  style={{ width: '100%', accentColor: '#6B1330' }}
+                />
+              </div>
 
-                {/* Slider Node Size */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#494963' }}>Tamaño de nodos</span>
-                    <span style={{ fontSize: '12px', color: '#9ca3af' }}>{graphConfig.nodeSizeMultiplier}x</span>
-                  </div>
-                  <input 
-                    type="range" min="0.5" max="2.5" step="0.1"
-                    value={graphConfig.nodeSizeMultiplier}
-                    onChange={(e) => setGraphConfig(p => ({...p, nodeSizeMultiplier: parseFloat(e.target.value)}))}
-                    style={{ width: '100%', accentColor: '#6B1330' }}
-                  />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: '#494963' }}>Tamaño de nodos</span>
+                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>{graphConfig.nodeSizeMultiplier}x</span>
                 </div>
+                <input 
+                  type="range" min="0.5" max="2.5" step="0.1"
+                  value={graphConfig.nodeSizeMultiplier}
+                  onChange={(e) => setGraphConfig(p => ({...p, nodeSizeMultiplier: parseFloat(e.target.value)}))}
+                  style={{ width: '100%', accentColor: '#6B1330' }}
+                />
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <div ref={containerRef} style={{ width: '100%', height: dimensions.height, backgroundColor: '#FAFAFA' }}>
+      {/* Canvas container */}
+      <div ref={containerRef} className="flex-1 w-full min-h-0 rounded-xl overflow-hidden" style={{ backgroundColor: '#FAFAFA' }}>
         <ForceGraph2D
           ref={fgRef}
           graphData={graphData}

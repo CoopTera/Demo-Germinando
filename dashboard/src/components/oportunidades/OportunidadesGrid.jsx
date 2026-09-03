@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
-export default function OportunidadesGrid({ data }) {
+export default function OportunidadesGrid({ data, onItemClick }) {
   if (data.length === 0) {
     return (
       <div className="col-span-full text-center text-pizarra/60 font-medium bg-white rounded-2xl card-elevated" style={{ padding: '48px 0' }}>
@@ -22,6 +22,7 @@ export default function OportunidadesGrid({ data }) {
       {data.map((item) => (
         <motion.div 
           key={item.id} 
+          onClick={() => onItemClick && onItemClick(item)}
           variants={staggerItemVariants}
           whileHover={{ scale: 1.025 }}
           whileTap={{ scale: 0.98 }}

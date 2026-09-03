@@ -36,7 +36,7 @@ export default function ActividadFeed({ animate = true }) {
         variants={animate ? staggerContainerVariants : undefined}
         initial={animate ? 'hidden' : false}
         animate="show"
-        className="flex flex-col flex-1 overflow-y-auto pr-2" 
+        className="flex flex-col flex-1 overflow-y-auto pr-2 min-h-0 custom-scrollbar" 
         style={{ gap: '24px' }}
       >
         {actividadReciente.map((item, i) => (

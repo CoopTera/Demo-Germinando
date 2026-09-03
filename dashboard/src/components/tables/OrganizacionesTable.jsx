@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function OrganizacionesTable({ data = [] }) {
+export default function OrganizacionesTable({ data = [], onItemClick }) {
   const formatCurrency = (amount) => {
     if (typeof amount !== 'number') return '$ 0';
     return amount.toLocaleString('es-AR', {
@@ -19,7 +19,7 @@ export default function OrganizacionesTable({ data = [] }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl animate-fade-in-up overflow-hidden">
+    <div className="bg-white rounded-2xl animate-fade-in-up overflow-hidden shadow-sm border border-borde">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider">
@@ -30,7 +30,6 @@ export default function OrganizacionesTable({ data = [] }) {
               <th scope="col" className="px-5 py-3 text-center">Convenios</th>
               <th scope="col" className="px-5 py-3 text-center">Talleres</th>
               <th scope="col" className="px-5 py-3 text-right">Presupuesto</th>
-              <th scope="col" className="px-5 py-3 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-borde">
@@ -38,7 +37,8 @@ export default function OrganizacionesTable({ data = [] }) {
               data.map((org, index) => (
                 <tr
                   key={org.id}
-                  className={`row-hover-accent relative transition-colors ${
+                  onClick={() => onItemClick?.(org)}
+                  className={`row-hover-accent relative transition-all cursor-pointer hover:bg-superficie-sec/50 ${
                     index % 2 === 0 ? '' : 'bg-canvas/50'
                   }`}
                 >
@@ -66,22 +66,12 @@ export default function OrganizacionesTable({ data = [] }) {
                   <td className="px-5 py-5 text-sm text-texto text-right font-semibold">
                     {formatCurrency(org.presupuesto)}
                   </td>
-                  <td className="px-5 py-5 text-sm text-texto text-center">
-                    <button
-                      type="button"
-                      className="px-3 py-1.5 text-xs font-semibold text-pizarra/70 hover:text-primario border border-borde rounded-lg hover:bg-superficie-sec transition-colors cursor-pointer"
-                      title={`Editar ${org.nombre}`}
-                      aria-label={`Editar ${org.nombre}`}
-                    >
-                      Editar
-                    </button>
-                  </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={6}
                   className="px-5 py-8 text-center text-sm text-pizarra/70"
                 >
                   No se encontraron organizaciones registradas.
