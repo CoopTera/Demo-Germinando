@@ -8,8 +8,15 @@ import CrecimientoBeneficiarios from '../components/charts/CrecimientoBeneficiar
 import GrafoVinculos from '../components/graph/GrafoVinculos';
 import AnimatedCounter from '../components/common/AnimatedCounter';
 import { pageContainerVariants, staggerItemVariants } from '../lib/motionTokens';
+import { useData } from '../context/DataContext';
 
 export default function GraficosPage() {
+  const { organizaciones, convenios } = useData();
+
+  const totalAsignado = convenios.reduce((acc, c) => acc + (c.monto || 0), 0);
+  const ejecutadoMonto = convenios.filter(c => c.estado === 'Activo' || c.estado === 'Finalizado').reduce((acc, c) => acc + (c.monto || 0), 0);
+  const porcentajeEjecutado = totalAsignado > 0 ? parseFloat(((ejecutadoMonto / totalAsignado) * 100).toFixed(1)) : 0;
+
   return (
     <motion.div 
       className="flex flex-col" 
@@ -32,13 +39,13 @@ export default function GraficosPage() {
         {/* Quick stats badges */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="bg-white rounded-2xl text-xs font-medium card-elevated flex items-center" style={{ padding: '10px 16px' }}>
-            <span className="text-pizarra/60 mr-1.5">Crecimiento interanual:</span>
-            <span className="font-bold text-exito">+50% organizaciones</span>
+            <span className="text-pizarra/60 mr-1.5">Unidades registradas:</span>
+            <span className="font-bold text-exito">{organizaciones.length} organizaciones</span>
           </div>
           <div className="bg-white rounded-2xl text-xs font-medium card-elevated flex items-center" style={{ padding: '10px 16px' }}>
             <span className="text-pizarra/60 mr-1.5">Ejecución presupuestaria:</span>
             <span className="font-bold text-primario whitespace-nowrap">
-              <AnimatedCounter value={95.7} suffix="%" />
+              <AnimatedCounter value={porcentajeEjecutado} suffix="%" />
             </span>
           </div>
         </div>

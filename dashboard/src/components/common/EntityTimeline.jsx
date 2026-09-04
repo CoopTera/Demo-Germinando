@@ -54,9 +54,8 @@ export default function EntityTimeline({ historial, onEdit, onDelete }) {
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
         transition={{ duration: 0.5 }}
-        style={{ transformOrigin: 'top' }}
         className="absolute bg-borde" 
-        style={{ left: '28px', top: '16px', bottom: '16px', width: '1px' }} 
+        style={{ left: '28px', top: '16px', bottom: '16px', width: '1px', transformOrigin: 'top' }} 
       />
 
       <motion.div 

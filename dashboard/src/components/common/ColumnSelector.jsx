@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { List } from '@carbon/icons-react';
+import { motion } from 'framer-motion';
 
 export default function ColumnSelector({ columns, setColumns, visibleColumns, setVisibleColumns, storageKey }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,10 @@ export default function ColumnSelector({ columns, setColumns, visibleColumns, se
 
   return (
     <div className="relative" ref={containerRef}>
-      <button 
+      <motion.button 
+        type="button"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-2 text-sm font-semibold rounded-xl transition-all cursor-pointer card-elevated border select-none ${
           isOpen ? 'bg-white text-primario border-primario/30' : 'bg-white text-pizarra hover:text-primario hover:bg-canvas border-borde'
@@ -68,9 +72,9 @@ export default function ColumnSelector({ columns, setColumns, visibleColumns, se
         title="Mostrar/Ocultar Columnas"
         style={{ padding: '9px 16px' }}
       >
-        <List size={16} />
+        <List size={16} className="text-pizarra/60" />
         <span className="hidden sm:inline font-semibold">Columnas</span>
-      </button>
+      </motion.button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-borde z-50" style={{ padding: '8px 0' }}>

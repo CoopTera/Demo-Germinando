@@ -1,28 +1,31 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { useData } from '../../context/DataContext';
-import { beneficiariosData } from '../../data/mockData';
 
-const COLORS = ['#22C55E', '#E42153']; // Verde para Activos, Rojo para Sin seguimiento
+const COLORS = ['#22C55E', '#E42153', '#FF7402'];
 
 export default function EstadoBeneficiariosChart() {
   const { beneficiarios } = useData();
-  const displayData = beneficiarios && beneficiarios.length > 0 ? beneficiarios : beneficiariosData;
 
   const chartData = useMemo(() => {
+    if (!beneficiarios || beneficiarios.length === 0) return [];
     let activos = 0;
-    let inactivos = 0;
-    displayData.forEach(b => {
-      const isSinSeguimiento = b.alerta || b.estado === 'Sin seguimiento';
-      if (isSinSeguimiento) inactivos++;
+    let sinSeguimiento = 0;
+    let suspendidos = 0;
+
+    beneficiarios.forEach(b => {
+      if (b.estado === 'Suspendido') suspendidos++;
+      else if (b.alerta || b.estado === 'Sin seguimiento') sinSeguimiento++;
       else activos++;
     });
 
-    return [
-      { name: 'Activos', value: activos },
-      { name: 'Sin seguimiento', value: inactivos }
-    ];
-  }, [displayData]);
+    const res = [];
+    if (activos > 0) res.push({ name: 'Activos', value: activos });
+    if (sinSeguimiento > 0) res.push({ name: 'Sin seguimiento', value: sinSeguimiento });
+    if (suspendidos > 0) res.push({ name: 'Suspendidos', value: suspendidos });
+
+    return res;
+  }, [beneficiarios]);
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -47,28 +50,31 @@ export default function EstadoBeneficiariosChart() {
       </div>
 
       <div className="flex-1 w-full min-h-0 flex items-center justify-center relative">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              outerRadius={90}
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              verticalAlign="bottom"
-              wrapperStyle={{ fontSize: '11px', paddingTop: '20px' }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                outerRadius={90}
+                dataKey="value"
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                verticalAlign="bottom"
+                wrapperStyle={{ fontSize: '11px', paddingTop: '20px' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-xs text-pizarra/50 italic">No hay datos de beneficiarios</div>
+        )}
       </div>
     </div>
   );
 }
-

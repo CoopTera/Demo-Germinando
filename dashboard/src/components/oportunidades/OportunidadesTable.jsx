@@ -23,14 +23,7 @@ export default function OportunidadesTable({ data }) {
     ...extraPadding
   });
 
-  const Resizer = ({ colKey }) => (
-    <div 
-      onMouseDown={(e) => startResize(e, colKey)}
-      style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '4px', cursor: 'col-resize', backgroundColor: '#E3E1E2', zIndex: 10 }}
-      onMouseEnter={(e) => e.target.style.backgroundColor = '#6B1330'}
-      onMouseLeave={(e) => e.target.style.backgroundColor = '#E3E1E2'}
-    />
-  );
+  // Resizer inlined in JSX
 
   const thStyle = (width, extraPadding = {}) => ({
     ...cellStyle(width, extraPadding),
@@ -44,9 +37,9 @@ export default function OportunidadesTable({ data }) {
         <table className="text-left border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
           <thead>
             <tr className="border-b border-borde bg-superficie-sec">
-              <th className="text-xs font-bold text-pizarra tracking-wider uppercase border-r border-borde" style={thStyle(widths.col1)}>Título<Resizer colKey="col1" /></th>
-              <th className="text-xs font-bold text-pizarra tracking-wider uppercase border-r border-borde" style={thStyle(widths.col2)}>Organizador<Resizer colKey="col2" /></th>
-              <th className="text-xs font-bold text-pizarra tracking-wider uppercase border-r border-borde" style={thStyle(widths.col3)}>Fecha / Plazo<Resizer colKey="col3" /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider uppercase border-r border-borde" style={thStyle(widths.col1)}>Título<div onMouseDown={(e) => startResize(e, "col1")} style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", cursor: "col-resize", backgroundColor: "#E3E1E2", zIndex: 10 }} onMouseEnter={(e) => e.target.style.backgroundColor = "#6B1330"} onMouseLeave={(e) => e.target.style.backgroundColor = "#E3E1E2"} /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider uppercase border-r border-borde" style={thStyle(widths.col2)}>Organizador<div onMouseDown={(e) => startResize(e, "col2")} style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", cursor: "col-resize", backgroundColor: "#E3E1E2", zIndex: 10 }} onMouseEnter={(e) => e.target.style.backgroundColor = "#6B1330"} onMouseLeave={(e) => e.target.style.backgroundColor = "#E3E1E2"} /></th>
+              <th className="text-xs font-bold text-pizarra tracking-wider uppercase border-r border-borde" style={thStyle(widths.col3)}>Fecha / Plazo<div onMouseDown={(e) => startResize(e, "col3")} style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", cursor: "col-resize", backgroundColor: "#E3E1E2", zIndex: 10 }} onMouseEnter={(e) => e.target.style.backgroundColor = "#6B1330"} onMouseLeave={(e) => e.target.style.backgroundColor = "#E3E1E2"} /></th>
               <th className="text-xs font-bold text-pizarra tracking-wider uppercase text-center" style={thStyle(widths.col4)}>Acción</th>
             </tr>
           </thead>

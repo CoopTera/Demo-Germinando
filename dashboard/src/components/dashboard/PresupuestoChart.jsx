@@ -2,14 +2,30 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import AnimatedCounter from '../common/AnimatedCounter';
+import { useData } from '../../context/DataContext';
 
-const data = [
-  { name: 'Ejecutado', value: 85 },
-  { name: 'Disponible', value: 15 }
-];
 const COLORS = ['#FF7402', '#EAE9EE'];
 
 export default function PresupuestoChart({ animate = true }) {
+  const { convenios } = useData();
+
+  const totalAsignado = convenios.reduce((acc, c) => acc + (c.monto || 0), 0);
+  const ejecutadoMonto = convenios.filter(c => c.estado === 'Activo' || c.estado === 'Finalizado').reduce((acc, c) => acc + (c.monto || 0), 0);
+  const disponibleMonto = Math.max(0, totalAsignado - ejecutadoMonto);
+  const porcentajeEjecutado = totalAsignado > 0 ? Math.round((ejecutadoMonto / totalAsignado) * 100) : 0;
+  const porcentajeDisponible = 100 - porcentajeEjecutado;
+
+  const data = totalAsignado > 0 ? [
+    { name: 'Ejecutado', value: porcentajeEjecutado },
+    { name: 'Disponible', value: porcentajeDisponible }
+  ] : [
+    { name: 'Sin datos', value: 100 }
+  ];
+
+  const formatCurrency = (val) => {
+    return `$ ${val.toLocaleString('es-AR')}`;
+  };
+
   return (
     <motion.div 
       initial={animate ? { opacity: 0, y: 16 } : false}
@@ -19,7 +35,7 @@ export default function PresupuestoChart({ animate = true }) {
       style={{ padding: '24px' }}
     >
       <div style={{ marginBottom: '24px' }}>
-        <h2 className="font-semibold text-pizarra text-base">Presupuesto</h2>
+        <h2 className="font-semibold text-pizarra text-base">Presupuesto Ejecutado</h2>
       </div>
       <div className="flex-1 w-full relative min-h-[200px] flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
@@ -37,7 +53,7 @@ export default function PresupuestoChart({ animate = true }) {
               animationEasing="ease-out"
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={totalAsignado > 0 ? COLORS[index % COLORS.length] : '#EAE9EE'} />
               ))}
             </Pie>
             <Tooltip 
@@ -51,9 +67,9 @@ export default function PresupuestoChart({ animate = true }) {
         {/* Center Text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-3xl font-bold text-texto">
-            <AnimatedCounter value={85} suffix="%" animate={animate} />
+            <AnimatedCounter value={porcentajeEjecutado} suffix="%" animate={animate} />
           </span>
-          <span className="text-sm font-bold text-pizarra mt-1">$ 13.268.500</span>
+          <span className="text-sm font-bold text-pizarra mt-1">{formatCurrency(ejecutadoMonto)}</span>
           <span className="text-[10px] font-semibold text-pizarra/60 uppercase tracking-wider mt-0.5">Ejecutado</span>
         </div>
       </div>
@@ -61,15 +77,15 @@ export default function PresupuestoChart({ animate = true }) {
         <div className="flex items-start gap-2">
           <div className="w-3 h-3 rounded-full bg-naranja mt-1 shrink-0" />
           <div className="flex flex-col">
-            <span className="text-xs text-texto font-medium">Ejecutado (85%)</span>
-            <span className="text-xs font-bold text-pizarra/60 mt-0.5">$ 13.268.500</span>
+            <span className="text-xs text-texto font-medium">Ejecutado ({porcentajeEjecutado}%)</span>
+            <span className="text-xs font-bold text-pizarra/60 mt-0.5">{formatCurrency(ejecutadoMonto)}</span>
           </div>
         </div>
         <div className="flex items-start gap-2">
           <div className="w-3 h-3 rounded-full bg-superficie-sec mt-1 shrink-0" />
           <div className="flex flex-col">
-            <span className="text-xs text-texto font-medium">Disponible (15%)</span>
-            <span className="text-xs font-bold text-pizarra/60 mt-0.5">$ 2.341.500</span>
+            <span className="text-xs text-texto font-medium">Disponible ({porcentajeDisponible}%)</span>
+            <span className="text-xs font-bold text-pizarra/60 mt-0.5">{formatCurrency(disponibleMonto)}</span>
           </div>
         </div>
       </div>

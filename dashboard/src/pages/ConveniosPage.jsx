@@ -17,9 +17,9 @@ export default function ConveniosPage() {
   const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [filtroActivo, setFiltroActivo] = useState('Todos');
   const [visibleCols, setVisibleCols] = useState(() => {
-    const defaultCols = { col1: true, col2: true, col3: true, col4: true, col5: true, col6: true };
+    const defaultCols = { col1: true, col2: true, col4: true, col5: true, col3: true, col5: true, col6: true };
     try {
-      const saved = localStorage.getItem('cols_convenios');
+      const saved = localStorage.getItem('cols_convenios_v3');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object') return parsed;
@@ -32,13 +32,13 @@ export default function ConveniosPage() {
     const defaultOrder = [
       { id: 'col1', label: 'Nombre' },
       { id: 'col2', label: 'Organización Vinculada' },
-      { id: 'col3', label: 'Monto' },
       { id: 'col4', label: 'Firma' },
       { id: 'col5', label: 'Vencimiento' },
+      { id: 'col3', label: 'Monto' },
       { id: 'col6', label: 'Estado' }
     ];
     try {
-      const savedOrder = localStorage.getItem('order_convenios');
+      const savedOrder = localStorage.getItem('order_convenios_v3');
       if (savedOrder) {
         const parsed = JSON.parse(savedOrder);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -48,7 +48,7 @@ export default function ConveniosPage() {
   });
 
   React.useEffect(() => {
-    localStorage.setItem('order_convenios', JSON.stringify(orderedColumns));
+    localStorage.setItem('order_convenios_v3', JSON.stringify(orderedColumns));
   }, [orderedColumns]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function ConveniosPage() {
           setColumns={setOrderedColumns}
           visibleColumns={visibleCols} 
           setVisibleColumns={setVisibleCols} 
-          storageKey="cols_convenios" 
+          storageKey="cols_convenios_v3" 
         />
       }
     >

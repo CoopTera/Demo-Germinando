@@ -1,3 +1,4 @@
+import { formatDate } from "../../utils/formatters";
 import React from 'react';
 import DataTable from './DataTable';
 
@@ -35,22 +36,22 @@ export default function ConveniosTable({ data = [], onItemClick, visibleCols = {
       }
     },
     {
-      id: 'col3', label: 'Monto', sortKey: 'monto', width: 150,
-      headerClassName: 'text-right', cellClassName: 'text-right font-bold',
-      renderCell: (row) => formatCurrency(row.monto)
-    },
-    {
       id: 'col4', label: 'Firma', sortKey: 'fechaFirma', width: 120,
-      renderCell: (row) => row.fechaFirma
+      renderCell: (row) => formatDate(row.fechaFirma)
     },
     {
       id: 'col5', label: 'Vencimiento', sortKey: 'fechaVencimiento', width: 120,
       cellClassName: (row) => {
-        const parts = row.fechaVencimiento.split('/');
-        const isExpiring = parts.length === 3 && parts[2] === '2024';
+        const parts = formatDate(row.fechaVencimiento).split('/');
+        const isExpiring = parts.length === 3 && parts[0] === '2024';
         return isExpiring ? 'text-naranja font-bold' : '';
       },
-      renderCell: (row) => row.fechaVencimiento
+      renderCell: (row) => formatDate(row.fechaVencimiento)
+    },
+    {
+      id: 'col3', label: 'Monto', sortKey: 'monto', width: 150,
+      headerClassName: 'text-right', cellClassName: 'text-right font-bold',
+      renderCell: (row) => formatCurrency(row.monto)
     },
     {
       id: 'col6', label: 'Estado', sortKey: 'estado', width: 120,
@@ -64,8 +65,8 @@ export default function ConveniosTable({ data = [], onItemClick, visibleCols = {
   ];
 
   const rowClassName = (row, index) => {
-    const parts = row.fechaVencimiento.split('/');
-    const isExpiring = parts.length === 3 && parts[2] === '2024';
+    const parts = formatDate(row.fechaVencimiento).split('/');
+    const isExpiring = parts.length === 3 && parts[0] === '2024';
     return `border-b border-borde hover:bg-canvas cursor-pointer transition-colors ${
       isExpiring ? 'bg-naranja/5' : index % 2 !== 0 ? 'bg-canvas/50' : ''
     }`;

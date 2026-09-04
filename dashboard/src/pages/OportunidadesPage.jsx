@@ -1,27 +1,26 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { oportunidades as mockOportunidades, alertas as mockAlertas } from '../data/mockData';
+import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
 import OportunidadesGrid from '../components/oportunidades/OportunidadesGrid';
 import Modal from '../components/common/Modal';
 import CustomSelect from '../components/common/CustomSelect';
 import CustomDatePicker from '../components/common/CustomDatePicker';
 import { staggerContainerVariants, staggerItemVariants } from '../lib/motionTokens';
+import { formatDate } from '../utils/formatters';
 
 const FILTROS = ['Todas', 'Licitaciones', 'Compras Públicas', 'Fondos', 'Capacitaciones'];
 
 export default function OportunidadesPage() {
   const navigate = useNavigate();
+  const { oportunidades, alertas, setAlertas, setOportunidades } = useData();
   const [busqueda, setBusqueda] = useState('');
   const [filtroActivo, setFiltroActivo] = useState('Todas');
   
-  const [alertas, setAlertas] = useState(mockAlertas);
-  const [oportunidades, setOportunidades] = useState(mockOportunidades);
-  
   const [selectedItem, setSelectedItem] = useState(null);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [nuevoForm, setNuevoForm] = useState({ tipo: 'Licitaciones', fecha: '' });
+  const [nuevoForm, setNuevoForm] = useState({ tipo: 'Licitaciones', fecha: '', titulo: '', organizador: '' });
 
   const handleResolver = (id) => {
     setAlertas(prev => prev.filter(a => a.id !== id));
@@ -29,20 +28,30 @@ export default function OportunidadesPage() {
 
   const handleCreateOportunidad = (e) => {
     e.preventDefault();
+    if (!nuevoForm.titulo) return;
+    const nueva = {
+      id: Date.now(),
+      titulo: nuevoForm.titulo,
+      organizador: nuevoForm.organizador || 'Gobierno de Santa Fe',
+      fecha: nuevoForm.fecha || '2024-06-01',
+      tipo: nuevoForm.tipo
+    };
+    setOportunidades(prev => [nueva, ...prev]);
     setIsNewModalOpen(false);
-    // Lógica para guardar la nueva oportunidad
+    setNuevoForm({ tipo: 'Licitaciones', fecha: '', titulo: '', organizador: '' });
   };
 
   const stats = [
-    { label: 'Total Alertas', value: alertas.length },
-    { label: 'Críticas', value: alertas.filter(a => a.prioridad === 'critica').length, valueColor: 'text-critico' },
-    { label: 'Oportunidades Activas', value: oportunidades.length }
+    { label: 'Total Alertas', value: (alertas || []).length },
+    { label: 'Críticas', value: (alertas || []).filter(a => a.prioridad === 'critica').length, valueColor: 'text-critico' },
+    { label: 'Oportunidades Activas', value: (oportunidades || []).length }
   ];
 
   const filteredOportunidades = useMemo(() => {
-    return oportunidades.filter(opt => {
+    return (oportunidades || []).filter(opt => {
       const matchesSearch = opt.titulo?.toLowerCase().includes(busqueda.toLowerCase()) || 
-                            opt.organizador?.toLowerCase().includes(busqueda.toLowerCase());
+                            opt.organizador?.toLowerCase().includes(busqueda.toLowerCase()) ||
+                            opt.orgAsignada?.toLowerCase().includes(busqueda.toLowerCase());
       const matchesFiltro = filtroActivo === 'Todas' || 
                             (filtroActivo === 'Licitaciones' && opt.titulo?.toLowerCase().includes('licitación')) ||
                             (filtroActivo === 'Compras Públicas' && opt.titulo?.toLowerCase().includes('compra pública')) ||
@@ -53,7 +62,7 @@ export default function OportunidadesPage() {
   }, [oportunidades, busqueda, filtroActivo]);
   
   const filteredAlertas = useMemo(() => {
-     return alertas.filter(a => a.mensaje.toLowerCase().includes(busqueda.toLowerCase()));
+     return (alertas || []).filter(a => a.mensaje.toLowerCase().includes(busqueda.toLowerCase()));
   }, [alertas, busqueda]);
 
   return (
@@ -69,7 +78,7 @@ export default function OportunidadesPage() {
         filtros={FILTROS}
         filtroActivo={filtroActivo}
         setFiltroActivo={setFiltroActivo}
-        totalItems={oportunidades.length + alertas.length}
+        totalItems={(oportunidades || []).length + (alertas || []).length}
         filteredItemsCount={filteredOportunidades.length + filteredAlertas.length}
       >
         <div className="flex flex-col xl:flex-row" style={{ gap: '32px' }}>
@@ -106,7 +115,7 @@ export default function OportunidadesPage() {
                           <span className={`inline-block rounded-full text-[10px] font-bold uppercase tracking-wider ${bgPrioridad} ${textPrioridad}`} style={{ padding: '2px 8px' }}>
                             Prioridad {alerta.prioridad}
                           </span>
-                          <p className="text-xs text-pizarra/50 font-medium">{new Date(alerta.fecha).toLocaleDateString('es-AR')}</p>
+                          <p className="text-xs text-pizarra/50 font-medium">{formatDate(alerta.fecha)}</p>
                         </div>
                         <h3 className="font-semibold text-texto text-[14px] leading-snug" style={{ marginBottom: '4px' }}>{alerta.mensaje}</h3>
                       </div>
@@ -168,12 +177,12 @@ export default function OportunidadesPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Organizador</label>
-                <p className="text-sm font-medium text-texto">{selectedItem.organizador}</p>
+                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Organizador / Asignada</label>
+                <p className="text-sm font-medium text-texto">{selectedItem.orgAsignada || selectedItem.organizador || 'Santa Fe'}</p>
               </div>
               <div>
-                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Fecha</label>
-                <p className="text-sm font-medium text-texto">{selectedItem.fecha}</p>
+                <label className="text-xs text-pizarra/70 uppercase font-bold tracking-wider">Fecha Cierre</label>
+                <p className="text-sm font-medium text-texto">{formatDate(selectedItem.fechaCierre || selectedItem.fecha)}</p>
               </div>
             </div>
             <div className="flex justify-end border-t border-borde pt-4 mt-2">
@@ -188,12 +197,28 @@ export default function OportunidadesPage() {
         <form onSubmit={handleCreateOportunidad} className="flex flex-col" style={{ gap: '16px' }}>
           <div>
             <label className="block text-sm font-bold text-pizarra mb-1">Título de la Oportunidad</label>
-            <input type="text" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} placeholder="Ej: Licitación Pública..." />
+            <input 
+              type="text" 
+              required 
+              value={nuevoForm.titulo}
+              onChange={(e) => setNuevoForm(prev => ({ ...prev, titulo: e.target.value }))}
+              className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" 
+              style={{ padding: '10px 16px' }} 
+              placeholder="Ej: Licitación Pública..." 
+            />
           </div>
           <div className="grid grid-cols-2" style={{ gap: '16px' }}>
             <div>
               <label className="block text-sm font-bold text-pizarra mb-1">Organizador</label>
-              <input type="text" required className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" style={{ padding: '10px 16px' }} placeholder="Ej: Ministerio..." />
+              <input 
+                type="text" 
+                required 
+                value={nuevoForm.organizador}
+                onChange={(e) => setNuevoForm(prev => ({ ...prev, organizador: e.target.value }))}
+                className="w-full bg-canvas text-texto text-sm rounded-xl border border-borde focus:outline-none focus:ring-2 focus:ring-primario/20" 
+                style={{ padding: '10px 16px' }} 
+                placeholder="Ej: Ministerio..." 
+              />
             </div>
             <div>
               <label className="block text-sm font-bold text-pizarra mb-1">Tipo</label>

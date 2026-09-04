@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
-import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
 import ColumnSelector from '../components/common/ColumnSelector';
 import TalleresTable from '../components/tables/TalleresTable';
@@ -17,9 +16,9 @@ export default function TalleresPage() {
   const [filtroActivo, setFiltroActivo] = useState('Todos');
 
   const [visibleCols, setVisibleCols] = useState(() => {
-    const defaultCols = { col1: true, col2: true, col3: true, col4: true, col5: true };
+    const defaultCols = { col1: true, col2: true, col4: true, col3: true, col6: true, col7: true, col5: true };
     try {
-      const saved = localStorage.getItem('cols_talleres');
+      const saved = localStorage.getItem('cols_talleres_v3');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object') return parsed;
@@ -32,12 +31,14 @@ export default function TalleresPage() {
     const defaultOrder = [
       { id: 'col1', label: 'Nombre del Taller' },
       { id: 'col2', label: 'Organización a Cargo' },
-      { id: 'col3', label: 'Cupo Máximo' },
       { id: 'col4', label: 'Inscriptos' },
+      { id: 'col3', label: 'Cupo Máximo' },
+      { id: 'col6', label: 'Fecha Inicio' },
+      { id: 'col7', label: 'Fecha Cierre' },
       { id: 'col5', label: 'Estado' }
     ];
     try {
-      const savedOrder = localStorage.getItem('order_talleres');
+      const savedOrder = localStorage.getItem('order_talleres_v3');
       if (savedOrder) {
         const parsed = JSON.parse(savedOrder);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -47,7 +48,7 @@ export default function TalleresPage() {
   });
 
   React.useEffect(() => {
-    localStorage.setItem('order_talleres', JSON.stringify(orderedColumns));
+    localStorage.setItem('order_talleres_v3', JSON.stringify(orderedColumns));
   }, [orderedColumns]);
 
   const getOrgName = (orgId) => {
@@ -93,7 +94,7 @@ export default function TalleresPage() {
       setPageSize={setPageSize}
       stats={[
         { label: 'Total Talleres', value: talleres.length },
-        { label: 'Inscriptos Activos', value: talleres.reduce((acc, t) => acc + t.inscriptos, 0) }
+        { label: 'Inscriptos Activos', value: talleres.reduce((acc, t) => acc + (t.inscriptos || 0), 0) }
       ]}
       tableControls={
         <ColumnSelector 
@@ -101,7 +102,7 @@ export default function TalleresPage() {
           setColumns={setOrderedColumns}
           visibleColumns={visibleCols} 
           setVisibleColumns={setVisibleCols} 
-          storageKey="cols_talleres" 
+          storageKey="cols_talleres_v3" 
         />
       }
     >
@@ -177,4 +178,3 @@ export default function TalleresPage() {
     </PageTemplate>
   );
 }
-

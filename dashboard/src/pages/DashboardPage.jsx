@@ -4,16 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { Catalog } from '@carbon/icons-react';
 import KPICard from '../components/dashboard/KPICard';
 import TopOrgs from '../components/dashboard/TopOrgs';
-import { kpiData, oportunidades } from '../data/mockData';
 import EvolucionChart from '../components/dashboard/EvolucionChart';
 import PresupuestoChart from '../components/dashboard/PresupuestoChart';
 import ActividadFeed from '../components/dashboard/ActividadFeed';
 import { pageContainerVariants, staggerItemVariants } from '../lib/motionTokens';
 import { isDashboardFirstLoad, markDashboardAsAnimated } from '../lib/sessionAnimationState';
+import { useData } from '../context/DataContext';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  // Determina si es la primera carga para los contadores numéricos
+  const { organizaciones, beneficiarios, convenios, talleres, oportunidades } = useData();
   const [isFirstLoad] = useState(() => isDashboardFirstLoad());
 
   useEffect(() => {
@@ -24,6 +24,20 @@ export default function DashboardPage() {
   const weekday = now.toLocaleDateString('es-AR', { weekday: 'long' });
   const day = now.getDate();
   const month = now.toLocaleDateString('es-AR', { month: 'long' });
+
+  // Cálculos dinámicos exactos para consistencia absoluta entre KPI Card y Gráfico
+  const totalPresupuesto = convenios.reduce((acc, c) => acc + (c.monto || 0), 0);
+  const ejecutadoMonto = convenios.filter(c => c.estado === 'Activo' || c.estado === 'Finalizado').reduce((acc, c) => acc + (c.monto || 0), 0);
+  const porcentajeEjecutado = totalPresupuesto > 0 ? Math.round((ejecutadoMonto / totalPresupuesto) * 100) : 0;
+
+  const formattedPresupuesto = totalPresupuesto > 0 ? `$ ${totalPresupuesto.toLocaleString('es-AR')}` : '$ 0';
+
+  const kpiData = {
+    beneficiarios: { total: beneficiarios.length, variacion: 12.3, periodo: 'vs. mes anterior' },
+    convenios: { total: convenios.length, variacion: 5.9, periodo: 'vs. mes anterior' },
+    unidadesProductivas: { total: organizaciones.length, variacion: -2.1, periodo: 'vs. mes anterior' },
+    talleres: { total: talleres.length, variacion: 8.4, periodo: 'vs. mes anterior' }
+  };
   const year = now.getFullYear();
   const formattedDate = `${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${day} de ${month.charAt(0).toUpperCase() + month.slice(1)} de ${year}`;
 
@@ -35,7 +49,7 @@ export default function DashboardPage() {
       initial="hidden"
       animate="show"
     >
-      {/* Welcome Section with Opportunities Indicator */}
+      {/* Welcome Section */}
       <motion.div variants={staggerItemVariants} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-pizarra">
@@ -46,7 +60,6 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* Indicador de Oportunidades */}
         <motion.button
           type="button"
           onClick={() => navigate('/oportunidades')}
@@ -96,10 +109,10 @@ export default function DashboardPage() {
         />
         <KPICard
           titulo="Presupuesto Asignado"
-          valor="$ 15.610.000"
+          valor={formattedPresupuesto}
           variacion={null}
           periodo="Ejercicio 2026"
-          presupuesto={{ porcentaje: 85 }}
+          presupuesto={{ porcentaje: porcentajeEjecutado }}
           index={3}
           animate={isFirstLoad}
         />
@@ -120,9 +133,9 @@ export default function DashboardPage() {
         <div className="h-[420px]">
           <ActividadFeed animate={isFirstLoad} />
         </div>
-        <div className="h-[420px]">
-          <TopOrgs animate={isFirstLoad} />
-        </div>
+        <motion.div variants={staggerItemVariants} className="lg:col-span-1 h-full">
+          <TopOrgs animate={!isFirstLoad} />
+        </motion.div>
       </motion.div>
     </motion.div>
   );

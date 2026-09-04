@@ -151,21 +151,23 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Table row hover accent ─── */
 .row-hover-accent {
-  position: relative;
   transition: all 0.2s ease;
 }
-.row-hover-accent::before {
+.row-hover-accent td:first-child {
+  position: relative;
+}
+.row-hover-accent td:first-child::before {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   width: 3px;
-  background: #6B1330;
+  background: var(--color-primario);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
-.row-hover-accent:hover::before {
+.row-hover-accent:hover td:first-child::before {
   opacity: 1;
 }
 

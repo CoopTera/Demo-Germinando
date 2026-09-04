@@ -1,11 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { actividadReciente } from '../../data/mockData';
+import { useData } from '../../context/DataContext';
 import { staggerContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function ActividadFeed({ animate = true }) {
   const navigate = useNavigate();
+  const { actividadReciente } = useData();
+
+  const list = actividadReciente || [];
 
   const handleClick = (item) => {
     if (!item.tipo || !item.entidadId) return;
@@ -39,44 +42,45 @@ export default function ActividadFeed({ animate = true }) {
         className="flex flex-col flex-1 overflow-y-auto pr-2 min-h-0 custom-scrollbar" 
         style={{ gap: '24px' }}
       >
-        {actividadReciente.map((item, i) => (
-          <motion.div
-            key={item.id}
-            variants={animate ? staggerItemVariants : undefined}
-            whileHover={item.entidadId ? { x: 3 } : {}}
-            onClick={() => handleClick(item)}
-            className={`relative flex items-start ${item.entidadId ? 'cursor-pointer group' : ''}`}
-            style={{ gap: '16px' }}
-          >
-            {/* Timeline line */}
-            {i !== actividadReciente.length - 1 && (
-              <motion.div 
-                initial={animate ? { scaleY: 0 } : false}
-                animate={{ scaleY: 1 }}
-                transition={animate ? { duration: 0.4, delay: i * 0.08 + 0.2 } : { duration: 0 }}
-                style={{ transformOrigin: 'top' }}
-                className="absolute left-[19px] top-10 bottom-[-24px] w-0.5 bg-borde" 
-              />
-            )}
-            
-            {/* Avatar */}
-            <motion.div 
-              whileHover={{ scale: 1.1 }}
-              className="rounded-full bg-pizarra/10 flex items-center justify-center text-pizarra font-bold text-xs shrink-0 z-10 border-[3px] border-white group-hover:bg-primario group-hover:text-white transition-colors" 
-              style={{ width: '40px', height: '40px' }}
+        {list.length > 0 ? (
+          list.map((item, i) => (
+            <motion.div
+              key={item.id || i}
+              variants={animate ? staggerItemVariants : undefined}
+              whileHover={item.entidadId ? { x: 3 } : {}}
+              onClick={() => handleClick(item)}
+              className={`relative flex items-start ${item.entidadId ? 'cursor-pointer group' : ''}`}
+              style={{ gap: '16px' }}
             >
-              {item.avatar}
+              {i !== list.length - 1 && (
+                <motion.div 
+                  initial={animate ? { scaleY: 0 } : false}
+                  animate={{ scaleY: 1 }}
+                  transition={animate ? { duration: 0.4, delay: i * 0.08 + 0.2 } : { duration: 0 }}
+                  style={{ transformOrigin: 'top' }}
+                  className="absolute left-[19px] top-10 bottom-[-24px] w-0.5 bg-borde" 
+                />
+              )}
+              
+              <motion.div 
+                whileHover={{ scale: 1.1 }}
+                className="rounded-full bg-pizarra/10 flex items-center justify-center text-pizarra font-bold text-xs shrink-0 z-10 border-[3px] border-white group-hover:bg-primario group-hover:text-white transition-colors" 
+                style={{ width: '40px', height: '40px' }}
+              >
+                {item.avatar || 'TG'}
+              </motion.div>
+              
+              <div className="flex-1 pt-1.5 pb-2">
+                <p className="text-sm text-texto leading-relaxed">
+                  <span className="font-semibold">{item.usuario}</span> {item.accion} <span className="font-semibold text-primario group-hover:underline">{item.modulo || item.entidad}</span>
+                </p>
+                <p className="text-[11px] text-pizarra/50 mt-1 font-medium">{item.fecha}</p>
+              </div>
             </motion.div>
-            
-            {/* Content */}
-            <div className="flex-1 pt-1.5 pb-2">
-              <p className="text-sm text-texto leading-relaxed">
-                <span className="font-semibold">{item.usuario}</span> {item.accion} <span className="font-semibold text-primario group-hover:underline">{item.entidad}</span>
-              </p>
-              <p className="text-[11px] text-pizarra/50 mt-1 font-medium">{item.fecha}</p>
-            </div>
-          </motion.div>
-        ))}
+          ))
+        ) : (
+          <div className="text-xs text-pizarra/50 italic text-center py-12">No hay actividad reciente registrada</div>
+        )}
       </motion.div>
     </motion.div>
   );

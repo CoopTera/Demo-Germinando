@@ -57,8 +57,9 @@ export default function DataTable({
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde animate-fade-in-up">
+      
       <div className="overflow-x-auto">
-        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
+        <table className="text-left border-collapse" style={{ tableLayout: 'auto', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
           <thead>
             <tr className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider border-b border-borde">
               {activeColumns.map((col, idx) => {

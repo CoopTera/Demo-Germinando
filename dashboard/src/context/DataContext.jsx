@@ -1,27 +1,82 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as xlsx from 'xlsx';
-import { organizacionesData, beneficiariosData, conveniosData, talleresData, alertas as alertasData } from '../data/mockData';
+import { 
+  organizacionesData, 
+  beneficiariosData, 
+  conveniosData, 
+  talleresData, 
+  alertas as alertasData,
+  oportunidades as oportunidadesData,
+  actividadReciente as actividadData
+} from '../data/mockData';
 
 const DataContext = createContext();
 
 export const useData = () => useContext(DataContext);
 
+const processedBeneficiarios = beneficiariosData.map(b => ({
+  ...b,
+  historial: [
+    { id: 1, fecha: b.inicioBeca, tipo: 'ingreso', titulo: 'Ingreso al programa', descripcion: 'Asignado a beca y talleres' },
+    { id: 2, fecha: b.ultimoRegistro || b.inicioBeca, tipo: 'seguimiento', titulo: 'Última actividad', descripcion: `Estado de seguimiento: ${b.estado}`}
+  ]
+}));
+
 export const DataProvider = ({ children }) => {
-  const [organizaciones, setOrganizaciones] = useState(organizacionesData);
-  const [beneficiarios, setBeneficiarios] = useState(
-    beneficiariosData.map(b => ({
-      ...b,
-      historial: [
-        { id: 1, fecha: b.inicioBeca, tipo: 'ingreso', titulo: 'Ingreso al programa', descripcion: `Asignado a ${b.programas}` },
-        { id: 2, fecha: '12/05/2025', tipo: 'taller', titulo: 'Inscripción a Taller', descripcion: 'Comenzó taller de capacitación básica.' },
-        { id: 3, fecha: b.actividad, tipo: 'seguimiento', titulo: 'Última actividad', descripcion: `Estado de seguimiento: ${b.estado}` }
-      ]
-    }))
-  );
-  const [convenios, setConvenios] = useState(conveniosData);
-  const [talleres, setTalleres] = useState(talleresData);
-  const [alertas, setAlertas] = useState(alertasData);
+  const [isDemoMode, setIsDemoMode] = useState(() => localStorage.getItem('demoMode') === 'true');
+
+  const [organizaciones, setOrganizaciones] = useState(() => isDemoMode ? [] : organizacionesData);
+  const [beneficiarios, setBeneficiarios] = useState(() => isDemoMode ? [] : processedBeneficiarios);
+  const [convenios, setConvenios] = useState(() => isDemoMode ? [] : conveniosData);
+  const [talleres, setTalleres] = useState(() => isDemoMode ? [] : talleresData);
+  const [alertas, setAlertas] = useState(() => isDemoMode ? [] : alertasData);
+  const [oportunidades, setOportunidades] = useState(() => isDemoMode ? [] : oportunidadesData);
+  const [actividadReciente, setActividadReciente] = useState(() => isDemoMode ? [] : actividadData);
+  
   const [hasDashboardAnimated, setHasDashboardAnimated] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('demoMode', isDemoMode);
+  }, [isDemoMode]);
+
+  const resetDatabase = (clean = false) => {
+    setIsDemoMode(clean);
+    if (clean) {
+      setOrganizaciones([]);
+      setBeneficiarios([]);
+      setConvenios([]);
+      setTalleres([]);
+      setAlertas([]);
+      setOportunidades([]);
+      setActividadReciente([]);
+    } else {
+      setOrganizaciones(organizacionesData);
+      setBeneficiarios(processedBeneficiarios);
+      setConvenios(conveniosData);
+      setTalleres(talleresData);
+      setAlertas(alertasData);
+      setOportunidades(oportunidadesData);
+      setActividadReciente(actividadData);
+    }
+  };
+
+  // Generic CRUD
+  const editarBeneficiario = (updated) => setBeneficiarios(prev => prev.map(b => b.id === updated.id ? updated : b));
+  const editarOrganizacion = (updated) => setOrganizaciones(prev => prev.map(o => o.id === updated.id ? updated : o));
+  const editarConvenio = (updated) => setConvenios(prev => prev.map(c => c.id === updated.id ? updated : c));
+  const editarTaller = (updated) => setTalleres(prev => prev.map(t => t.id === updated.id ? updated : t));
+
+  const addBeneficiario = (nuevo) => setBeneficiarios(prev => [nuevo, ...prev]);
+  const addOrganizacion = (nuevo) => setOrganizaciones(prev => [nuevo, ...prev]);
+  const addConvenio = (nuevo) => setConvenios(prev => [nuevo, ...prev]);
+  const addTaller = (nuevo) => setTalleres(prev => [nuevo, ...prev]);
+
+  const deleteBeneficiario = (id) => setBeneficiarios(prev => prev.filter(b => b.id !== id));
+  const deleteOrganizacion = (id) => setOrganizaciones(prev => prev.filter(o => o.id !== id));
+  const deleteConvenio = (id) => setConvenios(prev => prev.filter(c => c.id !== id));
+  const deleteTaller = (id) => setTalleres(prev => prev.filter(t => t.id !== id));
+
+  const resolveAlerta = (id) => setAlertas(prev => prev.filter(a => a.id !== id));
 
   const importarDesdeExcel = (file) => {
     const reader = new FileReader();
@@ -32,103 +87,57 @@ export const DataProvider = ({ children }) => {
       const worksheet = workbook.Sheets[firstSheetName];
       const json = xlsx.utils.sheet_to_json(worksheet);
       
-      const nuevasOrgs = json.map((row, index) => ({
-        id: `import-${Date.now()}-${index}`,
-        nombre: row['NOMBRE']?.toString().trim() || 'Sin nombre',
-        especializacion: row['ESPECIALIZACION']?.toString().trim() || 'General',
-        localizacion: row['LOCALIZACION']?.toString().trim() || 'Sin especificar',
-        cuit: row['CUIT'] || '',
-        convenios: Math.floor(Math.random() * 3) + 1,
-        talleres: Math.floor(Math.random() * 5) + 1,
-        beneficiarios: parseInt(row['Q PARTICIPANTES']) || 0,
-        presupuesto: row['PRESUPUESTO'] || '$ 0'
-      }));
+      if (json.length === 0) {
+        alert('El archivo está vacío.');
+        return;
+      }
 
-      setOrganizaciones(prev => [...prev, ...nuevasOrgs]);
-      alert(`✅ Se importaron ${nuevasOrgs.length} organizaciones correctamente.`);
+      const firstRow = json[0];
+      if (firstRow.hasOwnProperty('DNI') || firstRow.hasOwnProperty('dni')) {
+        const nuevos = json.map((row, index) => ({
+          id: `import-ben-${Date.now()}-${index}`,
+          dni: row['DNI']?.toString() || '',
+          nombre: row['NOMBRE']?.toString() || 'Sin nombre',
+          localizacion: row['LOCALIZACION'] || row['Localización'] || 'Santa Fe',
+          direccion: row['DIRECCION'] || row['Dirección'] || '',
+          inicioBeca: row['FECHA_INICIO'] || row['Fecha Inicio'] || '2024-01-01',
+          fechaInicio: row['FECHA_INICIO'] || row['Fecha Inicio'] || '2024-01-01',
+          presupuestoBeca: row['BECA_MENSUAL'] || row['Beca Mensual'] || 120000,
+          ultimoRegistro: row['ULTIMO_REGISTRO'] || row['Último Registro'] || '2024-03-01',
+          estado: row['ESTADO']?.toString() || 'Activo',
+          talleres: [],
+          historial: []
+        }));
+        setBeneficiarios(prev => [...nuevos, ...prev]);
+        alert(`Éxito. Se importaron ${nuevos.length} beneficiarios correctamente.`);
+      } else {
+        const nuevasOrgs = json.map((row, index) => ({
+          id: `import-org-${Date.now()}-${index}`,
+          nombre: row['NOMBRE']?.toString().trim() || 'Sin nombre',
+          especializacion: row['ESPECIALIZACION'] || row['Especialización'] || 'General',
+          localizacion: row['LOCALIZACION'] || row['Localización'] || 'Santa Fe',
+          direccion: row['DIRECCION'] || row['Dirección'] || '',
+          convenios: row['CONVENIOS'] || 0,
+          talleres: row['TALLERES'] || 0,
+          presupuesto: row['PRESUPUESTO'] || 5000000
+        }));
+        setOrganizaciones(prev => [...nuevasOrgs, ...prev]);
+        alert(`Éxito. Se importaron ${nuevasOrgs.length} organizaciones correctamente.`);
+      }
     };
     reader.readAsArrayBuffer(file);
-  };
-
-  const ExcelDateToJSDate = (serial) => {
-    if (!serial || isNaN(serial)) return serial;
-    const utc_days = Math.floor(serial - 25569);
-    const utc_value = utc_days * 86400;                                        
-    const date_info = new Date(utc_value * 1000);
-    return date_info.toLocaleDateString('es-AR');
-  };
-
-  const importarBeneficiarios = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = xlsx.read(data, { type: 'array' });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = xlsx.utils.sheet_to_json(worksheet);
-      
-      const nuevosBeneficiarios = json.map((row, index) => ({
-        id: `ben-${Date.now()}-${index}`,
-        nombre: row['NOMBRE']?.toString().trim() || 'Sin nombre',
-        dni: row['DNI']?.toString().trim() || 'S/D',
-        programas: row['PROGRAMAS QUE LO BENEFICIAN']?.toString().trim() || '-',
-        inicioBeca: ExcelDateToJSDate(row['INICIO DE LA BECA']) || '-',
-        tiempoBeca: row['TIEMPO DE BECA']?.toString().trim() || '-',
-        monto: parseInt(row['MONTO BECA MENSUAL']) || 0,
-        actividad: row['ULTIMA ACTIVIDAD']?.toString().trim() || '-',
-        estado: row['ESTADO DE SEGUIMIENTO']?.toString().trim() || 'Sin seguimiento'
-      }));
-
-      setBeneficiarios(prev => [...prev, ...nuevosBeneficiarios]);
-      alert(`✅ Se importaron ${nuevosBeneficiarios.length} beneficiarios correctamente.`);
-    };
-    reader.readAsArrayBuffer(file);
-  };
-
-  const agregarOrganizacion = (nuevaOrg) => {
-    setOrganizaciones([...organizaciones, { ...nuevaOrg, id: Date.now() }]);
-  };
-
-  const editarOrganizacion = (id, dataEditada) => {
-    setOrganizaciones(prev => prev.map(org => org.id === id ? { ...org, ...dataEditada } : org));
-  };
-
-  const eliminarOrganizacion = (id) => {
-    setOrganizaciones(prev => prev.filter(org => org.id !== id));
-  };
-
-  const agregarBeneficiario = (nuevoBen) => {
-    setBeneficiarios([...beneficiarios, { ...nuevoBen, id: Date.now() }]);
-  };
-
-  const editarBeneficiario = (id, dataEditada) => {
-    setBeneficiarios(prev => prev.map(ben => ben.id === id ? { ...ben, ...dataEditada } : ben));
-  };
-
-  const eliminarBeneficiario = (id) => {
-    setBeneficiarios(prev => prev.filter(ben => ben.id !== id));
   };
 
   return (
-    <DataContext.Provider value={{ 
-      organizaciones, 
-      setOrganizaciones, 
-      importarDesdeExcel,
-      agregarOrganizacion,
-      editarOrganizacion,
-      eliminarOrganizacion,
-      beneficiarios,
-      importarBeneficiarios,
-      agregarBeneficiario,
-      editarBeneficiario,
-      eliminarBeneficiario,
-      convenios,
-      setConvenios,
-      talleres,
-      setTalleres,
-      alertas,
-      setAlertas,
-      hasDashboardAnimated,
-      setHasDashboardAnimated
+    <DataContext.Provider value={{
+      isDemoMode, resetDatabase,
+      organizaciones, beneficiarios, convenios, talleres, alertas, oportunidades, actividadReciente,
+      editarBeneficiario, editarOrganizacion, editarConvenio, editarTaller,
+      addBeneficiario, addOrganizacion, addConvenio, addTaller,
+      deleteBeneficiario, deleteOrganizacion, deleteConvenio, deleteTaller,
+      resolveAlerta, setAlertas, setOportunidades, setActividadReciente,
+      hasDashboardAnimated, setHasDashboardAnimated,
+      importarDesdeExcel
     }}>
       {children}
     </DataContext.Provider>

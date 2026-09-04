@@ -1,17 +1,16 @@
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { useData } from '../../context/DataContext';
-import { organizacionesData } from '../../data/mockData';
 
 const COLORS = ['#6B1330', '#FF7402', '#494963', '#FFCB02', '#E42153', '#22C55E', '#8B5CF6'];
 
 export default function EspecialidadChart() {
   const { organizaciones } = useData();
-  const displayData = organizaciones && organizaciones.length > 0 ? organizaciones : organizacionesData;
 
   const chartData = useMemo(() => {
+    if (!organizaciones || organizaciones.length === 0) return [];
     const counts = {};
-    displayData.forEach(org => {
+    organizaciones.forEach(org => {
       const esp = org.especializacion || 'Sin Especificar';
       counts[esp] = (counts[esp] || 0) + 1;
     });
@@ -19,7 +18,7 @@ export default function EspecialidadChart() {
     return Object.entries(counts)
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
-  }, [displayData]);
+  }, [organizaciones]);
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -44,32 +43,35 @@ export default function EspecialidadChart() {
       </div>
 
       <div className="flex-1 w-full min-h-0 flex items-center justify-center relative">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={90}
-              paddingAngle={2}
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              layout="vertical"
-              verticalAlign="middle"
-              align="right"
-              wrapperStyle={{ fontSize: '11px' }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={90}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                layout="vertical"
+                verticalAlign="middle"
+                align="right"
+                wrapperStyle={{ fontSize: '11px' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-xs text-pizarra/50 italic">No hay datos de organizaciones</div>
+        )}
       </div>
     </div>
   );
 }
-

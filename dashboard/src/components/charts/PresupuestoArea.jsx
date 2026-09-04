@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { presupuestoData } from '../../data/mockData';
+import { useData } from '../../context/DataContext';
 
 const formatCurrency = (val) => {
   const formatted = new Intl.NumberFormat('es-AR', {
@@ -46,6 +46,25 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function PresupuestoArea() {
+  const { convenios } = useData();
+
+  const chartData = useMemo(() => {
+    if (!convenios || convenios.length === 0) return [];
+    
+    const totalAsignado = convenios.reduce((acc, c) => acc + (c.monto || 0), 0);
+    const ejecutado = convenios.filter(c => c.estado === 'Activo' || c.estado === 'Finalizado').reduce((acc, c) => acc + (c.monto || 0), 0);
+    
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'];
+    return meses.map((mes, idx) => {
+      const factor = (idx + 1) / 6;
+      return {
+        periodo: mes,
+        asignado: totalAsignado,
+        ejecutado: Math.round(ejecutado * factor)
+      };
+    });
+  }, [convenios]);
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-borde h-full flex flex-col" style={{ padding: '20px' }}>
       <div style={{ marginBottom: '16px' }}>
@@ -54,64 +73,67 @@ export default function PresupuestoArea() {
         </h3>
       </div>
 
-      <div className="flex-1 w-full min-h-0">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={presupuestoData}
-            margin={{ top: 10, right: 20, left: 10, bottom: 20 }}
-          >
-            <defs>
-              <linearGradient id="gradAsignado" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#EAE9EE" stopOpacity={0.9} />
-                <stop offset="95%" stopColor="#EAE9EE" stopOpacity={0.05} />
-              </linearGradient>
-              <linearGradient id="gradEjecutado" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#6B1330" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#6B1330" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E3E1E2" vertical={false} />
-            <XAxis
-              dataKey="periodo"
-              tick={{ fontSize: 11, fill: '#494963' }}
-              angle={-45}
-              textAnchor="end"
-              height={60}
-              stroke="#E3E1E2"
-            />
-            <YAxis
-              tick={{ fontSize: 11, fill: '#494963' }}
-              stroke="#E3E1E2"
-              tickFormatter={(val) => `$${(val / 1000000).toFixed(val % 1000000 === 0 ? 0 : 1)}M`}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              verticalAlign="bottom"
-              wrapperStyle={{ paddingTop: '10px' }}
-              formatter={(value) => <span className="text-xs font-medium text-texto">{value}</span>}
-            />
-            <Area
-              type="monotone"
-              dataKey="asignado"
-              name="Presupuesto Asignado"
-              stroke="#494963"
-              strokeWidth={1.5}
-              fillOpacity={1}
-              fill="url(#gradAsignado)"
-            />
-            <Area
-              type="monotone"
-              dataKey="ejecutado"
-              name="Presupuesto Ejecutado"
-              stroke="#6B1330"
-              strokeWidth={2}
-              fillOpacity={1}
-              fill="url(#gradEjecutado)"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+      <div className="flex-1 w-full min-h-0 flex items-center justify-center">
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={chartData}
+              margin={{ top: 10, right: 20, left: 10, bottom: 20 }}
+            >
+              <defs>
+                <linearGradient id="gradAsignado" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#EAE9EE" stopOpacity={0.9} />
+                  <stop offset="95%" stopColor="#EAE9EE" stopOpacity={0.05} />
+                </linearGradient>
+                <linearGradient id="gradEjecutado" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6B1330" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#6B1330" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E3E1E2" vertical={false} />
+              <XAxis
+                dataKey="periodo"
+                tick={{ fontSize: 11, fill: '#494963' }}
+                angle={-45}
+                textAnchor="end"
+                height={60}
+                stroke="#E3E1E2"
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: '#494963' }}
+                stroke="#E3E1E2"
+                tickFormatter={(val) => `$${(val / 1000000).toFixed(val % 1000000 === 0 ? 0 : 1)}M`}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                verticalAlign="bottom"
+                wrapperStyle={{ paddingTop: '10px' }}
+                formatter={(value) => <span className="text-xs font-medium text-texto">{value}</span>}
+              />
+              <Area
+                type="monotone"
+                dataKey="asignado"
+                name="Presupuesto Asignado"
+                stroke="#494963"
+                strokeWidth={1.5}
+                fillOpacity={1}
+                fill="url(#gradAsignado)"
+              />
+              <Area
+                type="monotone"
+                dataKey="ejecutado"
+                name="Presupuesto Ejecutado"
+                stroke="#6B1330"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#gradEjecutado)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-xs text-pizarra/50 italic">No hay datos de presupuesto disponibles</div>
+        )}
       </div>
     </div>
   );
 }
-
