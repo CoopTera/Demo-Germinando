@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
-import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
+import ColumnSelector from '../components/common/ColumnSelector';
+import ConveniosTable from '../components/tables/ConveniosTable';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ConveniosPage() {
@@ -15,6 +16,40 @@ export default function ConveniosPage() {
   const [isEditingItem, setIsEditingItem] = useState(false);
   const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [filtroActivo, setFiltroActivo] = useState('Todos');
+  const [visibleCols, setVisibleCols] = useState(() => {
+    const defaultCols = { col1: true, col2: true, col3: true, col4: true, col5: true, col6: true };
+    try {
+      const saved = localStorage.getItem('cols_convenios');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) {}
+    return defaultCols;
+  });
+
+  const [orderedColumns, setOrderedColumns] = useState(() => {
+    const defaultOrder = [
+      { id: 'col1', label: 'Nombre' },
+      { id: 'col2', label: 'Organización Vinculada' },
+      { id: 'col3', label: 'Monto' },
+      { id: 'col4', label: 'Firma' },
+      { id: 'col5', label: 'Vencimiento' },
+      { id: 'col6', label: 'Estado' }
+    ];
+    try {
+      const savedOrder = localStorage.getItem('order_convenios');
+      if (savedOrder) {
+        const parsed = JSON.parse(savedOrder);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch(e) {}
+    return defaultOrder;
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('order_convenios', JSON.stringify(orderedColumns));
+  }, [orderedColumns]);
 
   useEffect(() => {
     if (location.state?.openModalId) {
@@ -23,10 +58,6 @@ export default function ConveniosPage() {
       window.history.replaceState({}, document.title);
     }
   }, [location.state, convenios]);
-
-  const { widths, startResize } = useTableResize({
-    col1: 220, col2: 250, col3: 150, col4: 150, col5: 200, col6: 100
-  });
 
   const getOrgName = (orgId) => {
     const org = organizaciones.find(o => o.id === orgId);
@@ -65,24 +96,7 @@ export default function ConveniosPage() {
     return formatted.replace(/\$\s*/g, '$\u00A0');
   };
 
-  const thStyle = (width, extra = {}) => ({
-    ...(width ? { width: `${width}px`, minWidth: `${width}px`, maxWidth: `${width}px` } : {}),
-    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-    padding: '12px 16px', position: 'relative', userSelect: 'none',
-    ...extra
-  });
 
-  const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
-
-  const Resizer = ({ colKey }) => (
-    <div 
-      onMouseDown={(e) => startResize(e, colKey)}
-      className="group"
-      style={{ position: 'absolute', right: -4, top: 0, bottom: 0, width: '8px', cursor: 'col-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-    >
-      <div className="w-[2px] h-4 bg-pizarra/20 group-hover:bg-primario transition-colors rounded-full" />
-    </div>
-  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -117,54 +131,18 @@ export default function ConveniosPage() {
         { label: 'Total Convenios', value: convenios.length },
         { label: 'Presupuesto Total', value: formatCurrency(convenios.reduce((acc, c) => acc + c.monto, 0)) }
       ]}
+      tableControls={
+        <ColumnSelector 
+          columns={orderedColumns} 
+          setColumns={setOrderedColumns}
+          visibleColumns={visibleCols} 
+          setVisibleColumns={setVisibleCols} 
+          storageKey="cols_convenios" 
+        />
+      }
     >
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde">
-        <div className="overflow-x-auto">
-          <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
-            <thead className="bg-superficie-sec border-b border-borde">
-              <tr>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>NOMBRE<Resizer colKey="col1" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col2)}>ORGANIZACIÓN ASOCIADA<Resizer colKey="col2" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col3)}>FECHA FIRMA<Resizer colKey="col3" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-right" style={thStyle(widths.col4)}>MONTO<Resizer colKey="col4" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(null, { paddingRight: '24px' })}>ESTADO Y VENCIMIENTO</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedConvenios.map((conv) => {
-                const daysLeft = getDaysLeft(conv.fechaVencimiento);
-
-                return (
-                  <tr key={conv.id} onClick={() => setSelectedItem(conv)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
-                    <td className="text-sm font-semibold text-texto border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={conv.nombre}>
-                      {conv.nombre}
-                    </td>
-                    <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)} title={getOrgName(conv.org_id)}>{getOrgName(conv.org_id)}</td>
-                    <td className="text-sm text-texto border-r border-borde" style={thStyle(widths.col3)}>{conv.fechaFirma}</td>
-                    <td className="text-sm font-bold text-texto text-right border-r border-borde whitespace-nowrap" style={thStyle(widths.col4)}>{formatCurrency(conv.monto)}</td>
-                    <td className="text-sm text-center" style={{...thStyle(null), padding: '8px 24px 8px 16px'}}>
-                      <div className="flex flex-col items-center justify-center" style={{ gap: '4px' }}>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                          conv.estado === 'Activo' ? 'bg-exito/10 text-exito' :
-                          conv.estado === 'Próximos a vencer' ? 'bg-naranja/10 text-naranja' :
-                          conv.estado === 'Por vencer' ? 'bg-critico/10 text-critico' :
-                          'bg-pizarra/10 text-pizarra'
-                        }`}>
-                          {conv.estado}
-                        </span>
-                        {daysLeft !== null && daysLeft <= 30 && (
-                          <div className="text-[10px] font-bold text-naranja">
-                            Vence en {daysLeft} días
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      <div className="pt-2">
+        <ConveniosTable data={paginatedConvenios} onItemClick={setSelectedItem} visibleCols={visibleCols} orderedColumns={orderedColumns} getOrgName={getOrgName} />
       </div>
 
       <Modal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} title={selectedItem?.nombre || 'Detalle de Convenio'}>

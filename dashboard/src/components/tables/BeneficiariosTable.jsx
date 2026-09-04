@@ -1,229 +1,142 @@
-import React, { useState, useEffect } from 'react';
-import { useTableResize } from '../../hooks/useTableResize';
-import { useTableSort } from '../../hooks/useTableSort';
-import SortableHeader from './SortableHeader';
-import ColumnSelector from '../common/ColumnSelector';
+import React from 'react';
+import DataTable from './DataTable';
 import { useData } from '../../context/DataContext';
 
-export default function BeneficiariosTable({ data = [], onItemClick, visibleCols = {} }) {
+export default function BeneficiariosTable({ data = [], onItemClick, visibleCols = {}, orderedColumns = [] }) {
   const { talleres } = useData();
-  const { widths, startResize } = useTableResize({
-    col1: 100, col2: 180, col3: 200, col4: 200, col5: 120, col6: 140, col7: 100, col8: 120
-  });
-
-  const { sortedData, sortConfig, requestSort } = useTableSort(data);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '-';
-    if (typeof dateStr === 'string' && dateStr.includes('/')) return dateStr;
-    if (typeof dateStr === 'string' && dateStr.includes('-')) {
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        const year = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1;
-        const day = parseInt(parts[2], 10);
-        return new Date(year, month, day).toLocaleDateString('es-AR');
-      }
+    try {
+      const [year, month, day] = dateStr.split('-');
+      return `${day}/${month}/${year}`;
+    } catch (e) {
+      return dateStr;
     }
-    const date = new Date(dateStr);
-    return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('es-AR');
   };
 
-  const getTiempoPrograma = (dateStr) => {
-    if (!dateStr) return '-';
-    let date;
-    if (typeof dateStr === 'string' && dateStr.includes('-')) {
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        date = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-      }
-    }
-    if (!date) date = new Date(dateStr);
-    if (isNaN(date.getTime())) return '-';
-    
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays < 30) return `${diffDays} días`;
-    const diffMonths = Math.floor(diffDays / 30);
-    if (diffMonths < 12) return `${diffMonths} meses`;
-    const diffYears = Math.floor(diffMonths / 12);
-    const extraMonths = diffMonths % 12;
-    return extraMonths > 0 ? `${diffYears}a ${extraMonths}m` : `${diffYears} años`;
+  const getTiempoPrograma = (fechaInicio) => {
+    if (!fechaInicio) return '-';
+    const inicio = new Date(fechaInicio);
+    const hoy = new Date();
+    const meses = (hoy.getFullYear() - inicio.getFullYear()) * 12 + (hoy.getMonth() - inicio.getMonth());
+    if (meses < 1) return 'Menos de 1 mes';
+    if (meses === 1) return '1 mes';
+    if (meses < 12) return `${meses} meses`;
+    const anios = Math.floor(meses / 12);
+    return anios === 1 ? '1 año' : `${anios} años`;
   };
 
-  const cellStyle = (width, extraPadding = {}) => ({
-    ...(width ? { width: `${width}px` } : {}),
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    padding: '16px 20px',
-    ...extraPadding
-  });
+  const columns = [
+    {
+      id: 'col1', label: 'DNI', sortKey: 'dni', width: 100,
+      renderCell: (row) => <span className="font-medium">{row.dni}</span>
+    },
+    {
+      id: 'col2', label: 'Nombre', sortKey: 'nombre', width: 180,
+      renderCell: (row) => <span className="font-semibold">{row.nombre}</span>
+    },
+    {
+      id: 'col3', label: 'Organización', sortKey: 'programas', width: 200,
+      renderCell: (row) => {
+        const org = row.programas || row.organizaciones;
+        return (
+          <div className="flex flex-wrap" style={{ gap: '4px' }}>
+            {org ? (
+              org.split(',').map((o, i) => (
+                <span key={i} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate" style={{ padding: '2px 8px', maxWidth: '100%' }} title={o.trim()}>
+                  {o.trim()}
+                </span>
+              ))
+            ) : (
+              <span className="text-gray-400 text-xs">Sin organización</span>
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      id: 'col4', label: 'Talleres', sortKey: 'talleres', width: 200,
+      customSort: (a, b, dir) => {
+        const aLen = (a.talleres || []).length;
+        const bLen = (b.talleres || []).length;
+        return dir === 'asc' ? aLen - bLen : bLen - aLen;
+      },
+      renderCell: (row) => {
+        const benTalleres = (row.talleres || []).map(tId => talleres.find(t => t.id === tId)?.nombre).filter(Boolean);
+        return (
+          <div className="flex flex-wrap" style={{ gap: '4px' }}>
+            {benTalleres.length > 0 ? (
+              benTalleres.map((o, i) => (
+                <span key={i} className="bg-naranja/10 text-naranja text-[10px] rounded-full inline-block font-bold uppercase truncate" style={{ padding: '2px 8px', maxWidth: '100%' }} title={o.trim()}>
+                  {o.trim()}
+                </span>
+              ))
+            ) : (
+              <span className="text-gray-400 text-xs">-</span>
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      id: 'col5', label: 'Ingreso', sortKey: 'inicioBeca', width: 120,
+      renderCell: (row) => {
+        const fecha = row.inicioBeca || row.fechaInicio;
+        return <span title={formatDate(fecha)}>{formatDate(fecha)}</span>;
+      }
+    },
+    {
+      id: 'col6', label: 'Tiempo de Beca', sortKey: 'inicioBeca', width: 140,
+      renderCell: (row) => {
+        const fecha = row.inicioBeca || row.fechaInicio;
+        const tiempoProg = getTiempoPrograma(fecha);
+        return <span className="font-medium" title={tiempoProg}>{tiempoProg}</span>;
+      }
+    },
+    {
+      id: 'col7', label: 'Asistencia', sortKey: 'asistencia', width: 100,
+      headerClassName: 'text-center',
+      cellClassName: (row) => {
+        const asistenciaNum = parseInt((row.asistencia || "0").replace('%', ''));
+        return `text-center font-bold ${asistenciaNum < 75 ? 'text-naranja' : 'text-texto'}`;
+      },
+      renderCell: (row) => row.asistencia || '-'
+    },
+    {
+      id: 'col8', label: 'Estado', sortKey: 'estado', width: 120,
+      headerClassName: 'text-center',
+      headerStyle: { paddingRight: '24px' },
+      cellClassName: 'text-center',
+      cellStyle: { paddingRight: '24px' },
+      renderCell: (row) => {
+        return row.estado === 'Activo' ? (
+          <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>Activo</span>
+        ) : row.estado === 'Egresado' ? (
+          <span className="inline-flex items-center rounded-full text-xs font-semibold bg-primario/10 text-primario truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>Egresado</span>
+        ) : (
+          <span className="inline-flex items-center rounded-full text-xs font-semibold bg-naranja/10 text-naranja truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>{row.estado}</span>
+        );
+      }
+    }
+  ];
 
-  const thStyle = (width, extraPadding = {}) => ({
-    ...(width ? cellStyle(width, extraPadding) : { padding: '16px 20px', ...extraPadding }),
-    position: 'relative',
-    userSelect: 'none'
-  });
-
-  const Resizer = ({ colKey }) => (
-    <div 
-      onMouseDown={(e) => startResize(e, colKey)}
-      className="group"
-      style={{ position: 'absolute', right: -4, top: 0, bottom: 0, width: '8px', cursor: 'col-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-    >
-      <div className="w-[2px] h-4 bg-pizarra/20 group-hover:bg-primario transition-colors rounded-full" />
-    </div>
-  );
-
-  const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
+  const rowClassName = (row, index) => {
+    const hasAlert = row.estado === 'Suspendido';
+    return hasAlert
+      ? 'bg-naranja/5 hover:bg-naranja/10'
+      : `hover:bg-canvas ${index % 2 === 0 ? '' : 'bg-canvas/50'}`;
+  };
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde">
-      <div className="overflow-x-auto">
-        <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
-          <thead>
-            <tr className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider border-b border-borde">
-              {visibleCols.col1 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>
-                <SortableHeader label="DNI" sortKey="dni" sortConfig={sortConfig} requestSort={requestSort} />
-                <Resizer colKey="col1" />
-              </th>)}
-              {visibleCols.col2 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col2)}>
-                <SortableHeader label="Nombre" sortKey="nombre" sortConfig={sortConfig} requestSort={requestSort} />
-                <Resizer colKey="col2" />
-              </th>)}
-              {visibleCols.col3 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col3)}>
-                <SortableHeader label="Organización" sortKey="programas" sortConfig={sortConfig} requestSort={requestSort} />
-                <Resizer colKey="col3" />
-              </th>)}
-              {visibleCols.col4 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col4)}>
-                <span className="truncate">Talleres</span>
-                <Resizer colKey="col4" />
-              </th>)}
-              {visibleCols.col5 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col5)}>
-                <SortableHeader label="Ingreso" sortKey="inicioBeca" sortConfig={sortConfig} requestSort={requestSort} />
-                <Resizer colKey="col5" />
-              </th>)}
-              {visibleCols.col6 && (<th scope="col" className="border-r border-borde" style={thStyle(widths.col6)}>
-                <span className="truncate">Tiempo de Beca</span>
-                <Resizer colKey="col6" />
-              </th>)}
-              {visibleCols.col7 && (<th scope="col" className="text-center border-r border-borde" style={thStyle(widths.col7)}>
-                <SortableHeader label="Asistencia" sortKey="asistencia" sortConfig={sortConfig} requestSort={requestSort} />
-                <Resizer colKey="col7" />
-              </th>)}
-              {visibleCols.col8 && (<th scope="col" className="text-center" style={thStyle(null, { paddingRight: '24px' })}>
-                <SortableHeader label="Estado" sortKey="estado" sortConfig={sortConfig} requestSort={requestSort} />
-              </th>)}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-borde">
-            {sortedData && sortedData.length > 0 ? (
-              sortedData.map((row, index) => {
-                const hasAlert = row.estado === 'Suspendido';
-                const org = row.programas || row.organizaciones;
-                const fecha = row.inicioBeca || row.fechaInicio;
-                const tiempoProg = getTiempoPrograma(fecha);
-                const asistenciaNum = parseInt((row.asistencia || "0").replace('%', ''));
-                const asisColor = asistenciaNum < 75 ? 'text-naranja' : 'text-texto';
-                
-                const benTalleres = (row.talleres || []).map(tId => talleres.find(t => t.id === tId)?.nombre).filter(Boolean);
-
-                return (
-                  <tr
-                    key={row.id || row.dni}
-                    onClick={() => onItemClick && onItemClick(row)}
-                    className={`border-b border-borde last:border-0 transition-colors cursor-pointer ${
-                      hasAlert
-                        ? 'bg-naranja/5 hover:bg-naranja/10'
-                        : `hover:bg-canvas ${index % 2 === 0 ? '' : 'bg-canvas/50'}`
-                    }`}
-                  >
-                    {visibleCols.col1 && (<td className="text-sm text-texto font-medium border-r border-borde" title={row.dni} style={cellStyle(widths.col1)}>
-                      {row.dni}
-                    </td>)}
-                    {visibleCols.col2 && (<td className="text-sm text-texto font-semibold border-r border-borde" title={row.nombre} style={cellStyle(widths.col2)}>
-                      {row.nombre}
-                    </td>)}
-                    {visibleCols.col3 && (<td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col3)}>
-                        <div className="flex flex-wrap" style={{ gap: '4px' }}>
-                          {org ? (
-                            org.split(',').map((o, i) => (
-                              <span
-                                key={i}
-                                className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate"
-                                style={{ padding: '2px 8px', maxWidth: '100%' }}
-                                title={o.trim()}
-                              >
-                                {o.trim()}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-gray-400 text-xs">Sin organización</span>
-                          )}
-                        </div>
-                    </td>)}
-                    {visibleCols.col4 && (<td className="text-sm text-texto border-r border-borde" style={cellStyle(widths.col4)}>
-                        <div className="flex flex-wrap" style={{ gap: '4px' }}>
-                          {benTalleres.length > 0 ? (
-                            benTalleres.map((o, i) => (
-                              <span
-                                key={i}
-                                className="bg-naranja/10 text-naranja text-[10px] rounded-full inline-block font-bold uppercase truncate"
-                                style={{ padding: '2px 8px', maxWidth: '100%' }}
-                                title={o.trim()}
-                              >
-                                {o.trim()}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-gray-400 text-xs">-</span>
-                          )}
-                        </div>
-                    </td>)}
-                    {visibleCols.col5 && (<td className="text-sm text-texto border-r border-borde" title={formatDate(fecha)} style={cellStyle(widths.col5)}>
-                      {formatDate(fecha)}
-                    </td>)}
-                    {visibleCols.col6 && (<td className="text-sm text-texto font-medium border-r border-borde" title={tiempoProg} style={cellStyle(widths.col6)}>
-                      {tiempoProg}
-                    </td>)}
-                    {visibleCols.col7 && (<td className={`text-sm text-center font-bold border-r border-borde ${asisColor}`} style={cellStyle(widths.col7)}>
-                      {row.asistencia || '-'}
-                    </td>)}
-                    {visibleCols.col8 && (<td className="text-sm text-center" style={cellStyle(null, { paddingRight: '24px' })}>
-                      {row.estado === 'Activo' ? (
-                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-exito/10 text-exito truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
-                          Activo
-                        </span>
-                      ) : row.estado === 'Egresado' ? (
-                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-primario/10 text-primario truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
-                          Egresado
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full text-xs font-semibold bg-naranja/10 text-naranja truncate" style={{ padding: '4px 8px', maxWidth: '100%' }}>
-                          {row.estado}
-                        </span>
-                      )}
-                    </td>)}
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td
-                  colSpan={8}
-                  className="text-center text-sm text-pizarra/70"
-                  style={{ padding: '32px 20px' }}
-                >
-                  No se encontraron beneficiarios registrados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DataTable 
+      data={data}
+      columns={columns}
+      orderedColumns={orderedColumns}
+      visibleCols={visibleCols}
+      onItemClick={onItemClick}
+      rowClassName={rowClassName}
+      emptyMessage="No se encontraron beneficiarios registrados."
+    />
   );
 }

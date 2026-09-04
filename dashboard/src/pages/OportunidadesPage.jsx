@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { oportunidades as mockOportunidades, alertas as mockAlertas } from '../data/mockData';
 import PageTemplate from '../components/layout/PageTemplate';
@@ -11,6 +12,7 @@ import { staggerContainerVariants, staggerItemVariants } from '../lib/motionToke
 const FILTROS = ['Todas', 'Licitaciones', 'Compras Públicas', 'Fondos', 'Capacitaciones'];
 
 export default function OportunidadesPage() {
+  const navigate = useNavigate();
   const [busqueda, setBusqueda] = useState('');
   const [filtroActivo, setFiltroActivo] = useState('Todas');
   
@@ -108,12 +110,24 @@ export default function OportunidadesPage() {
                         </div>
                         <h3 className="font-semibold text-texto text-[14px] leading-snug" style={{ marginBottom: '4px' }}>{alerta.mensaje}</h3>
                       </div>
-                      <div className="flex justify-end border-t border-borde" style={{ marginTop: '16px', paddingTop: '12px' }}>
+                      <div className="flex justify-end border-t border-borde" style={{ marginTop: '16px', paddingTop: '12px', gap: '8px' }}>
+                        <motion.button 
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => {
+                            if (alerta.tipo === 'convenio_vencimiento') navigate('/convenios');
+                            else if (alerta.tipo === 'sin_actualizacion') navigate('/talleres');
+                          }}
+                          className="text-xs font-semibold text-pizarra hover:bg-canvas border border-borde cursor-pointer rounded-lg transition-colors"
+                          style={{ padding: '6px 12px' }}
+                        >
+                          Ver detalles
+                        </motion.button>
                         <motion.button 
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => handleResolver(alerta.id)}
-                          className="text-xs font-semibold text-primario hover:bg-primario/10 cursor-pointer rounded-lg transition-colors"
+                          className="text-xs font-semibold text-white bg-primario hover:bg-primario/90 cursor-pointer rounded-lg transition-colors shadow-sm"
                           style={{ padding: '6px 12px' }}
                         >
                           Resolver acción

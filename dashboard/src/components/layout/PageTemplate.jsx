@@ -165,30 +165,30 @@ export default function PageTemplate({
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={`flex items-center gap-2 text-xs font-semibold rounded-xl transition-all cursor-pointer select-none card-elevated ${
+                className={`flex items-center gap-2 text-sm font-semibold rounded-xl transition-all cursor-pointer select-none card-elevated border ${
                   hasActiveFilter
-                    ? 'bg-primario text-white'
+                    ? 'bg-primario text-white border-primario'
                     : isFilterOpen
-                    ? 'bg-white text-primario font-bold'
-                    : 'bg-white text-pizarra/80 hover:text-primario'
+                    ? 'bg-white text-primario border-primario/30'
+                    : 'bg-white text-pizarra hover:text-primario hover:bg-canvas border-borde'
                 }`}
-                style={{ padding: '10px 16px' }}
+                style={{ padding: '9px 16px' }}
               >
-                <Filter size={15} className={hasActiveFilter ? 'text-white' : 'text-pizarra/60'} />
-                <span className="whitespace-nowrap font-medium">
+                <Filter size={16} className={hasActiveFilter ? 'text-white' : 'text-pizarra/60'} />
+                <span className="whitespace-nowrap font-semibold">
                   {getFilterButtonLabel()}
                 </span>
                 {hasActiveFilter && (
                   <span 
                     onClick={handleResetFilters}
-                    className="hover:bg-white/20 rounded-full p-0.5 ml-0.5 text-white"
+                    className="hover:bg-white/20 rounded-full p-0.5 ml-0.5 text-white flex items-center justify-center"
                     title="Quitar filtros"
                   >
-                    <Close size={12} />
+                    <Close size={14} />
                   </span>
                 )}
                 <ChevronDown 
-                  size={14} 
+                  size={16} 
                   className={`transition-transform duration-200 ${isFilterOpen ? 'rotate-180' : ''} ${hasActiveFilter ? 'text-white' : 'text-pizarra/40'}`} 
                 />
               </motion.button>

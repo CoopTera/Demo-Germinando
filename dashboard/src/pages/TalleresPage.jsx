@@ -4,6 +4,8 @@ import { useData } from '../context/DataContext';
 import PageTemplate from '../components/layout/PageTemplate';
 import { useTableResize } from '../hooks/useTableResize';
 import Modal from '../components/common/Modal';
+import ColumnSelector from '../components/common/ColumnSelector';
+import TalleresTable from '../components/tables/TalleresTable';
 
 export default function TalleresPage() {
   const navigate = useNavigate();
@@ -14,9 +16,39 @@ export default function TalleresPage() {
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [filtroActivo, setFiltroActivo] = useState('Todos');
 
-  const { widths, startResize } = useTableResize({
-    col1: 250, col2: 250, col3: 150, col4: 150, col5: 150, col6: 100
+  const [visibleCols, setVisibleCols] = useState(() => {
+    const defaultCols = { col1: true, col2: true, col3: true, col4: true, col5: true };
+    try {
+      const saved = localStorage.getItem('cols_talleres');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) {}
+    return defaultCols;
   });
+
+  const [orderedColumns, setOrderedColumns] = useState(() => {
+    const defaultOrder = [
+      { id: 'col1', label: 'Nombre del Taller' },
+      { id: 'col2', label: 'Organización a Cargo' },
+      { id: 'col3', label: 'Cupo Máximo' },
+      { id: 'col4', label: 'Inscriptos' },
+      { id: 'col5', label: 'Estado' }
+    ];
+    try {
+      const savedOrder = localStorage.getItem('order_talleres');
+      if (savedOrder) {
+        const parsed = JSON.parse(savedOrder);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch(e) {}
+    return defaultOrder;
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('order_talleres', JSON.stringify(orderedColumns));
+  }, [orderedColumns]);
 
   const getOrgName = (orgId) => {
     const org = organizaciones.find(o => o.id === orgId);
@@ -30,23 +62,6 @@ export default function TalleresPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const thStyle = (width, extra = {}) => ({
-    ...(width ? { width: `${width}px`, minWidth: `${width}px`, maxWidth: `${width}px` } : {}),
-    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-    padding: '12px 16px', position: 'relative', userSelect: 'none',
-    ...extra
-  });
-
-  const Resizer = ({ colKey }) => (
-    <div 
-      onMouseDown={(e) => startResize(e, colKey)}
-      className="group"
-      style={{ position: 'absolute', right: -4, top: 0, bottom: 0, width: '8px', cursor: 'col-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-    >
-      <div className="w-[2px] h-4 bg-pizarra/20 group-hover:bg-primario transition-colors rounded-full" />
-    </div>
-  );
-
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -58,8 +73,6 @@ export default function TalleresPage() {
     const start = (currentPage - 1) * pageSize;
     return filteredTalleres.slice(start, start + pageSize);
   }, [filteredTalleres, currentPage, pageSize]);
-
-  const totalFixedWidth = Object.values(widths).reduce((a, b) => a + b, 0);
 
   return (
     <PageTemplate 
@@ -82,46 +95,18 @@ export default function TalleresPage() {
         { label: 'Total Talleres', value: talleres.length },
         { label: 'Inscriptos Activos', value: talleres.reduce((acc, t) => acc + t.inscriptos, 0) }
       ]}
+      tableControls={
+        <ColumnSelector 
+          columns={orderedColumns} 
+          setColumns={setOrderedColumns}
+          visibleColumns={visibleCols} 
+          setVisibleColumns={setVisibleCols} 
+          storageKey="cols_talleres" 
+        />
+      }
     >
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-borde">
-        <div className="overflow-x-auto">
-          <table className="text-left border-collapse" style={{ tableLayout: 'fixed', minWidth: '100%', width: totalFixedWidth > 0 ? `${totalFixedWidth}px` : '100%' }}>
-            <thead className="bg-superficie-sec border-b border-borde">
-              <tr>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col1, { paddingLeft: '24px' })}>NOMBRE DEL TALLER<Resizer colKey="col1" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde" style={thStyle(widths.col2)}>ORGANIZACIÓN A CARGO<Resizer colKey="col2" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col3)}>CUPO MÁXIMO<Resizer colKey="col3" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider border-r border-borde text-center" style={thStyle(widths.col4)}>INSCRIPTOS<Resizer colKey="col4" /></th>
-                <th className="text-xs font-bold text-pizarra tracking-wider text-center" style={thStyle(null, { paddingRight: '24px' })}>ESTADO</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedTalleres.map((taller) => (
-                <tr key={taller.id} onClick={() => setSelectedItem(taller)} className="border-b border-borde hover:bg-canvas cursor-pointer transition-colors">
-                  <td className="text-sm font-semibold text-texto border-r border-borde truncate" style={thStyle(widths.col1, { paddingLeft: '24px' })} title={taller.nombre}>
-                    {taller.nombre}
-                  </td>
-                  <td className="text-sm font-medium text-pizarra/80 border-r border-borde" style={thStyle(widths.col2)}>
-                    <div className="flex flex-wrap" style={{ gap: '4px' }}>
-                      {(taller.org_ids || []).map((id, i) => (
-                        <span key={i} className="bg-primario/10 text-primario text-xs rounded-full inline-block font-medium truncate hover:bg-primario/20 transition-colors" style={{ padding: '2px 8px', maxWidth: '100%' }} onClick={(e) => { e.stopPropagation(); navigate('/organizaciones', { state: { filterOrg: getOrgName(id) } }); }} title={getOrgName(id)}>
-                          {getOrgName(id)}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col3)}>{taller.cupo}</td>
-                  <td className="text-sm font-bold text-texto text-center border-r border-borde" style={thStyle(widths.col4)}>{taller.inscriptos}</td>
-                  <td className="text-sm text-center" style={thStyle(null, { paddingRight: '24px' })}>
-                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${taller.estado === 'En curso' ? 'bg-primario/10 text-primario' : taller.estado === 'Finalizado' ? 'bg-pizarra/10 text-pizarra' : 'bg-exito/10 text-exito'}`}>
-                      {taller.estado}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="pt-2">
+        <TalleresTable data={paginatedTalleres} onItemClick={setSelectedItem} visibleCols={visibleCols} orderedColumns={orderedColumns} getOrgName={getOrgName} />
       </div>
 
       <Modal isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} title={selectedItem?.nombre || 'Detalle de Taller'}>

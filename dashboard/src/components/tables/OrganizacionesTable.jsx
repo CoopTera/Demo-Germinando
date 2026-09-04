@@ -1,6 +1,7 @@
 import React from 'react';
+import DataTable from './DataTable';
 
-export default function OrganizacionesTable({ data = [], onItemClick }) {
+export default function OrganizacionesTable({ data = [], onItemClick, visibleCols = {}, orderedColumns = [] }) {
   const formatCurrency = (amount) => {
     if (typeof amount !== 'number') return '$ 0';
     return amount.toLocaleString('es-AR', {
@@ -18,70 +19,55 @@ export default function OrganizacionesTable({ data = [], onItemClick }) {
     return 'bg-superficie-sec text-pizarra';
   };
 
+  const columns = [
+    {
+      id: 'col1', label: 'Nombre', sortKey: 'nombre', width: 250,
+      renderCell: (row) => <span className="font-medium">{row.nombre}</span>
+    },
+    {
+      id: 'col2', label: 'Localización', sortKey: 'localizacion', width: 200,
+      renderCell: (row) => <span className="text-pizarra/80 font-medium">{row.localizacion}</span>
+    },
+    {
+      id: 'col3', label: 'Especialización', sortKey: 'especializacion', width: 200,
+      renderCell: (row) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${getEspecializacionBadgeClass(row.especializacion)}`}>
+          {row.especializacion}
+        </span>
+      )
+    },
+    {
+      id: 'col4', label: 'Convenios', sortKey: 'convenios', width: 120,
+      headerClassName: 'text-center', cellClassName: 'text-center font-bold',
+      renderCell: (row) => row.convenios
+    },
+    {
+      id: 'col5', label: 'Talleres', sortKey: 'talleres', width: 120,
+      headerClassName: 'text-center', cellClassName: 'text-center font-bold',
+      renderCell: (row) => row.talleres
+    },
+    {
+      id: 'col6', label: 'Presupuesto', sortKey: 'presupuesto', width: 180,
+      headerClassName: 'text-right', cellClassName: 'text-right font-semibold',
+      renderCell: (row) => formatCurrency(row.presupuesto)
+    }
+  ];
+
+  const rowClassName = (row, index) => {
+    return `row-hover-accent relative transition-all cursor-pointer hover:bg-superficie-sec/50 ${
+      index % 2 === 0 ? '' : 'bg-canvas/50'
+    }`;
+  };
+
   return (
-    <div className="bg-white rounded-2xl animate-fade-in-up overflow-hidden shadow-sm border border-borde">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-superficie-sec text-pizarra text-sm font-semibold uppercase tracking-wider">
-            <tr>
-              <th scope="col" className="px-5 py-3">Nombre</th>
-              <th scope="col" className="px-5 py-3">Localización</th>
-              <th scope="col" className="px-5 py-3">Especialización</th>
-              <th scope="col" className="px-5 py-3 text-center">Convenios</th>
-              <th scope="col" className="px-5 py-3 text-center">Talleres</th>
-              <th scope="col" className="px-5 py-3 text-right">Presupuesto</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-borde">
-            {data && data.length > 0 ? (
-              data.map((org, index) => (
-                <tr
-                  key={org.id}
-                  onClick={() => onItemClick?.(org)}
-                  className={`row-hover-accent relative transition-all cursor-pointer hover:bg-superficie-sec/50 ${
-                    index % 2 === 0 ? '' : 'bg-canvas/50'
-                  }`}
-                >
-                  <td className="px-5 py-5 text-sm text-texto font-medium">
-                    {org.nombre}
-                  </td>
-                  <td className="px-5 py-5 text-sm text-pizarra/80 font-medium">
-                    {org.localizacion}
-                  </td>
-                  <td className="px-5 py-5 text-sm">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${getEspecializacionBadgeClass(
-                        org.especializacion
-                      )}`}
-                    >
-                      {org.especializacion}
-                    </span>
-                  </td>
-                  <td className="px-5 py-5 text-sm text-texto text-center font-bold">
-                    {org.convenios}
-                  </td>
-                  <td className="px-5 py-5 text-sm text-texto text-center font-bold">
-                    {org.talleres}
-                  </td>
-                  <td className="px-5 py-5 text-sm text-texto text-right font-semibold">
-                    {formatCurrency(org.presupuesto)}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={6}
-                  className="px-5 py-8 text-center text-sm text-pizarra/70"
-                >
-                  No se encontraron organizaciones registradas.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DataTable 
+      data={data}
+      columns={columns}
+      orderedColumns={orderedColumns}
+      visibleCols={visibleCols}
+      onItemClick={onItemClick}
+      rowClassName={rowClassName}
+      emptyMessage="No se encontraron organizaciones registradas."
+    />
   );
 }
-

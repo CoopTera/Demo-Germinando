@@ -6,6 +6,7 @@ import OrganizacionesTable from '../components/organizaciones/OrganizacionesTabl
 import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid';
 import PageTemplate from '../components/layout/PageTemplate';
 import Modal from '../components/common/Modal';
+import ColumnSelector from '../components/common/ColumnSelector';
 import OrganizacionForm from '../components/forms/OrganizacionForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -21,6 +22,41 @@ export default function OrganizacionesPage() {
   const [ciudadActiva, setCiudadActiva] = useState('Todas');
   const [selectedItem, setSelectedItem] = useState(null);
   const [isEditingItem, setIsEditingItem] = useState(false);
+  
+  const [visibleCols, setVisibleCols] = useState(() => {
+    const defaultCols = { col1: true, col2: true, col3: true, col4: true, col5: true, col6: true };
+    try {
+      const saved = localStorage.getItem('cols_organizaciones');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) {}
+    return defaultCols;
+  });
+
+  const [orderedColumns, setOrderedColumns] = useState(() => {
+    const defaultOrder = [
+      { id: 'col1', label: 'Nombre' },
+      { id: 'col2', label: 'Localización' },
+      { id: 'col3', label: 'Especialización' },
+      { id: 'col4', label: 'Convenios' },
+      { id: 'col5', label: 'Talleres' },
+      { id: 'col6', label: 'Presupuesto' }
+    ];
+    try {
+      const savedOrder = localStorage.getItem('order_organizaciones');
+      if (savedOrder) {
+        const parsed = JSON.parse(savedOrder);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch(e) {}
+    return defaultOrder;
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('order_organizaciones', JSON.stringify(orderedColumns));
+  }, [orderedColumns]);
   const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
 
@@ -169,11 +205,22 @@ export default function OrganizacionesPage() {
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}
         setPageSize={setPageSize}
+        tableControls={
+          viewMode === 'list' && (
+            <ColumnSelector 
+              columns={orderedColumns} 
+              setColumns={setOrderedColumns}
+              visibleColumns={visibleCols} 
+              setVisibleColumns={setVisibleCols} 
+              storageKey="cols_organizaciones" 
+            />
+          )
+        }
       >
         {/* Table / Grid with generous separation */}
         <div className="pt-2">
           {viewMode === 'list' ? (
-            <OrganizacionesTable data={paginatedData} onItemClick={setSelectedItem} />
+            <OrganizacionesTable data={paginatedData} onItemClick={setSelectedItem} visibleCols={visibleCols} orderedColumns={orderedColumns} />
           ) : (
             <OrganizacionesGrid data={paginatedData} onItemClick={setSelectedItem} />
           )}
