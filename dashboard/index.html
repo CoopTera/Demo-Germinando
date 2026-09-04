@@ -10,17 +10,6 @@
     <title>Germinando - Panel de Gestión</title>
   </head>
   <body>
-    <script>
-      window.onerror = function(message, source, lineno, colno, error) {
-        fetch('http://localhost:9999', { method: 'POST', body: JSON.stringify({type: 'error', message, stack: error ? error.stack : ''}) }).catch(console.error);
-      };
-      const origError = console.error;
-      console.error = function(...args) {
-        const parsedArgs = args.map(a => a instanceof Error ? a.stack : (typeof a === 'object' ? JSON.stringify(a, Object.getOwnPropertyNames(a)) : String(a)));
-        fetch('http://localhost:9999', { method: 'POST', body: JSON.stringify({type: 'console.error', args: parsedArgs}) }).catch(origError);
-        origError.apply(console, args);
-      };
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

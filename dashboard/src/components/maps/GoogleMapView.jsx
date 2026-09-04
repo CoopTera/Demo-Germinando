@@ -5,12 +5,10 @@ import 'leaflet/dist/leaflet.css';
 import { 
   Location, 
   Search, 
-  Maximize, 
-  Minimize, 
   ChevronLeft, 
   ChevronRight, 
-  Renew,
-  Close
+  Close,
+  CenterToFit
 } from '@carbon/icons-react';
 import { getEntityCoordinates, SANTA_FE_CENTER } from '../../utils/geoUtils';
 
@@ -70,7 +68,6 @@ export default function GoogleMapView({
   const wasSidebarOpenBeforeSelectionRef = useRef(false);
   const prevSelectedItemRef = useRef(selectedItem);
   const [localSearch, setLocalSearch] = useState('');
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const isOrg = entityType === 'organizacion';
 
@@ -149,14 +146,14 @@ export default function GoogleMapView({
     });
 
     if (count > 1) {
-      mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+      mapInstanceRef.current.flyToBounds(bounds, { padding: [50, 50], maxZoom: 14, duration: 0.8 });
     } else if (count === 1) {
       const firstEntry = markerMapRef.current.values().next().value;
       if (firstEntry?.marker) {
-        mapInstanceRef.current.setView(firstEntry.marker.getLatLng(), 14);
+        mapInstanceRef.current.flyTo(firstEntry.marker.getLatLng(), 14, { duration: 0.8 });
       }
     } else {
-      mapInstanceRef.current.setView([SANTA_FE_CENTER.lat, SANTA_FE_CENTER.lng], 8);
+      mapInstanceRef.current.flyTo([SANTA_FE_CENTER.lat, SANTA_FE_CENTER.lng], 8, { duration: 0.8 });
     }
   }, []);
 
@@ -172,10 +169,9 @@ export default function GoogleMapView({
       zoomControl: false
     });
 
-    // Capa de mosaicos CartoDB Voyager: limpia, moderna, elegante y de carga rápida
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
+    // Capa de mosaicos oficial de OpenStreetMap: 100% gratuita y sin marcas de agua ni API keys
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
     }).addTo(map);
 
@@ -203,7 +199,7 @@ export default function GoogleMapView({
       }, 250);
       return () => clearTimeout(timer);
     }
-  }, [isSidebarOpen, isFullscreen]);
+  }, [isSidebarOpen]);
 
   // Actualizar marcadores cuando cambian los items o el mapa está listo
   useEffect(() => {
@@ -314,25 +310,17 @@ export default function GoogleMapView({
   return (
     <div 
       ref={containerRef}
-      className={`relative bg-canvas rounded-2xl border border-borde overflow-hidden shadow-sm transition-all duration-300 ${
-        isFullscreen ? 'fixed inset-4 z-50 rounded-2xl shadow-2xl' : 'h-[760px] min-h-[640px]'
-      }`}
+      className="relative bg-canvas rounded-2xl border border-borde overflow-hidden shadow-sm transition-all duration-300 h-[760px] min-h-[640px]"
     >
-      {/* Floating Map Controls (top right of map canvas) */}
-      <div className="absolute top-4 right-4 z-[1001] pointer-events-auto flex items-center gap-2">
+      {/* Botón flotante para centrar vista por defecto */}
+      <div className="absolute top-4 right-4 z-[1001] pointer-events-auto">
         <button
           onClick={handleResetBounds}
-          className="flex items-center justify-center w-9 h-9 bg-white text-pizarra/80 hover:text-primario text-xs font-semibold rounded-xl border border-borde shadow-md hover:bg-superficie-sec transition-all cursor-pointer card-elevated"
-          title="Centrar vista general"
+          className="flex items-center gap-1.5 px-3.5 py-2 bg-white text-pizarra hover:text-primario text-xs font-semibold rounded-xl border border-borde shadow-md hover:bg-superficie-sec hover:shadow-lg transition-all cursor-pointer select-none card-elevated"
+          title="Centrar y volver a la vista por defecto"
         >
-          <Renew size={16} />
-        </button>
-        <button
-          onClick={() => setIsFullscreen(!isFullscreen)}
-          className="flex items-center justify-center w-9 h-9 bg-white text-pizarra/80 hover:text-primario text-xs font-semibold rounded-xl border border-borde shadow-md hover:bg-superficie-sec transition-all cursor-pointer card-elevated"
-          title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
-        >
-          {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
+          <CenterToFit size={16} className="text-primario shrink-0" />
+          <span>Centrar</span>
         </button>
       </div>
 
