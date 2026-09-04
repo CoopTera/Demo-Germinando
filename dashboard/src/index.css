@@ -171,5 +171,14 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-
-
+/* ─── Google Maps: Ocultar carteles y modales de error de desarrollo ─── */
+.gm-err-container,
+.gm-err-content,
+.gm-err-message,
+.dismissButton,
+div[role="dialog"]:has(.dismissButton) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

@@ -10,6 +10,7 @@ import EntityTimeline from '../components/common/EntityTimeline';
 import MiniGraph from '../components/graph/MiniGraph';
 import BeneficiarioForm from '../components/forms/BeneficiarioForm';
 import CustomSelect from '../components/common/CustomSelect';
+import GoogleMapView from '../components/maps/GoogleMapView';
 import { Add, EventSchedule, Location, Calendar, Time, Money } from '@carbon/icons-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -140,13 +141,15 @@ export default function BeneficiariosPage() {
     };
 
     const handleEditEvent = (updatedEvent) => {
-      const newHistorial = b.historial.map(e => e.id === updatedEvent.id ? updatedEvent : e);
+      const currentHistorial = Array.isArray(b.historial) ? b.historial : [];
+      const newHistorial = currentHistorial.map(e => e.id === updatedEvent.id ? updatedEvent : e);
       editarBeneficiario({ ...b, historial: newHistorial });
       setSelectedItem({ ...b, historial: newHistorial });
     };
 
     const handleDeleteEvent = (eventId) => {
-      const newHistorial = b.historial.filter(e => e.id !== eventId);
+      const currentHistorial = Array.isArray(b.historial) ? b.historial : [];
+      const newHistorial = currentHistorial.filter(e => e.id !== eventId);
       editarBeneficiario({ ...b, historial: newHistorial });
       setSelectedItem({ ...b, historial: newHistorial });
     };
@@ -250,7 +253,7 @@ export default function BeneficiariosPage() {
         {/* Línea de Tiempo */}
         <div style={cardStyle}>
           <span style={{ ...labelStyle, marginBottom: '14px' }}>Línea de Tiempo</span>
-          <EntityTimeline historial={b.historial} onEdit={handleEditEvent} onDelete={handleDeleteEvent} />
+          <EntityTimeline historial={Array.isArray(b.historial) ? b.historial : []} onEdit={handleEditEvent} onDelete={handleDeleteEvent} />
         </div>
 
         {/* Red de Vínculos */}
@@ -295,6 +298,7 @@ export default function BeneficiariosPage() {
           setFiltroActivo={setFiltro}
           viewMode={viewMode}
           setViewMode={setViewMode}
+          showMapView={true}
           totalItems={beneficiarios.length}
           filteredItemsCount={filteredData.length}
           currentPage={currentPage}
@@ -316,8 +320,15 @@ export default function BeneficiariosPage() {
           <div className="pt-2">
             {viewMode === 'list' ? (
               <BeneficiariosTable data={paginatedData} onItemClick={setSelectedItem} visibleCols={visibleCols} orderedColumns={orderedColumns} />
-            ) : (
+            ) : viewMode === 'grid' ? (
               <BeneficiariosGrid data={paginatedData} onItemClick={setSelectedItem} />
+            ) : (
+              <GoogleMapView
+                items={filteredData}
+                entityType="beneficiario"
+                onItemClick={setSelectedItem}
+                selectedItem={selectedItem}
+              />
             )}
           </div>
         </PageTemplate>

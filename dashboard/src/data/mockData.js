@@ -208,7 +208,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "carlosg@gmail.com",
-    "telefono": "341-999888"
+    "telefono": "341-999888",
+    "coordenadas": {
+          "lat": -32.9734,
+          "lng": -60.6481
+    }
   },
   {
     "id": 2,
@@ -227,7 +231,11 @@ export const beneficiariosData = [
     "estado": "Sin seguimiento",
     "alerta": true,
     "contacto": "mlsilva@hotmail.com",
-    "telefono": "342-444555"
+    "telefono": "342-444555",
+    "coordenadas": {
+          "lat": -31.6441,
+          "lng": -60.7032
+    }
   },
   {
     "id": 3,
@@ -247,7 +255,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "joaquinm@gmail.com",
-    "telefono": "3492-333222"
+    "telefono": "3492-333222",
+    "coordenadas": {
+          "lat": -31.253,
+          "lng": -61.4835
+    }
   },
   {
     "id": 4,
@@ -266,7 +278,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "susilopez@gmail.com",
-    "telefono": "3482-111111"
+    "telefono": "3482-111111",
+    "coordenadas": {
+          "lat": -29.1445,
+          "lng": -59.6482
+    }
   },
   {
     "id": 5,
@@ -285,7 +301,11 @@ export const beneficiariosData = [
     "estado": "Suspendido",
     "alerta": true,
     "contacto": "lucasf@yahoo.com",
-    "telefono": "341-777666"
+    "telefono": "341-777666",
+    "coordenadas": {
+          "lat": -32.9558,
+          "lng": -60.6582
+    }
   },
   {
     "id": 6,
@@ -303,7 +323,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "anapaula@gmail.com",
-    "telefono": "342-888999"
+    "telefono": "342-888999",
+    "coordenadas": {
+          "lat": -31.6378,
+          "lng": -60.7115
+    }
   },
   {
     "id": 7,
@@ -322,7 +346,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "erossi@gmail.com",
-    "telefono": "3462-555123"
+    "telefono": "3462-555123",
+    "coordenadas": {
+          "lat": -33.7485,
+          "lng": -61.962
+    }
   },
   {
     "id": 8,
@@ -341,7 +369,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "flor.rios@hotmail.com",
-    "telefono": "342-666333"
+    "telefono": "342-666333",
+    "coordenadas": {
+          "lat": -31.666,
+          "lng": -60.768
+    }
   },
   {
     "id": 9,
@@ -360,7 +392,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "gonza.peralta@gmail.com",
-    "telefono": "3493-456123"
+    "telefono": "3493-456123",
+    "coordenadas": {
+          "lat": -30.9415,
+          "lng": -61.5605
+    }
   },
   {
     "id": 10,
@@ -378,7 +414,11 @@ export const beneficiariosData = [
     "estado": "Sin seguimiento",
     "alerta": true,
     "contacto": "valedominguez@gmail.com",
-    "telefono": "3401-444777"
+    "telefono": "3401-444777",
+    "coordenadas": {
+          "lat": -32.2045,
+          "lng": -61.698
+    }
   },
   {
     "id": 11,
@@ -397,7 +437,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "rbenitez@gmail.com",
-    "telefono": "341-456789"
+    "telefono": "341-456789",
+    "coordenadas": {
+          "lat": -32.9421,
+          "lng": -60.6812
+    }
   },
   {
     "id": 12,
@@ -416,7 +460,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "cami.almada@yahoo.com.ar",
-    "telefono": "342-789012"
+    "telefono": "342-789012",
+    "coordenadas": {
+          "lat": -31.6189,
+          "lng": -60.6892
+    }
   },
   {
     "id": 13,
@@ -434,7 +482,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "acostadamian@gmail.com",
-    "telefono": "3471-554433"
+    "telefono": "3471-554433",
+    "coordenadas": {
+          "lat": -32.819,
+          "lng": -61.387
+    }
   },
   {
     "id": 14,
@@ -453,7 +505,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "nadia.carrizo@hotmail.com",
-    "telefono": "3464-667788"
+    "telefono": "3464-667788",
+    "coordenadas": {
+          "lat": -33.041,
+          "lng": -61.165
+    }
   },
   {
     "id": 15,
@@ -471,7 +527,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "facumedina@gmail.com",
-    "telefono": "3492-998877"
+    "telefono": "3492-998877",
+    "coordenadas": {
+          "lat": -31.258,
+          "lng": -61.491
+    }
   },
   {
     "id": 16,
@@ -490,7 +550,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "loremansilla@gmail.com",
-    "telefono": "3482-332211"
+    "telefono": "3482-332211",
+    "coordenadas": {
+          "lat": -29.148,
+          "lng": -59.642
+    }
   },
   {
     "id": 17,
@@ -509,7 +573,11 @@ export const beneficiariosData = [
     "estado": "Sin seguimiento",
     "alerta": true,
     "contacto": "hugomaidana@gmail.com",
-    "telefono": "3462-887766"
+    "telefono": "3462-887766",
+    "coordenadas": {
+          "lat": -33.741,
+          "lng": -61.975
+    }
   },
   {
     "id": 18,
@@ -528,7 +596,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "sofi.coronel@gmail.com",
-    "telefono": "341-223344"
+    "telefono": "341-223344",
+    "coordenadas": {
+          "lat": -32.938,
+          "lng": -60.692
+    }
   },
   {
     "id": 19,
@@ -547,7 +619,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "mleguizamon@yahoo.com",
-    "telefono": "342-554411"
+    "telefono": "342-554411",
+    "coordenadas": {
+          "lat": -31.661,
+          "lng": -60.771
+    }
   },
   {
     "id": 20,
@@ -566,7 +642,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "ggodoy@gmail.com",
-    "telefono": "3493-889900"
+    "telefono": "3493-889900",
+    "coordenadas": {
+          "lat": -30.946,
+          "lng": -61.558
+    }
   },
   {
     "id": 21,
@@ -584,7 +664,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "tomasocampo@gmail.com",
-    "telefono": "3471-112244"
+    "telefono": "3471-112244",
+    "coordenadas": {
+          "lat": -32.814,
+          "lng": -61.381
+    }
   },
   {
     "id": 22,
@@ -602,7 +686,11 @@ export const beneficiariosData = [
     "estado": "Suspendido",
     "alerta": true,
     "contacto": "patrivivas@gmail.com",
-    "telefono": "3464-334455"
+    "telefono": "3464-334455",
+    "coordenadas": {
+          "lat": -33.047,
+          "lng": -61.172
+    }
   },
   {
     "id": 23,
@@ -621,7 +709,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "joanabustos@gmail.com",
-    "telefono": "341-889900"
+    "telefono": "341-889900",
+    "coordenadas": {
+          "lat": -32.989,
+          "lng": -60.641
+    }
   },
   {
     "id": 24,
@@ -640,7 +732,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "lferreyra@gmail.com",
-    "telefono": "342-123987"
+    "telefono": "342-123987",
+    "coordenadas": {
+          "lat": -31.605,
+          "lng": -60.697
+    }
   },
   {
     "id": 25,
@@ -658,7 +754,11 @@ export const beneficiariosData = [
     "estado": "Activo",
     "alerta": false,
     "contacto": "brendasosa@gmail.com",
-    "telefono": "3401-998877"
+    "telefono": "3401-998877",
+    "coordenadas": {
+          "lat": -32.199,
+          "lng": -61.705
+    }
   }
 ];
 export const conveniosData = [
