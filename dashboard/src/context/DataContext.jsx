@@ -9,6 +9,7 @@ import {
   oportunidades as oportunidadesData,
   actividadReciente as actividadData
 } from '../data/mockData';
+import { programasEstado as programasEstadoData, vinculosInstitucionales as vinculosData } from '../data/vinculosData';
 
 const DataContext = createContext();
 
@@ -32,6 +33,8 @@ export const DataProvider = ({ children }) => {
   const [alertas, setAlertas] = useState(() => isDemoMode ? [] : alertasData);
   const [oportunidades, setOportunidades] = useState(() => isDemoMode ? [] : oportunidadesData);
   const [actividadReciente, setActividadReciente] = useState(() => isDemoMode ? [] : actividadData);
+  const [programasEstado, setProgramasEstado] = useState(() => isDemoMode ? [] : programasEstadoData);
+  const [vinculos, setVinculos] = useState(() => isDemoMode ? [] : vinculosData);
   
   const [hasDashboardAnimated, setHasDashboardAnimated] = useState(false);
 
@@ -49,6 +52,8 @@ export const DataProvider = ({ children }) => {
       setAlertas([]);
       setOportunidades([]);
       setActividadReciente([]);
+      setProgramasEstado([]);
+      setVinculos([]);
     } else {
       setOrganizaciones(organizacionesData);
       setBeneficiarios(processedBeneficiarios);
@@ -57,6 +62,8 @@ export const DataProvider = ({ children }) => {
       setAlertas(alertasData);
       setOportunidades(oportunidadesData);
       setActividadReciente(actividadData);
+      setProgramasEstado(programasEstadoData);
+      setVinculos(vinculosData);
     }
   };
 
@@ -77,6 +84,10 @@ export const DataProvider = ({ children }) => {
   const deleteTaller = (id) => setTalleres(prev => prev.filter(t => t.id !== id));
 
   const resolveAlerta = (id) => setAlertas(prev => prev.filter(a => a.id !== id));
+
+  const editarVinculo = (updated) => setVinculos(prev => prev.map(v => v.id === updated.id ? updated : v));
+  const addVinculo = (nuevo) => setVinculos(prev => [nuevo, ...prev]);
+  const deleteVinculo = (id) => setVinculos(prev => prev.filter(v => v.id !== id));
 
   const importarDesdeExcel = (file) => {
     const reader = new FileReader();
@@ -132,9 +143,11 @@ export const DataProvider = ({ children }) => {
     <DataContext.Provider value={{
       isDemoMode, resetDatabase,
       organizaciones, beneficiarios, convenios, talleres, alertas, oportunidades, actividadReciente,
+      programasEstado, vinculos,
       editarBeneficiario, editarOrganizacion, editarConvenio, editarTaller,
       addBeneficiario, addOrganizacion, addConvenio, addTaller,
       deleteBeneficiario, deleteOrganizacion, deleteConvenio, deleteTaller,
+      editarVinculo, addVinculo, deleteVinculo,
       resolveAlerta, setAlertas, setOportunidades, setActividadReciente,
       hasDashboardAnimated, setHasDashboardAnimated,
       importarDesdeExcel

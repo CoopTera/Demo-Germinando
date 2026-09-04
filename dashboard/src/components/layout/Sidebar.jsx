@@ -10,6 +10,7 @@ import {
   Catalog,
   Document,
   Education,
+  Partnership,
 } from '@carbon/icons-react';
 
 const navItems = [
@@ -20,6 +21,7 @@ const navItems = [
   { name: 'Convenios', path: '/convenios', icon: Document },
   { name: 'Talleres', path: '/talleres', icon: Education },
   { name: 'Gráficos', path: '/graficos', icon: ChartBar },
+  { name: 'Articulaciones', path: '/articulaciones', icon: Partnership },
 ];
 
 function ActivePill({ collapsed }) {

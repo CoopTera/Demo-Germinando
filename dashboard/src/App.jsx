@@ -1,10 +1,11 @@
-﻿import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import DashboardPage from './pages/DashboardPage';
 import OrganizacionesPage from './pages/OrganizacionesPage';
 import BeneficiariosPage from './pages/BeneficiariosPage';
 import ConveniosPage from './pages/ConveniosPage';
 import TalleresPage from './pages/TalleresPage';
+import ArticulacionesPage from './pages/ArticulacionesPage';
 import GraficosPage from './pages/GraficosPage';
 import OportunidadesPage from './pages/OportunidadesPage';
 import PerfilPage from './pages/PerfilPage';
@@ -21,6 +22,7 @@ function App() {
             <Route path="/beneficiarios" element={<BeneficiariosPage />} />
             <Route path="/convenios" element={<ConveniosPage />} />
             <Route path="/talleres" element={<TalleresPage />} />
+            <Route path="/articulaciones" element={<ArticulacionesPage />} />
             <Route path="/oportunidades" element={<OportunidadesPage />} />
             <Route path="/graficos" element={<GraficosPage />} />
             <Route path="/perfil" element={<PerfilPage />} />

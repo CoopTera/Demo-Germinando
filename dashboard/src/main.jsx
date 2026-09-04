@@ -12,6 +12,7 @@ import ProfilePage from './pages/ProfilePage';
 import OportunidadesPage from './pages/OportunidadesPage';
 import ConveniosPage from './pages/ConveniosPage';
 import TalleresPage from './pages/TalleresPage';
+import ArticulacionesPage from './pages/ArticulacionesPage';
 import { DataProvider } from './context/DataContext';
 
 createRoot(document.getElementById('root')).render(
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="oportunidades" element={<OportunidadesPage />} />
             <Route path="convenios" element={<ConveniosPage />} />
             <Route path="talleres" element={<TalleresPage />} />
+            <Route path="articulaciones" element={<ArticulacionesPage />} />
             <Route path="graficos" element={<GraficosPage />} />
             <Route path="grafo" element={<GrafoPage />} />
             <Route path="perfil" element={<ProfilePage />} />

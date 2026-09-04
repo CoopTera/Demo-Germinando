@@ -18,6 +18,7 @@ export default function PageTemplate({
   filterGroups,
   viewMode,
   setViewMode,
+  viewModes,
   totalItems,
   filteredItemsCount,
   currentPage,
@@ -204,36 +205,59 @@ export default function PageTemplate({
           {/* View Toggle */}
           {setViewMode && (
             <div className="flex items-center bg-white rounded-xl p-1 shrink-0 self-start sm:self-auto card-elevated">
-              <button
-                onClick={() => setViewMode('list')}
-                className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'list' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
-                title="Vista de Lista"
-                style={{ padding: '6px 12px' }}
-              >
-                {viewMode === 'list' && (
-                  <motion.div
-                    layoutId="viewModeSwitchPill"
-                    className="absolute inset-0 bg-canvas rounded-lg -z-10"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <List size={16} />
-              </button>
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'grid' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
-                title="Vista de Cuadrícula"
-                style={{ padding: '6px 12px' }}
-              >
-                {viewMode === 'grid' && (
-                  <motion.div
-                    layoutId="viewModeSwitchPill"
-                    className="absolute inset-0 bg-canvas rounded-lg -z-10"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <Grid size={16} />
-              </button>
+              {(!viewModes || viewModes.includes('gantt')) && (
+                <button
+                  onClick={() => setViewMode('gantt')}
+                  className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'gantt' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
+                  title="Vista Gantt"
+                  style={{ padding: '6px 12px' }}
+                >
+                  {viewMode === 'gantt' && (
+                    <motion.div
+                      layoutId="viewModeSwitchPill"
+                      className="absolute inset-0 bg-canvas rounded-lg -z-10"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor">
+                    <path d="M28,6H4A2,2,0,0,0,2,8V24a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V8A2,2,0,0,0,28,6ZM4,8H10V14H4Zm0,8H14v8H4Zm24,8H16V16H28Zm0-10H12V8H28Z" />
+                  </svg>
+                </button>
+              )}
+              {(!viewModes || viewModes.includes('list')) && (
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'list' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
+                  title="Vista de Lista"
+                  style={{ padding: '6px 12px' }}
+                >
+                  {viewMode === 'list' && (
+                    <motion.div
+                      layoutId="viewModeSwitchPill"
+                      className="absolute inset-0 bg-canvas rounded-lg -z-10"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <List size={16} />
+                </button>
+              )}
+              {(!viewModes || viewModes.includes('grid')) && (
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'grid' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
+                  title="Vista de Cuadrícula"
+                  style={{ padding: '6px 12px' }}
+                >
+                  {viewMode === 'grid' && (
+                    <motion.div
+                      layoutId="viewModeSwitchPill"
+                      className="absolute inset-0 bg-canvas rounded-lg -z-10"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <Grid size={16} />
+                </button>
+              )}
             </div>
           )}
         </div>
