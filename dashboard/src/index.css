@@ -18,22 +18,22 @@
   --color-sidebar-active: #4D0A20;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  *, ::before, ::after {
+    box-sizing: border-box;
+  }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #EBEDF2;
-  color: #2D2D3A;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #EBEDF2;
+    color: #2D2D3A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', system-ui, sans-serif;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+  }
 }
 
 /* ─── Scrollbar ─── */
@@ -171,14 +171,12 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-/* ─── Google Maps: Ocultar carteles y modales de error de desarrollo ─── */
-.gm-err-container,
-.gm-err-content,
-.gm-err-message,
-.dismissButton,
-div[role="dialog"]:has(.dismissButton) {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
+/* ─── Leaflet Custom Pin & Controls ─── */
+.custom-leaflet-pin {
+  background: transparent !important;
+  border: none !important;
 }
+.leaflet-container {
+  font-family: inherit !important;
+}
+
