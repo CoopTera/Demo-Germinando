@@ -7,6 +7,7 @@ import ColumnSelector from '../components/common/ColumnSelector';
 import OrganizacionesTable from '../components/tables/OrganizacionesTable';
 import OrganizacionesGrid from '../components/organizaciones/OrganizacionesGrid';
 import OrganizacionForm from '../components/forms/OrganizacionForm';
+import GoogleMapView from '../components/maps/GoogleMapView';
 import MiniGraph from '../components/graph/MiniGraph';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Location, Document, Construction, UserMultiple } from '@carbon/icons-react';
@@ -284,6 +285,7 @@ export default function OrganizacionesPage() {
           ]}
           viewMode={viewMode}
           setViewMode={setViewMode}
+          showMapView={true}
           totalItems={organizaciones.length}
           filteredItemsCount={filteredData.length}
           currentPage={currentPage}
@@ -305,8 +307,15 @@ export default function OrganizacionesPage() {
           <div className="pt-2">
             {viewMode === 'list' ? (
               <OrganizacionesTable data={paginatedData} onItemClick={setSelectedItem} visibleCols={visibleCols} orderedColumns={orderedColumns} />
-            ) : (
+            ) : viewMode === 'grid' ? (
               <OrganizacionesGrid data={paginatedData} onItemClick={setSelectedItem} />
+            ) : (
+              <GoogleMapView 
+                items={filteredData} 
+                entityType="organizacion" 
+                onItemClick={setSelectedItem} 
+                selectedItem={selectedItem} 
+              />
             )}
           </div>
         </PageTemplate>

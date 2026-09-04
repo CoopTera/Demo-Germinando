@@ -100,7 +100,11 @@ export default function MiniGraph({ rootEntityId, rootEntityType, height = 220 }
       }
     }
 
-    return { nodes, links };
+    // Garantizar que cada enlace conecte nodos válidos existentes para evitar que ForceGraph2D falle
+    const validNodeIds = new Set(nodes.map(n => n.id));
+    const validLinks = links.filter(l => validNodeIds.has(l.source) && validNodeIds.has(l.target));
+
+    return { nodes, links: validLinks };
   }, [rootEntityId, rootEntityType, organizaciones, beneficiarios, convenios, talleres]);
 
   const handleNodeCanvasObject = useCallback((node, ctx, globalScale) => {

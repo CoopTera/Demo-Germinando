@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, List, Grid, ChevronDown, Close } from '@carbon/icons-react';
+import { Search, Filter, List, Grid, Map, ChevronDown, Close } from '@carbon/icons-react';
 import { pageContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function PageTemplate({
@@ -19,6 +19,7 @@ export default function PageTemplate({
   viewMode,
   setViewMode,
   viewModes,
+  showMapView = false,
   totalItems,
   filteredItemsCount,
   currentPage,
@@ -205,7 +206,7 @@ export default function PageTemplate({
           {/* View Toggle */}
           {setViewMode && (
             <div className="flex items-center bg-white rounded-xl p-1 shrink-0 self-start sm:self-auto card-elevated">
-              {(!viewModes || viewModes.includes('gantt')) && (
+              {(viewModes && viewModes.includes('gantt')) && (
                 <button
                   onClick={() => setViewMode('gantt')}
                   className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'gantt' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
@@ -256,6 +257,23 @@ export default function PageTemplate({
                     />
                   )}
                   <Grid size={16} />
+                </button>
+              )}
+              {(showMapView || (viewModes && viewModes.includes('map'))) && (
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'map' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
+                  title="Vista de Mapa"
+                  style={{ padding: '6px 12px' }}
+                >
+                  {viewMode === 'map' && (
+                    <motion.div
+                      layoutId="viewModeSwitchPill"
+                      className="absolute inset-0 bg-canvas rounded-lg -z-10"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <Map size={16} />
                 </button>
               )}
             </div>
@@ -324,87 +342,96 @@ export default function PageTemplate({
       {/* Content */}
       <motion.div variants={staggerItemVariants}>
         {children}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between" style={{ marginTop: '20px', padding: '0 8px', gap: '12px' }}>
-          <div className="flex items-center" style={{ gap: '16px' }}>
-            <p className="text-xs text-pizarra/60 font-medium">
-              {pageSize && currentPage ? (
-                <>
-                  Mostrando <span className="font-semibold text-pizarra">{filteredItemsCount === 0 ? 0 : (currentPage - 1) * pageSize + 1}</span> al <span className="font-semibold text-pizarra">{Math.min(currentPage * pageSize, filteredItemsCount)}</span> de{' '}
-                  <span className="font-semibold text-pizarra">{filteredItemsCount}</span> registros
-                </>
-              ) : (
-                <>
-                  Mostrando <span className="font-semibold text-pizarra">{filteredItemsCount}</span> de{' '}
-                  <span className="font-semibold text-pizarra">{totalItems}</span> registros
-                </>
+        {viewMode !== 'map' ? (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between" style={{ marginTop: '20px', padding: '0 8px', gap: '12px' }}>
+            <div className="flex items-center" style={{ gap: '16px' }}>
+              <p className="text-xs text-pizarra/60 font-medium">
+                {pageSize && currentPage ? (
+                  <>
+                    Mostrando <span className="font-semibold text-pizarra">{filteredItemsCount === 0 ? 0 : (currentPage - 1) * pageSize + 1}</span> al <span className="font-semibold text-pizarra">{Math.min(currentPage * pageSize, filteredItemsCount)}</span> de{' '}
+                    <span className="font-semibold text-pizarra">{filteredItemsCount}</span> registros
+                  </>
+                ) : (
+                  <>
+                    Mostrando <span className="font-semibold text-pizarra">{filteredItemsCount}</span> de{' '}
+                    <span className="font-semibold text-pizarra">{totalItems}</span> registros
+                  </>
+                )}
+              </p>
+              {setPageSize && (
+                <div className="flex items-center" style={{ gap: '8px' }}>
+                  <span className="text-xs text-pizarra/40 font-medium">Mostrar:</span>
+                  <select 
+                    value={pageSize} 
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
+                      if (setCurrentPage) setCurrentPage(1);
+                    }}
+                    className="bg-white text-pizarra text-xs font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-primario/20 cursor-pointer card-elevated"
+                    style={{ padding: '4px 8px' }}
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                  </select>
+                </div>
               )}
-            </p>
-            {setPageSize && (
-              <div className="flex items-center" style={{ gap: '8px' }}>
-                <span className="text-xs text-pizarra/40 font-medium">Mostrar:</span>
-                <select 
-                  value={pageSize} 
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    if (setCurrentPage) setCurrentPage(1);
-                  }}
-                  className="bg-white text-pizarra text-xs font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-primario/20 cursor-pointer card-elevated"
-                  style={{ padding: '4px 8px' }}
+            </div>
+            
+            {currentPage && setCurrentPage && Math.ceil(totalItems / pageSize) > 1 && (
+              <div className="flex items-center" style={{ gap: '6px' }}>
+                <button 
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className={`rounded-xl text-xs font-semibold cursor-pointer card-elevated transition-colors ${currentPage === 1 ? 'bg-canvas text-pizarra/30 cursor-not-allowed' : 'bg-white text-pizarra/60 hover:text-pizarra'}`} 
+                  style={{ padding: '7px 12px' }}
                 >
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                </select>
+                  Anterior
+                </button>
+                
+                {Array.from({ length: Math.ceil(totalItems / pageSize) }).map((_, i) => {
+                  const pageNum = i + 1;
+                  // Show first, last, and pages around current page
+                  if (
+                    pageNum === 1 || 
+                    pageNum === Math.ceil(totalItems / pageSize) || 
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  ) {
+                    return (
+                      <button 
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`rounded-xl text-xs font-semibold cursor-pointer card-elevated transition-colors ${currentPage === pageNum ? 'bg-primario text-white' : 'bg-white text-pizarra/60 hover:text-pizarra'}`} 
+                        style={{ padding: '7px 14px' }}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                    return <span key={pageNum} className="text-pizarra/40 text-xs px-1">...</span>;
+                  }
+                  return null;
+                })}
+
+                <button 
+                  onClick={() => setCurrentPage(Math.min(Math.ceil(totalItems / pageSize), currentPage + 1))}
+                  disabled={currentPage === Math.ceil(totalItems / pageSize)}
+                  className={`rounded-xl text-xs font-semibold cursor-pointer card-elevated transition-colors ${currentPage === Math.ceil(totalItems / pageSize) ? 'bg-canvas text-pizarra/30 cursor-not-allowed' : 'bg-white text-pizarra/60 hover:text-pizarra'}`} 
+                  style={{ padding: '7px 12px' }}
+                >
+                  Siguiente
+                </button>
               </div>
             )}
           </div>
-          
-          {currentPage && setCurrentPage && Math.ceil(totalItems / pageSize) > 1 && (
-            <div className="flex items-center" style={{ gap: '6px' }}>
-              <button 
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className={`rounded-xl text-xs font-semibold cursor-pointer card-elevated transition-colors ${currentPage === 1 ? 'bg-canvas text-pizarra/30 cursor-not-allowed' : 'bg-white text-pizarra/60 hover:text-pizarra'}`} 
-                style={{ padding: '7px 12px' }}
-              >
-                Anterior
-              </button>
-              
-              {Array.from({ length: Math.ceil(totalItems / pageSize) }).map((_, i) => {
-                const pageNum = i + 1;
-                // Show first, last, and pages around current page
-                if (
-                  pageNum === 1 || 
-                  pageNum === Math.ceil(totalItems / pageSize) || 
-                  (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                ) {
-                  return (
-                    <button 
-                      key={pageNum}
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`rounded-xl text-xs font-semibold cursor-pointer card-elevated transition-colors ${currentPage === pageNum ? 'bg-primario text-white' : 'bg-white text-pizarra/60 hover:text-pizarra'}`} 
-                      style={{ padding: '7px 14px' }}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
-                  return <span key={pageNum} className="text-pizarra/40 text-xs px-1">...</span>;
-                }
-                return null;
-              })}
-
-              <button 
-                onClick={() => setCurrentPage(Math.min(Math.ceil(totalItems / pageSize), currentPage + 1))}
-                disabled={currentPage === Math.ceil(totalItems / pageSize)}
-                className={`rounded-xl text-xs font-semibold cursor-pointer card-elevated transition-colors ${currentPage === Math.ceil(totalItems / pageSize) ? 'bg-canvas text-pizarra/30 cursor-not-allowed' : 'bg-white text-pizarra/60 hover:text-pizarra'}`} 
-                style={{ padding: '7px 12px' }}
-              >
-                Siguiente
-              </button>
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className="flex items-center justify-between" style={{ marginTop: '16px', padding: '0 8px' }}>
+            <p className="text-xs text-pizarra/60 font-medium">
+              Mostrando <span className="font-semibold text-pizarra">{filteredItemsCount}</span> de{' '}
+              <span className="font-semibold text-pizarra">{totalItems}</span> entidades georreferenciadas en el mapa
+            </p>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
