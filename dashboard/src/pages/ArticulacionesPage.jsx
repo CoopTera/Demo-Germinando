@@ -8,6 +8,7 @@ import VinculosTable from '../components/vinculos/VinculosTable';
 import VinculosGrid from '../components/vinculos/VinculosGrid';
 import VinculoDetailContent from '../components/vinculos/VinculoDetailContent';
 import VinculoForm from '../components/vinculos/VinculoForm';
+import PeriodSelector from '../components/common/PeriodSelector';
 
 const FILTROS_ESTADO = ['Todos', 'Vigente', 'En Negociación', 'Finalizado', 'Suspendido'];
 const FILTROS_NIVEL = ['Todos', 'Provincial', 'Nacional', 'Municipal'];
@@ -24,18 +25,40 @@ export default function VinculosPage() {
   const [isDeletingItem, setIsDeletingItem] = useState(false);
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [panelWidth, setPanelWidth] = useState(480);
+  const [periodoDesde, setPeriodoDesde] = useState('');
+  const [periodoHasta, setPeriodoHasta] = useState('');
 
   const getPrograma = (programaId) => programasEstado.find(p => p.id === programaId);
 
+  const availableYears = useMemo(() => {
+    const years = new Set();
+    vinculos.forEach(v => {
+      const start = new Date(v.fechaInicio).getFullYear();
+      const end = new Date(v.fechaFin).getFullYear();
+      if (!isNaN(start) && !isNaN(end)) {
+        for (let y = start; y <= end; y++) {
+          years.add(y);
+        }
+      }
+    });
+    return Array.from(years).sort((a, b) => b - a);
+  }, [vinculos]);
+
   const filteredData = useMemo(() => {
     let data = [...vinculos];
+    
+    // Filtro por Estado
     if (filtroEstado !== 'Todos') data = data.filter(v => v.estado === filtroEstado);
+    
+    // Filtro por Nivel
     if (filtroNivel !== 'Todos') {
       data = data.filter(v => {
         const prog = getPrograma(v.programa_id);
         return prog && prog.nivel === filtroNivel;
       });
     }
+    
+    // Filtro por Búsqueda
     if (busqueda.trim()) {
       const q = busqueda.toLowerCase();
       data = data.filter(v => {
@@ -110,23 +133,35 @@ export default function VinculosPage() {
           filteredItemsCount={filteredData.length}
         >
           <div className="flex flex-col h-[calc(100vh-280px)] min-h-[500px]">
-            {/* Nivel filter row */}
-            <div className="flex items-center gap-2 mb-4 shrink-0">
-              <span className="text-xs font-bold text-pizarra/50 uppercase tracking-wider">Nivel:</span>
-              {FILTROS_NIVEL.map(n => (
-                <button
-                  key={n}
-                  onClick={() => setFiltroNivel(n)}
-                  className={`text-[11px] font-bold rounded-full transition-all cursor-pointer ${
-                    filtroNivel === n
-                      ? 'bg-[#6B1330] text-white shadow-sm'
-                      : 'bg-white text-[#494963] border border-[#E2E4EB] hover:bg-[#F5F6F8]'
-                  }`}
-                  style={{ padding: '4px 12px' }}
-                >
-                  {n}
-                </button>
-              ))}
+            {/* Filter row */}
+            <div className="flex items-center justify-between mb-4 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-pizarra/50 uppercase tracking-wider">Nivel:</span>
+                {FILTROS_NIVEL.map(n => (
+                  <button
+                    key={n}
+                    onClick={() => setFiltroNivel(n)}
+                    className={`text-[11px] font-bold rounded-full transition-all cursor-pointer ${
+                      filtroNivel === n
+                        ? 'bg-[#6B1330] text-white shadow-sm'
+                        : 'bg-white text-[#494963] border border-[#E2E4EB] hover:bg-[#F5F6F8]'
+                    }`}
+                    style={{ padding: '4px 12px' }}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3">
+                <PeriodSelector 
+                  periodoDesde={periodoDesde} 
+                  setPeriodoDesde={setPeriodoDesde} 
+                  periodoHasta={periodoHasta} 
+                  setPeriodoHasta={setPeriodoHasta} 
+                  availableYears={availableYears} 
+                />
+              </div>
             </div>
 
             <div className="flex-1 overflow-hidden relative">
@@ -136,6 +171,8 @@ export default function VinculosPage() {
                   programas={programasEstado}
                   onItemClick={setSelectedItem}
                   selectedId={selectedItem?.id}
+                  periodoDesde={periodoDesde}
+                  periodoHasta={periodoHasta}
                 />
               )}
               {viewMode === 'list' && (

@@ -26,7 +26,7 @@ export default function BeneficiariosTable({ data = [], onItemClick, visibleCols
     },
     {
       id: 'col1', label: 'DNI', sortKey: 'dni', width: 100,
-      renderCell: (row) => <span className="font-mono text-xs text-pizarra/70">{row.dni}</span>
+      renderCell: (row) => <span className="font-medium text-xs text-pizarra/70">{row.dni}</span>
     },
     {
       id: 'col3', label: 'Organización', sortKey: 'programas', width: 200,

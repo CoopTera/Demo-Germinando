@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronDown, ChevronRight } from '@carbon/icons-react';
 
-const GanttChart = ({ vinculos, programas, onItemClick, selectedId }) => {
+const GanttChart = ({ vinculos, programas, onItemClick, selectedId, periodoDesde, periodoHasta }) => {
   const [collapsed, setCollapsed] = useState({});
 
   const toggleGroup = (programaId) => {
@@ -27,6 +27,19 @@ const GanttChart = ({ vinculos, programas, onItemClick, selectedId }) => {
     // Add padding to dates
     min = new Date(min.getFullYear(), min.getMonth() - 1, 1);
     max = new Date(max.getFullYear(), max.getMonth() + 2, 0);
+
+    // Apply manual overrides if set
+    if (periodoDesde) {
+      const [y, m] = periodoDesde.split('-');
+      min = new Date(y, m - 1, 1);
+    }
+    if (periodoHasta) {
+      const [y, m] = periodoHasta.split('-');
+      max = new Date(y, m, 0); // last day of that month
+    }
+    
+    // Ensure min doesn't surpass max
+    if (min > max) max = new Date(min.getFullYear(), min.getMonth() + 1, 0);
     
     const months = (max.getFullYear() - min.getFullYear()) * 12 + (max.getMonth() - min.getMonth()) + 1;
     
@@ -37,7 +50,7 @@ const GanttChart = ({ vinculos, programas, onItemClick, selectedId }) => {
     }
     
     return { minDate: min, maxDate: max, totalMonths: months, monthsArr: arr };
-  }, [vinculos]);
+  }, [vinculos, periodoDesde, periodoHasta]);
 
   const groups = useMemo(() => {
     const grouped = {};

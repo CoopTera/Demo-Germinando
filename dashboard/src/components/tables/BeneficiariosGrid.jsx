@@ -78,7 +78,7 @@ export default function BeneficiariosGrid({ data = [], onItemClick }) {
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <h3 className="font-bold text-pizarra text-base leading-tight" title={row.nombre}>{row.nombre}</h3>
-                  <p className="text-pizarra/60 text-xs mt-1 font-medium font-mono">{row.dni}</p>
+                  <p className="text-pizarra/60 text-xs mt-1 font-medium">{row.dni}</p>
                 </div>
               </div>
 
