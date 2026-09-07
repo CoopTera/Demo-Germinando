@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Catalog } from '@carbon/icons-react';
+import { Idea } from '@carbon/icons-react';
 import KPICard from '../components/dashboard/KPICard';
 import TopOrgs from '../components/dashboard/TopOrgs';
 import EvolucionChart from '../components/dashboard/EvolucionChart';
@@ -69,7 +69,7 @@ export default function DashboardPage() {
           style={{ width: '52px', height: '52px' }}
           title="Ver Oportunidades"
         >
-          <Catalog size={24} className="text-pizarra group-hover:text-primario transition-colors" />
+          <Idea size={24} className="text-pizarra group-hover:text-primario transition-colors" />
           {oportunidades && oportunidades.length > 0 && (
             <span 
               className="absolute bg-primario text-white text-xs font-bold rounded-full flex items-center justify-center border-2 border-white"

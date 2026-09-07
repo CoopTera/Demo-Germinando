@@ -7,7 +7,7 @@ import {
   Enterprise,
   Group,
   ChartBar,
-  Catalog,
+  Idea,
   Document,
   Education,
   Partnership,
@@ -15,7 +15,7 @@ import {
 
 const navItems = [
   { name: 'Panel Ejecutivo', path: '/', icon: Dashboard, end: true },
-  { name: 'Oportunidades', path: '/oportunidades', icon: Catalog },
+  { name: 'Oportunidades', path: '/oportunidades', icon: Idea },
   { name: 'Organizaciones', path: '/organizaciones', icon: Enterprise },
   { name: 'Beneficiarios', path: '/beneficiarios', icon: Group },
   { name: 'Convenios', path: '/convenios', icon: Document },
