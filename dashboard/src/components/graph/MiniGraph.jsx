@@ -126,11 +126,7 @@ export default function MiniGraph({ rootEntityId, rootEntityType, height = 220 }
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     
-    let textToDraw = label;
-    const words = label.split(' ');
-    if (words.length > 2) {
-      textToDraw = words.slice(0, 2).join(' ') + '...';
-    }
+    const textToDraw = label;
 
     const yPos = node.y + nodeRadius + 3;
 
@@ -138,7 +134,7 @@ export default function MiniGraph({ rootEntityId, rootEntityType, height = 220 }
     ctx.lineWidth = 4 / globalScale;
     ctx.strokeText(textToDraw, node.x, yPos);
     
-    ctx.fillStyle = '#222222';
+    ctx.fillStyle = '#2D2D3A';
     ctx.fillText(textToDraw, node.x, yPos);
   }, []);
 

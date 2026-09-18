@@ -18,10 +18,10 @@ const navItems = [
   { name: 'Oportunidades', path: '/oportunidades', icon: Idea },
   { name: 'Organizaciones', path: '/organizaciones', icon: Enterprise },
   { name: 'Beneficiarios', path: '/beneficiarios', icon: Group },
-  { name: 'Convenios', path: '/convenios', icon: Document },
-  { name: 'Talleres', path: '/talleres', icon: Education },
-  { name: 'Gráficos', path: '/graficos', icon: ChartBar },
+  { name: 'Talleres', path: '/talleres', icon: ChartBar },
   { name: 'Articulaciones', path: '/articulaciones', icon: Partnership },
+  { name: 'Convenios', path: '/convenios', icon: Document },
+  { name: 'Gráficos', path: '/graficos', icon: ChartBar },
 ];
 
 function ActivePill({ collapsed }) {

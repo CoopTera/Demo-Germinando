@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 
 export default function OrganizacionForm({ onClose, initialData = null }) {
-  const { agregarOrganizacion, editarOrganizacion } = useData();
+  const { addOrganizacion, editarOrganizacion } = useData();
   const [formData, setFormData] = useState({
     nombre: initialData?.nombre || '',
     especializacion: initialData?.especializacion || '',
     localizacion: initialData?.localizacion || '',
     cuit: initialData?.cuit || '',
     beneficiarios: initialData?.beneficiarios || '',
-    presupuesto: initialData?.presupuesto?.replace(/[^0-9]/g, '') || '',
+    presupuesto: initialData?.presupuesto != null ? String(initialData.presupuesto).replace(/[^0-9]/g, '') : '',
     convenios: initialData?.convenios || '',
     talleres: initialData?.talleres || ''
   });
@@ -26,13 +26,16 @@ export default function OrganizacionForm({ onClose, initialData = null }) {
       beneficiarios: Number(formData.beneficiarios) || 0,
       convenios: Number(formData.convenios) || 0,
       talleres: Number(formData.talleres) || 0,
-      presupuesto: `$ ${Number(formData.presupuesto).toLocaleString('es-AR') || 0}`
+      presupuesto: Number(formData.presupuesto) || 0
     };
 
     if (initialData && initialData.id) {
-      editarOrganizacion(initialData.id, dataToSave);
+      // Importante: useData.editarOrganizacion espera (id, data), pero en DataContext editarOrganizacion solo espera (updatedObject).
+      // Revisando DataContext: const editarOrganizacion = (updated) => ...
+      // Entonces dataToSave necesita tener el id adentro
+      editarOrganizacion({ ...dataToSave, id: initialData.id });
     } else {
-      agregarOrganizacion(dataToSave);
+      addOrganizacion({ ...dataToSave, id: Date.now() });
     }
     onClose();
   };

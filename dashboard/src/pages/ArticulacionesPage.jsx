@@ -9,6 +9,7 @@ import VinculosGrid from '../components/vinculos/VinculosGrid';
 import VinculoDetailContent from '../components/vinculos/VinculoDetailContent';
 import VinculoForm from '../components/vinculos/VinculoForm';
 import PeriodSelector from '../components/common/PeriodSelector';
+import GrafoVinculos from '../components/graph/GrafoVinculos';
 
 const FILTROS_ESTADO = ['Todos', 'Vigente', 'En Negociación', 'Finalizado', 'Suspendido'];
 const FILTROS_NIVEL = ['Todos', 'Provincial', 'Nacional', 'Municipal'];
@@ -132,7 +133,7 @@ export default function VinculosPage() {
           totalItems={vinculos.length}
           filteredItemsCount={filteredData.length}
         >
-          <div className="flex flex-col h-[calc(100vh-280px)] min-h-[500px]">
+          <div className="flex flex-col h-auto min-h-[500px]">
             {/* Filter row */}
             <div className="flex items-center justify-between mb-4 shrink-0">
               <div className="flex items-center gap-2">
@@ -164,7 +165,7 @@ export default function VinculosPage() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-hidden relative">
+            <div className="flex-1 min-h-[500px] overflow-hidden relative">
               {viewMode === 'gantt' && (
                 <GanttChart
                   vinculos={filteredData}
@@ -193,6 +194,11 @@ export default function VinculosPage() {
                   />
                 </div>
               )}
+            </div>
+
+            {/* Grafo section always visible at the bottom */}
+            <div className="mt-6 h-[400px] shrink-0 border border-borde rounded-xl overflow-hidden relative shadow-sm">
+              <GrafoVinculos />
             </div>
           </div>
         </PageTemplate>

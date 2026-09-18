@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, List, Grid, Map, ChevronDown, Close } from '@carbon/icons-react';
+import { Search, Filter, List, Grid, Map, ChevronDown, Close, Network_3 } from '@carbon/icons-react';
 import { pageContainerVariants, staggerItemVariants } from '../../lib/motionTokens';
 
 export default function PageTemplate({
@@ -274,6 +274,23 @@ export default function PageTemplate({
                     />
                   )}
                   <Map size={16} />
+                </button>
+              )}
+              {(viewModes && viewModes.includes('graph')) && (
+                <button
+                  onClick={() => setViewMode('graph')}
+                  className={`relative rounded-lg cursor-pointer transition-colors z-10 ${viewMode === 'graph' ? 'text-primario font-bold' : 'text-pizarra/50 hover:text-pizarra'}`}
+                  title="Vista de Grafo"
+                  style={{ padding: '6px 12px' }}
+                >
+                  {viewMode === 'graph' && (
+                    <motion.div
+                      layoutId="viewModeSwitchPill"
+                      className="absolute inset-0 bg-canvas rounded-lg -z-10"
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <Network_3 size={16} />
                 </button>
               )}
             </div>

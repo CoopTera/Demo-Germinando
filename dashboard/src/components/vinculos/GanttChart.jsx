@@ -148,7 +148,7 @@ const GanttChart = ({ vinculos, programas, onItemClick, selectedId, periodoDesde
                      className="flex w-full border-b border-[#E2E4EB] bg-[#FAFAFC] hover:bg-[#F0F2F5] cursor-pointer transition-colors"
                      onClick={() => toggleGroup(group.programa.id)}
                    >
-                     <div style={{ width: '280px', minWidth: '280px', padding: '12px 20px' }} className="border-r border-[#E2E4EB] bg-inherit sticky left-0 z-30 flex items-center font-bold text-[#2D2D3A] shadow-[2px_0_8px_-3px_rgba(0,0,0,0.05)]">
+                     <div style={{ width: '280px', minWidth: '280px', padding: '12px 20px' }} className="border-r border-[#E2E4EB] bg-inherit sticky left-0 z-40 flex items-center font-bold text-[#2D2D3A] shadow-[2px_0_8px_-3px_rgba(0,0,0,0.05)]">
                        <span className="mr-2 text-[#494963]">
                          {isCollapsed ? <ChevronRight size={18} /> : <ChevronDown size={18} />}
                        </span>
@@ -172,7 +172,7 @@ const GanttChart = ({ vinculos, programas, onItemClick, selectedId, periodoDesde
                          className={`flex w-full border-b border-[#E2E4EB]/50 hover:bg-[#EBEDF2]/40 cursor-pointer transition-colors relative hover:z-[60] ${isSelected ? 'bg-[#EBEDF2]/60' : ''}`}
                          onClick={() => onItemClick(v)}
                        >
-                         <div style={{ width: '280px', minWidth: '280px', padding: '12px 20px 12px 44px' }} className={`border-r border-[#E2E4EB] sticky left-0 z-30 flex items-center shadow-[2px_0_8px_-3px_rgba(0,0,0,0.05)] ${isSelected ? 'bg-[#F2F4F7]' : 'bg-white'}`}>
+                         <div style={{ width: '280px', minWidth: '280px', padding: '12px 20px 12px 44px' }} className={`border-r border-[#E2E4EB] sticky left-0 z-40 flex items-center shadow-[2px_0_8px_-3px_rgba(0,0,0,0.05)] ${isSelected ? 'bg-[#F2F4F7]' : 'bg-white'}`}>
                            <span className="truncate text-[#494963] font-medium" title={v.titulo}>{v.titulo}</span>
                          </div>
                          <div className="flex-1 relative h-12 group flex items-center hover:z-[60]">
